@@ -1,0 +1,113 @@
+\section{Heterogenoues Pre-trained Transformers (HPT)}
+\label{sec:method}
+
+
+\begin{figure*}
+\centering
+\includegraphics[width=\linewidth]{figures/network_arch.pdf}
+\vspace{.3em}
+    \caption{\textbf{Stem Architecture in HPT.} In the HPT stem, the proprioceptive tokenizer uses an MLP to map proprioceptive information to a feature which is then attended by 16 learnable tokens. The vision tokenizer uses pre-trained encoders and similarly uses an attention mechanism to map vision features into 16 fixed tokens. The architecture flexibly handles sequences of inputs without increasing the size of tokens. }
+    \label{fig:network_arch}
+    \vspace{-10pt}
+\end{figure*}
+
+
+
+In \textit{heterogeneous robot learning} with cross embodiments, the data are generated from different domains such as simulation and real robots, across sensory modalities such as RGB images, language instructions, depth maps, 3D point clouds, and tactile images. Each robot is a unique hardware embodiment with varying degrees of freedom, end-effectors, sensor configurations, controller and action spaces, and application-specific physical setups.
+ 
+
+In the following sections, we discuss the HPT network architecture and the training procedure to address the heterogeneity above.  We modularize the network architecture (Figure \ref{fig:framework}) into the embodiment-specific stem, the shared trunk, and the task-specific heads. Intuitively, the stems, shown in Figure \ref{fig:network_arch}, are earlier layers of the neural network that align sensory inputs from heterogeneous embodiment and modalities into the shared representation space. The \textit{shared} middle part of the network is called the trunk, which processes the sensory representation into a latent representation that can be used for multiple tasks. Finally, the last part of the network is the head, which maps that latent representation to the action space in individual tasks of interest. The training procedure, dubbed \textit{heterogeneous pre-training}, assigns and aligns specific stem/head pairs based on the sampled embodiment and task data, and still enjoys the benefits of joint training in the shared trunk. This can be thought of as tokenizing each embodiment using neural networks and alleviating the need to unify embodiments into a homogeneous data form in standard training procedures.
+
+
+\subsection{Network Architecture}
+\paragraph{Stem.} The stem $\theta_{\text{stem}}$ (Figure \ref{fig:network_arch}) in \methodname{} is composed of a proprioceptive tokenizer and a vision tokenizer. These tokenizers map heterogeneous inputs from different embodiments to a \textit{fixed number} of tokens with \textit{fixed dimensions}, which enables the trunk to treat them in the same manner despite large heterogeneity, as well as enjoy the scaling and inference benefits on fixed context length. The key idea is to leverage attention  \cite{vaswani2017attention,jaegle2021perceiver,carion2020end} to attend a fixed number of learnable tokens to features of the observations. Although we mainly focus on proprioception and vision, handling other kinds of sensor heterogeneity in tactile, 3D, and action inputs can be flexibly extended in stems. 
+\begin{itemize}
+    \item \textbf{Proprioception Tokenizers.} In Figure \ref{fig:network_arch} (left), for embodiment $k$, the proprioceptive tokenizer maps any sequence of robot proprioceptive information with dimension $d^k_p$ (e.g. 7 for end-effector pose) into  $N_p$ (e.g. $N_p=16$) tokens with dimension $d$ with values ranging from 128 to 1024. To achieve this, we first use an MLP to map the proprioceptive input into a feature space with dimension $d$. We then apply sinusoidal position encoding and use attention across the state feature and the learnable tokens, to map into $16$ tokens with dimension $d$.  Proprioceptive information is critical in robot policy learning, but its usage is often as simple as feature concatenation with a vision encoder \cite{levine2016end}.
+    
+\item \textbf{Vision Tokenizers.} In Figure \ref{fig:network_arch} (right), the vision tokenizer can map any sequence of camera images (videos of multiple views)  with dimension $H \times W \times 3$ into   $N_v$ (we use $N_v=16$ by default) tokens with dimension $d$. To achieve this, we first use \textit{pre-trained frozen feature networks} (e.g. 7 by 7 features from ResNet) and then flatten the features. After that, we again use attention across these features and learnable tokens,  to map the vision input into $16$ tokens with dimension $d$.  
+\end{itemize}
+ 
+ After processing each modality individually in the time sequence order, we concatenate all modality tokens and add additional modality embeddings and sinusoidal positional embeddings. This is used as the input sequence to the trunk that we introduce below. To avoid overfitting, the stem only has a small number of parameters (one MLP and one attention layer).
+
+Related works such as Octo \cite{octo_2023} and others \cite{nair2022r3m,vc2023,brohan2022rt} mostly focus on pre-training the vision backbone of the policy through masking or self-supervision. They often stack sequences of single-view images along channels \cite{brohan2022rt} for a particular robot or use a large number of tokens (256 in \cite{octo_2023}).  In contrast, HPT uses stems with pre-trained vision encoders to map arbitrary image sequences to a short sequence of tokens (16). Moreover, rather than \textit{add in} proprioception during transfer in related works, HPT \textit{jointly pre-trains} the vision and proprioception parts, from heterogeneous datasets. 
+
+ 
+
+
+
+\paragraph{Trunk.}
+As the central component for pre-training, the trunk architecture follows a transformer, parametrized by $\theta^{\text{trunk}}$ in the latent space with dimension $d$. The output token sequence length $L$ is the same as the input token sequence length. The output token sequence is simply pooled as the final combined feature for the observation. The trunk is shared across different embodiments and tasks to capture the complex input-output relationships (i.e. the number of trunk parameters is fixed independent of the number of embodiments and tasks).  
+
+\begin{figure}
+  \centering
+   
+  \begin{minipage}{0.47\textwidth}
+    \centering
+    \vspace{-5pt}
+             \setlength{\abovecaptionskip}{-3pt}
+  \setlength{\belowcaptionskip}{-2pt}
+    \includegraphics[width=\linewidth]{figures/dataset_figure_concise.pdf}
+\caption{\textbf{Dataset Heterogeneity in Robotics.} We show illustrations of dataset mixtures (each color is a distinct embodiment) from different domains including real robot teleop \cite{open_x_embodiment_rt_x_2023}, deployed robots \cite{frodobots2024frodobots2k}, simulations, and human videos \cite{Damen2018EPICKITCHENS}. See Appendix Section \ref{appendix:impl} for dataset mixture details. 
+}\label{fig:dataset_main} 
+\end{minipage}\hfill
+  \begin{minipage}{0.5\textwidth}
+  \vspace{-75pt}
+    \centering
+    \resizebox{\linewidth}{!}{
+      \begin{tabular}{l|cccc}
+        \toprule
+        {\bf  } & {\bf \# Depth } & {\bf \# Width} & {\bf \# Attn. Heads} & {\bf \# Param.}    \\ 
+        \midrule
+        \bf HPT-Small    &   16     &   128     &   8    & 3.1M  \\
+        \bf HPT-Base     &   16     &  256      &   8    & 12.6M \\
+        \bf HPT-Large    &  16      &  512      &   8    & 50.5M \\
+        \bf HPT-XLarge   &  32      &  768     &   16    & 226.8M \\
+        \bf HPT-Huge     &  80      &  1024     &  16    & 1.1B   \\
+        \bottomrule
+      \end{tabular}
+    }
+    \captionof{table}{\textbf{Network Details of \methodname{}.} The width denotes the latent dimension size of the trunk transformer and the depth denotes the number of blocks. The \textit{default} setup is the HPT-Small model.
+    }
+    \label{tab:model_size_table}
+  \end{minipage}
+ 
+ \hfill \begin{minipage}{0.5\textwidth}
+ \vspace{-75pt}
+    \centering
+    \resizebox{\linewidth}{!}{
+      \begin{tabular}{l|cccc}
+        \toprule
+        {\bf  } & {\bf \# Dataset } & {\bf \# Traj.} & {\bf \# Samples} & {\bf \# Batch Size}    \\ 
+        \midrule
+        \bf Default    &   27     &   16k     &   5M    & 256  \\
+        \bf Scaled    &   52     &  270k      &   155M    & 2048 \\
+        \bottomrule
+      \end{tabular}
+    }
+    \captionof{table}{\textbf{Dataset Details of  Pre-train Settings.} The \textit{default} setup is trained with 27 datasets from RT-X with 16k trajectories (maximum 1000 trajectories each) and \textit{scaled} setup involves more data and compute.}
+    \label{tab:new_table}
+  \end{minipage}
+
+\end{figure}
+ 
+\paragraph{Head.}
+The policy head $\theta_{\text{head}}$  takes the output of the trunk transformer and maps it to the action space $\mathcal{A}$  in each dataset. For each embodiment and task, the policy head can be an arbitrary architecture (e.g. MLP)  that takes as input the pooled feature of the trunk and outputs a normalized action trajectory. The policy head is reinitialized for transferring to a new embodiment. 
+
+
+\subsection{Training Objective}
+ Given a total of $K$ datasets with heterogeneous embodiments sampled from different distributions $\mathcal{D}_1,...,\mathcal{D}_k,...,\mathcal{D}_K$, we let $\mathcal{D}_k  = \{\tau^{(i)}\}_{1\le i \le M_k}$ denote a set of  $M_k$ trajectories in dataset $\mathcal{D}_k$, with  $\tau^{(i)} = \{o_t^{(i)},a_t^{(i)}\}_{1 \le t \le T}$ denoting the $i$-th trajectory of maximum length $T$ of observation and action tuples.
+The objective is to minimize the following loss across datasets
+\begin{equation}
+\label{equ:pool_loss}
+\setlength{\abovedisplayskip}{-1pt}
+\setlength{\belowdisplayskip}{-1pt}
+\min_{\theta}~~ \sum_{k=1}^K~\mathcal{L} (\theta^{\text{stem}}_k,\theta^{\text{trunk}},\theta^{\text{head}}_k;\mathcal{D}_k).
+\end{equation}
+ $\mathcal{L}$ is behavior cloning loss computed as the Huber loss between the normalized action labels based on dataset statistics and the network's action predictions. $\theta=\bigcup_{k=1}^K \{\theta^{\text{stem}}_{k},\theta^{\text{head}}_{k}\}\cup \theta^{\text{trunk}}$ denotes the network parameters comprised of embodiment-specific stem and head $\theta^{\text{stem}}_{k},\theta^{\text{head}}_{k}$ for dataset $k$, and a   single set of shared trunk parameters $\theta_{\text{trunk}}$ across all embodiments. This training procedure has two axes of data scaling: the quantity  $M_k$  for one dataset $D_k$ and the total number of datasets $K$.  In the pre-training stage, only the trunk parameters are updated at every iteration, and the stems and heads for each heterogeneous embodiment and task are updated based on the training batch sampling. See implementation details in Appendix Section \ref{appendix:training_details}.
+
+ 
+\subsection{Transfer Learning}
+The policy transfer process is similar to aligning the features of the new domain (through pre-trained stem encoders) to the pre-trained embedding space of the trunk \cite{li2023blip,liu2023visual}. Given a new dataset $\mathcal{D}_{K+1}$ from a new embodiment, the objective can be the same as pre-training or alternatives \cite{chi2023diffusion}.  We reinitialize the head and stem parameters with embodiment-specific input and output dimensions (such as different proprioception and action dimensions), and freeze the weights of the trunk. 
+ 
+
+

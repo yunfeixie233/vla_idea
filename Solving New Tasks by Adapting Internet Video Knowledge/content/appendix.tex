@@ -1,0 +1,462 @@
+\setcounter{table}{0}
+\renewcommand{\thetable}{A\arabic{table}}
+\setcounter{figure}{0}
+\renewcommand{\thefigure}{A\arabic{figure}}
+\renewcommand\theHtable{Appendix.\thetable}
+
+
+\section{Text Prompts}
+Below we listed the text prompts we used for adaptation and task evaluation.
+
+\begin{table}[h]
+\centering
+\small
+
+\setlength{\tabcolsep}{4.8pt}
+\scalebox{0.8}{
+
+\begin{tabular}{@{}llll@{}}
+\toprule
+Task             & In-Domain Prompts                         & AnimateDiff Prompts                                        & DreamBooth Identifier                 \\ \midrule
+Dog Walking      & a dog/pharaoh hound walking          & a dog/pharaoh hound walking                                & a {[}D{]} dog                         \\
+Humanoid Walking & a(n) humanoid/action figure  walking & a(n) humanoid/action figure walking                        & a {[}D{]} action figure               \\
+\midrule
+Assembly$^*$     & assembly                         & a robot arm placing a ring over a peg                               & \multirow{14}{*}{a {[}D{]} robot arm} \\
+Dial Turn$^*$     & dial turn                         & a robot arm turning a dial                               &                                       \\
+Reach$^*$     & reach                         & a robot arm reaching a red sphere                               &                                       \\
+Peg Unplug Side$^*$     & peg unplug side                         & a robot arm unplugging a gray peg                               &                                       \\
+Lever Pull$^*$       & lever pull                           & a robot arm pulling a lever                                &                                       \\ 
+Coffee Push$^*$      & coffee push                          & a robot arm pushing a white cup towards a coffee machine &                                       \\
+Door Close$^*$       & door close                           & a robot arm closing a door                                 &                                   \\
+Door Open        & door open                            & a robot arm opening a door                                 &                                       \\
+Window Close     & window close                         & a robot arm closing a window                               &                                       \\
+Window Open      & window open                          & a robot arm opening a window                               &                                       \\
+Drawer Close     & drawer close                         & a robot arm closing a drawer                               &                                       \\
+Drawer Open      & drawer open                          & a robot arm open a drawer                                  &                                       \\
+Soccer           & soccer                               & a robot arm pushing a soccer ball into the net             &                                       \\
+Button Press     & button press                         & a robot arm pushing a button                               &                                       \\\bottomrule
+\end{tabular}
+}
+
+\caption{\textbf{Task-Prompt Pairs.} We include a comprehensive list of tasks and their text prompts for adaptation and evaluation. ``$*$'' denotes tasks seen during adaptation.}
+\label{table:text_prompts}
+\end{table}
+
+\begin{table}[h]
+\centering
+\small
+
+\setlength{\tabcolsep}{4.8pt}
+
+\begin{tabular}{@{}lll@{}}
+\toprule
+Task             & In-Domain Prompts                         & AnimateDiff Prompts           \\ \midrule
+Spatula in Kitchen$^{*}$      & spatula                      & find the spatula              \\
+Toaster in Kitchen$^{*}$       & toaster                   & find the toaster                    \\
+Painting in Living Room$^*$     & painting                    & find the painting             \\
+Blinds in Bedroom$^*$           & blinds                         & find the blinds             \\
+ToiletPaper in Bathroom$^*$     & toilet paper                         & find the toilet paper   \\
+Pillow in Living Room          & pillow                         & find the pillow           \\
+DeskLamp in Living Room       & desk lamp                           & find the desk lamp     \\ 
+Mirror in Bedroom               & mirror                          & find the mirror         \\
+Laptop in Bedroom             & laptop                           & find the laptop           \\
+\bottomrule
+\end{tabular}
+
+
+\caption{\textbf{Task-Prompt Pairs for iTHOR.} We include a comprehensive list of iTHOR tasks and their text prompts for adaptation and evaluation. ``$*$'' denotes tasks seen during adaptation.}
+\label{table:text_prompts_ithor}
+\end{table}
+
+
+
+
+
+
+
+
+\section{Continued Denoising}
+\label{sec:cont_denoising}
+
+In diffusion-based policy supervision, rewards are extracted from the procedure of corrupting frames achieved by the policy with some level of Gaussian noise and then making denoising predictions using the video model~\citep{huang2023diffusion, luo2024text}.  For additional insight, we propose a visualization technique called \textbf{\textit{continued denoising}}, and report FVD scores for videos generated in such a manner.  In continued denoising, rather than extracting a scalar from components of the denoising prediction as in Video-TADPoLe, we treat the noised video as an initialization and iteratively continue sampling to produce a final clean video prediction - thus, “continuing” the denoising procedure.  In our experiments we perform continued denoising conditioned on a desired text prompt, a noise level of 700, a total frame length of 16, and 10 denoising steps.
+
+As mentioned in Section~\ref{subsec:policy_supervision_method}, policy supervision does not necessarily require strong free-form generation of in-domain videos; rather it evaluates observed frames achieved by following the current policy.  For qualitative purposes, continued denoising provides us a visual sense of how this evaluation of achieved frames is done (examples in Figure~\ref{fig:mw_continued_denoising_400_unseen}), as well as a sanity check on the integration of in-domain information through adaptation.  Furthermore, it enables quantitative comparison through FVD scores, which provides an idea on the capability of adapted video models to reconstruct in-domain-like videos conditioned on text.  It is intuitive to hypothesize that a lower FVD score correlates with better in-domain adaptation, as it understands how to accurately complete the provided in-domain frames from a heavy noise corruption.
+
+In Table~\ref{table:fvd_scores_contd}, we report the FVD scores for the same set of seen and unseen tasks that are evaluated in free-form generation experiments. 
+We discover that the lowest FVD score for continued denoising is achieved by the in-domain model, which is unsurprising as it was explicitly trained on such examples.  The next-best FVD scores are achieved by probabilistic adaptation and its inverse.  This is significant because it supports the finding that with adaptation, generalization to unseen tasks is possible, and suggests that accurate domain-specific rewards can be supplied through policy supervision.  Indeed, this aligns with our result in Table~\ref{table:mw_videotadpole}, where Inverse Probabilistic Adaptation achieves the best overall task performance through policy supervision. 
+
+\begin{table}[h]
+\centering
+\setlength{\tabcolsep}{4.8pt}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{@{}lcccccc@{}}
+\toprule
+FVD Scores (MetaWorld) & Vanilla AnimateDiff & In-Domain-Only & Direct Finetuning & Subject Customization & Prob. Adaptation & Inverse Prob. Adaptation \\ \midrule
+Seen                   & 2700.4              & \textbf{602.8}          & 1004.6            & 1078.9                & 622.6            & 627.4                    \\
+Unseen                 & 2643.2              & \textbf{610.1}          & 978.5             & 1711.8                & 630.6            & 681.8                    \\ \bottomrule
+\end{tabular}
+}
+\caption[]{\textbf{FVD Scores with Continued Denoising.} We report FVD scores for videos of MetaWorld tasks, produced by Continued Denoising via the video generative models of interest. This is computed for both seen and unseen task sets, each with 7 tasks, aggregating results over 1000 synthetic videos.}
+\label{table:fvd_scores_contd}
+\end{table}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{figures/mw_continued_denoising_400_unseen.pdf}
+    \vspace{-15pt}
+    \caption{\textbf{Continued Denoising.}  We visualize frames from a task unseen during adaptation, corrupted with a level of Gaussian noise (top row).  We then show the result of continued denoising using an inverse probabilistic adaptation model to verify it can visually generalize to fill in novel in-domain information.  Despite not having seen a button, it is able to reconstruct it conditioned on text.  This figure is for intuition; in practice, a much higher noise level is used, shown in Figure~\ref{fig:mw_continued_denoising_700_unseen}.}
+    \label{fig:mw_continued_denoising_400_unseen}
+    \vspace{-10pt}
+\end{figure}
+
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{figures/mw_continued_denoising_700_unseen.pdf}
+    \vspace{-1em}
+    \caption{\textbf{Continued Denoising (in practice).}  In practice, an aggressive level of Gaussian corruption is usually used on achieved frames for reward computation (700 for MetaWorld).  However, because to the human eye this may look virtually indistinguishable from pure noise, we supply an illustrative example in Figure~\ref{fig:mw_continued_denoising_400_unseen} using a noise level of 400.  Here, we showcase visuals of the same unseen task corrupted with a practical noise level of 700.  We then show the result of continued denoising to visually verify the model integrates adapted in-domain information successfully.  When performing continued denoising from such a high corruption, conditioned on the text prompt ``a robot arm pushing a button”, it is therefore quite surprising the level of detail with which the adapted text-to-video model is able to reconstruct novel in-domain features such as the button - which it has not even seen during adaptation.  The resulting continued denoising video can also be evaluated against in-domain examples via FVD for further insights.}
+    \label{fig:mw_continued_denoising_700_unseen}
+    \vspace{-1em}
+\end{figure}
+
+\section{Video-TADPoLe Reward Computation}
+\label{sec:videotadpole_equations}
+
+Video-TADPoLe~\citep{luo2024text} rewards are densely computed for a trajectory achieved by a policy, in terms of their rendered frames.  For arbitrary start index $i$ and end index $j$ inclusive of the trajectory, for $i \leq j$, let $\mathbf{o}_{[i+1:j+1]}$  denote the associated sequence of rendered frames.  Video-TADPoLe then utilizes a source noise vector $\boldsymbol{\epsilon}_0 \sim \mathcal{N}(\boldsymbol{\epsilon};\boldsymbol{0}, \textbf{I}_{j-i+1})$ of the same dimensionality as a Gaussian corruption to produce noisy observation $\tilde{\mathbf{o}}_{[i+1:j+1]}$.  Then, Video-TADPoLe computes a batch of \textit{alignment reward} terms through one inference step of the text-to-video diffusion model as:
+$$r_{[i:j]}^\text{align} = \left\lVert\boldsymbol{\hat{\epsilon}}_{\boldsymbol{\phi}}(\tilde{\boldsymbol{o}}_{[i+1:j+1]}; \texttt{t}_\text{noise}, y) - \boldsymbol{\hat{\epsilon}}_{\boldsymbol{\phi}}(\tilde{\boldsymbol{o}}_{[i+1:j+1]}; \texttt{t}_\text{noise})\right\rVert_2^2,$$
+and a batch of \textit{reconstruction reward} terms as:
+$$r_{[i:j]}^\text{rec} = \left\lVert\boldsymbol{\hat{\epsilon}}_{\boldsymbol{\phi}}(\tilde{\boldsymbol{o}}_{[i+1:j+1]}; \texttt{t}_\text{noise}) - \boldsymbol{\epsilon}_0\right\rVert_2^2 - \left\lVert\boldsymbol{\hat{\epsilon}}_{\boldsymbol{\phi}}(\tilde{\boldsymbol{o}}_{[i+1:j+1]}; \texttt{t}_\text{noise}, y) - \boldsymbol{\epsilon}_0\right\rVert_2^2.$$
+For a provided context window of size $n$, Video-TADPoLe calculates the reward at each timestep $t$ utilizing each context window that involves achieved observation $\mathbf{o}_{t+1}$:
+$$r_t = \frac{1}{n}\sum_{i = 1}^{n}\texttt{symlog}\left(w_1*r_{[t-i+1:t-i+n]}^\text{align}[i-1]\right) + \texttt{symlog}\left(w_2 * r_{[t-i+1:t-i+n]}^\text{rec}[i-1]\right).$$
+A stride term $s$ can be used to make this computation tractable across long trajectories, where the context window skips $s$ timesteps before computing a sequence of Video-TADPoLe rewards again.  The context window $n$, stride $s$, and noise level $\texttt{t}_\text{noise}$ are hyperparameters to be set by the user; in practice, good settings for such hyperparameters can be found in an offline manner through \textit{policy discrimination} (Section~\ref{sec:policy_discrimination}).
+
+
+
+
+
+
+
+
+
+
+
+\section{Implementation Details}
+\label{sec:implementation_details}
+
+
+We include the default hyperparameters from the TD-MPC implementation in Table~\ref{tab:tdmpc-hparams} for completeness.  We do not modify the default recommended settings for both Humanoid and Dog environments, as well as the Meta-World experiments.
+
+
+
+
+
+
+
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{@{}ll@{}}
+\toprule
+Hyperparameter     & Value                           \\ \midrule
+Training Objective       &   \texttt{pred\_noise}           \\
+Number of Training Steps &  60000                            \\
+Loss Type                & L2                                \\
+Learning Rate            &  1e-4                              \\
+Beta Schedule            &  Linear schedule (0.0085, 0.012)   \\
+Timesteps                &  1000                              \\
+EMA Decay                &  0.99                              \\
+EMA Update Steps         &  10                                \\ 
+\bottomrule
+\end{tabular}
+
+
+\caption[]{\textbf{Hyperparameters for In-Domain Model Training.} }
+\label{table:hparams_in_domain_model_training}
+\end{table}
+
+\begin{table}[]
+\centering
+\begin{tabular}{@{}lcc@{}}
+\toprule
+Noise Level              & Humanoid Walking & Dog Walking \\ \midrule
+In-Domain Only           & 600              & 600         \\
+Direct Finetuning        & 700              & 700         \\
+Subject Customization    & 500              & 600         \\
+Prob. Adaptation         & 700              & 700         \\
+Inverse Prob. Adaptation & 600              & 500         \\ \bottomrule
+\end{tabular}
+\caption[]{\textbf{VideoTADPoLe Noise Levels for DeepMind Control.}}
+\label{table:videotadpole_noise_level_dmc}
+\end{table}
+
+
+\textbf{Visual Planning Hyperparameters:} To generate a video plan with adapted video models, we perform DDIM~\citep{song2021ddim} sampling for 25 steps. We use 7.5 as the text-conditioning guidance scale for directly finetuned AnimateDiff, and use 2.5 for other adaptation techniques. Additionally, we use 0.1 as the prior strength for probabilistic adaptaion and 0.5 for its inverse version.
+
+
+\textbf{Inverse Dynamics:} We employ a small MLP network as our inverse dynamics model. The model takes in the embeddings of two consecutive video frames, which are extracted using VC-1~\citep{majumdar2023vc1}, and predicts the action that enables the transition between the provided frames. We train the inverse dynamics model on a dataset comprising a mixture of expert and suboptimal trajectories rendered from the environment, using the same set of tasks and data volumn as used for adaptation. For fairness, we reuse the same dynamics model across all adaptation techniques during evaluation. We provide the detailed hyperparameters of inverse dynamics training in Table~\ref{table:inv_dyn_hparams}.
+
+
+\begin{table}[h]
+\centering
+\small
+
+\begin{tabular}{@{}ll@{}}
+\toprule
+Hyperparameter    & Value \\ \midrule
+Input Dimension  & 1536      \\
+Output Dimension & 4      \\
+Training Epochs  & 20      \\
+Learning Rate    & 3e-5      \\
+Optimizer        & AdamW     \\ \bottomrule
+\end{tabular}
+
+\caption{\textbf{Hyperparamters of Inverse Dynamics Model Training}}
+\label{table:inv_dyn_hparams}
+\end{table}
+
+
+\begin{table}[h!]
+\centering
+\begin{minipage}{0.48\textwidth}
+\label{tab:sd-hparams}
+\vspace{0.05in}
+\centering
+\begin{tabular}{@{}ll@{}}
+\toprule
+Component   & \# Parameters (Millions) \\
+\midrule
+VAE (Encoder) & 34.16 \\
+VAE (Decoder) & 49.49 \\
+U-Net & 865.91 \\
+Text Encoder & 340.39 \\
+\bottomrule
+\end{tabular}%
+
+\caption{\textbf{StableDiffusion Components.} For completeness, we list sizes of the components of the StableDiffusion v2.1 checkpoint used in Video-TADPoLe experiments. The checkpoint is used purely for inference, and is not modified or updated in any way. Note that the VAE Decoder is not utilized in our framework.}
+
+\hfill
+
+\vspace{0.45in}
+
+
+\label{tab:ad-hparams}
+\vspace{0.05in}
+\centering
+\begin{tabular}{@{}ll@{}}
+\toprule
+Component   & \# Parameters (Millions) \\
+\midrule
+VAE (Encoder) & 34.16 \\
+VAE (Decoder) & 49.49 \\
+U-Net & 1312.73 \\%865.91 \\
+Text Encoder & 123.06 \\
+\bottomrule
+\end{tabular}%
+\caption{\textbf{AnimateDiff Components.} For completeness, we list sizes of the components of the AnimateDiff checkpoint used in Video-TADPoLe experiments.  The checkpoint is used purely for inference, and is not modified or updated in any way. Note that the VAE Decoder is not utilized in our framework.}
+\end{minipage}\hfill
+\begin{minipage}{0.48\textwidth}
+\vspace{0.05in}
+\centering
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{@{}ll@{}}
+\toprule
+Hyperparameter   & Value \\
+\midrule
+Discount factor ($\gamma$) & 0.99 \\
+Seed steps & $5,000$ \\
+Replay buffer size & Unlimited \\
+Sampling technique & PER ($\alpha=0.6, \beta=0.4$) \\
+Planning horizon ($H$) & $5$ \\
+Initial parameters ($\mu^{0}, \sigma^{0}$) & $(0, 2)$ \\
+Population size & $512$ \\
+Elite fraction & $64$ \\
+Iterations & 12 (Humanoid)\\
+ & 8 (Dog)\\
+Policy fraction & $5\%$ \\
+Number of particles & $1$ \\
+Momentum coefficient & $0.1$ \\
+Temperature ($\tau$) & $0.5$ \\
+MLP hidden size & $512$ \\
+MLP activation & ELU \\
+Latent dimension & 100 (Humanoid, Dog) \\
+Learning rate & 3e-4 (Dog)\\
+ & 1e-3 (Humanoid) \\
+Optimizer ($\theta$) & Adam ($\beta_1=0.9, \beta_2=0.999$) \\
+Temporal coefficient ($\lambda$) & $0.5$ \\
+Reward loss coefficient ($c_{1}$) & $0.5$ \\
+Value loss coefficient ($c_{2}$) & $0.1$ \\
+Consistency loss coefficient ($c_{3}$) & $2$ \\
+Exploration schedule ($\epsilon$) & $0.5\rightarrow 0.05$ (25k steps) \\
+Planning horizon schedule & $1\rightarrow 5$ (25k steps) \\
+Batch size & 2048 (Dog) \\
+ & 512 (Humanoid) \\
+Momentum coefficient ($\zeta$) & $0.99$ \\
+Steps per gradient update & $1$ \\
+$\theta^{-}$ update frequency & 2 \\
+\bottomrule
+\end{tabular}%
+}
+\caption{\textbf{TD-MPC hyperparameters.} We use the official implementation TD-MPC~\citep{hansen2022temporal} with no adjustments to the hyperparameters, but list it below for completeness. We set the number of training steps to 2 million for continuous control experiments using TD-MPC, and 700k steps for MetaWorld experiments.}
+\label{tab:tdmpc-hparams}
+\end{minipage}
+\end{table}
+
+
+\section{Policy Discrimination}
+\label{sec:policy_discrimination}
+Rather than performing an expensive sweep over Video-TADPoLe hyperparameters directly by launching policy supervision experiments across each adapted video model technique, which can be expensive, we look for an offline method to determine reasonable hyperparameter settings.  For each environment, we therefore utilize an example expert quality demonstration video as well as an example poor quality demonstration video (with arbitrary quality levels in-between, if available).  Then, we can perform a search over Video-TADPoLe parameters by computing Video-TADPoLe rewards for these trajectories using an adapted video model, conditioned on the task-relevant text prompt, with respect to different context window, stride, and noise level settings.  We seek parameter settings that, through the adapted video model's Video-TADPoLe reward computation, can correctly distinguish between the expert, text-aligned video demonstration from the poor, text-unaligned video demonstration; this can be done by comparing the predicted Video-TADPoLe rewards.  Once identified in this offline manner, we can subsequently use the discovered settings of context window, stride, and noise level for learning text-conditioned policies.  In practice, we have found that these settings can be reused for novel text-conditioning within the same environment without issue.
+
+
+\section{Policy Supervision with Additional Pretrained Video Models}
+
+\begin{table*}[h]
+\centering
+\small
+
+\setlength{\tabcolsep}{4.8pt}
+ \scalebox{0.9}{
+\begin{tabular}{lccccc}\toprule
+Success Rate (\%) w/ & Door Close$^*$ & Door Open & Window Close & Window Open & Drawer Close  \\
+\midrule
+In-Domain-Only & 100.0 $\pm$ 0.0  & 31.1 $\pm$ 44.0  & 0.0 $\pm$ 0.0  & 33.3 $\pm$ 47.1  & 74.4 $\pm$ 36.2    \\
+Vanilla AnimateLCM & 100.0 $\pm$ 0.0  & 0.0 $\pm$ 0.0  & 98.9 $\pm$ 1.9  & 33.3 $\pm$ 29.1   & 100.0 $\pm$ 0.0    \\
+\midrule
+Prob. Adaptation & 100.0 $\pm$ 0.0  & 0.0 $\pm$ 0.0 & 66.7 $\pm$ 57.7  & 0.0 $\pm$ 0.0 & 100.0 $\pm$ 0.0   \\
+Inverse Prob. Adaptation & 100.0 $\pm$ 0.0 & 100.0 $\pm$ 0.0  & 100.0 $\pm$ 0.0  & 94.4 $\pm$ 9.6  & 100.0 $\pm$ 0.0    \\
+\midrule
+\midrule
+Success Rate (\%) w/ & Drawer Open & Coffee Push$^*$ & Soccer & Button Press &  \textbf{Overall}  \\
+\midrule
+In-Domain-Only &  0.0 $\pm$ 0.0 & 0.0 $\pm$ 0.0 & 0.0 $\pm$ 0.0 & 33.3 $\pm$ 47.1  & 30.2    \\
+Vanilla AnimateLCM & 0.0 $\pm$ 0.0 & 5.6 $\pm$ 9.6  & 0.0 $\pm$ 0.0  & 0.0 $\pm$ 0.0  &  37.5    \\
+\midrule
+Prob. Adaptation & 0.0 $\pm$ 0.0 & 32.2 $\pm$ 28.0  & 4.4 $\pm$ 7.7  & 0.0 $\pm$ 0.0  &  33.7     \\
+Inverse Prob. Adaptation & 16.7 $\pm$ 29.0 & 41.1 $\pm$ 15.0 & 4.4 $\pm$ 5.1 & 30.0 $\pm$ 52.0  &  \textbf{65.2}   \\
+\bottomrule
+\end{tabular}
+}
+\vspace{-5pt}
+\caption[]{\textbf{Policy Learning on MetaWorld with AnimateLCM.} We report the mean success rate across 9 manipulation tasks in MetaWorld, aggregated over 3 seeds.}
+\label{table:mw_policysupervision_animatelcm}
+\vspace{-5pt}
+\end{table*}
+
+We also provide policy supervision results on MetaWorld with AnimateLCM~\citep{wang2024animatelcm} in Table~\ref{table:mw_policysupervision_animatelcm}. Similar to AnimateDiff, vanilla AnimateLCM is also able to achieve decent success rates through Video-TADPoLe. Furthermore, we discover that inverse probabilistic adaptation consistently achieves the best performance with both AnimateDiff and AnimateLCM. With AnimateLCM, inverse probabilistic adaptation obtains the highest overall success rate of $\textbf{65.2\%}$, surpassing all other evaluated video models and adaptation techniques, with non-zero success rates across all evaluated tasks.
+
+
+\section{Visual Planning with Additional Pretrained Video Models}
+
+\begin{table*}[h]
+\centering
+\small
+
+\setlength{\tabcolsep}{4.8pt}
+ \scalebox{0.9}{
+\begin{tabular}{lccccc}\toprule
+Success Rate (\%) w/ & Door Close$^*$ & Door Open & Window Close & Window Open & Drawer Close  \\
+\midrule
+In-Domain-Only & 93.3 $\pm$ 14.9 & 0.0 $\pm$ 0.0 & 53.3 $\pm$ 29.8  & 6.7 $\pm$ 14.9 & 20.0 $\pm$ 29.8 \\
+Vanilla AnimateLCM & 100.0 $\pm$ 0.0  & 0.0 $\pm$ 0.0  & 0.0 $\pm$ 0.0  & 20.0 $\pm$ 18.3   & 40.0 $\pm$ 27.9    \\
+\midrule
+Prob. Adaptation & 100.0 $\pm$ 0.0  & 0.0 $\pm$ 0.0 & 53.3 $\pm$ 38.0  & 0.0 $\pm$ 0.0 & 53.3 $\pm$ 29.8   \\
+Inverse Prob. Adaptation & 100.0 $\pm$ 0.0 & 0.0 $\pm$ 0.0  & 40.0 $\pm$ 14.9  & 0.0 $\pm$ 0.0  & 93.3 $\pm$ 14.9    \\
+\midrule
+\midrule
+Success Rate (\%) w/ & Drawer Open & Coffee Push$^*$ & Soccer & Button Press &  \textbf{Overall}  \\
+\midrule
+In-Domain-Only &  0.0 $\pm$ 0.0  & 0.0 $\pm$ 0.0 & 0.0 $\pm$ 0.0 & 40.0 $\pm$ 14.9 &   23.7  \\
+Vanilla AnimateLCM & 0.0 $\pm$ 0.0 & 0.0 $\pm$ 0.0  & 0.0 $\pm$ 0.0  & 0.0 $\pm$ 0.0  &  17.8    \\
+\midrule
+Prob. Adaptation & 0.0 $\pm$ 0.0 & 0.0 $\pm$ 0.0  & 0.0 $\pm$ 0.0  & 6.7 $\pm$ 14.9  &  23.7     \\
+Inverse Prob. Adaptation & 0.0 $\pm$ 0.0 & 0.0 $\pm$ 0.0 & 6.7 $\pm$ 14.9 & 26.7 $\pm$ 27.9  &  \textbf{29.6}   \\
+\bottomrule
+\end{tabular}
+}
+\vspace{-5pt}
+\caption[]{\textbf{Visual Planning on MetaWorld with AnimateLCM.} We report the mean success rate across 9 manipulation tasks in MetaWorld. Each table entry shows the average success rate aggregated from $5$ seeds. }
+\label{table:mw_visualplanning_animatelcm}
+\vspace{-5pt}
+\end{table*}
+
+We provide visual planning results on MetaWorld with an additional video diffusion model, AnimateLCM~\citep{wang2024animatelcm}, in Table~\ref{table:mw_visualplanning_animatelcm}. We observe both probabilistic adaptation and its inverse version bring improvements in overall success rate compared to Vanilla AnimateLCM. Specifically, inverse probabilistic adaptation achieves the best overall performance and outperforms the in-domain-only baseline by 24.9\%, reconfirming the efficacy of adaptation in improving in-domain task performance.  This further demonstrates that adaptation as an approach can be applied flexibly across different backbone text-to-video models for successful downstream robotic applications.
+
+\section{Visual Planning for Object Navigation in iTHOR Environments}
+
+\begin{table*}[h]
+\centering
+\small
+
+\setlength{\tabcolsep}{4.8pt}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{lccccc}\toprule
+Success Rate (\%) w/ & Spatula in \textit{Kitchen}$^*$ & Toaster in \textit{Kitchen}$^*$ & Painting in \textit{Living Room}$^*$ & Blinds in \textit{Bedroom}$^*$ & ToiletPaper in \textit{Bathroom}$^*$ \\
+\midrule
+In-Domain-Only & 13.3 $\pm$ 29.8 & 33.3 $\pm$ 33.3 & 0.0 $\pm$ 0.0  & 13.3 $\pm$ 29.8 & 40.0 $\pm$ 36.5 \\
+\midrule
+Prob. Adaptation & 20.0 $\pm$ 29.8  & 60.0 $\pm$ 27.9 & 0.0 $\pm$ 0.0  & 26.7 $\pm$ 36.5 & 73.3 $\pm$ 14.9   \\
+Inverse Prob. Adaptation & 13.3 $\pm$ 18.3 & 33.3 $\pm$ 23.6  & 0.0 $\pm$ 0.0  & 33.3 $\pm$ 33.3  & 40.0 $\pm$ 14.9    \\
+\midrule
+\midrule
+Success Rate (\%) w/ & Pillow in \textit{Living Room} & DeskLamp in \textit{Living Room} & Mirror in \textit{Bedroom} &  Laptop in \textit{Bedroom} &  \textbf{Overall}  \\
+\midrule
+In-Domain-Only &  6.7 $\pm$ 14.9  & 6.7 $\pm$ 14.9 & 0.0 $\pm$ 0.0 & 26.7 $\pm$ 27.9 &   15.6  \\
+\midrule
+Prob. Adaptation & 13.3 $\pm$ 18.3 & 13.3 $\pm$ 18.3  & 0.0 $\pm$ 0.0  & 53.3 $\pm$ 29.8  &  \textbf{28.9}     \\
+Inverse Prob. Adaptation & 6.7 $\pm$ 14.9 & 13.3 $\pm$ 18.3 & 6.7 $\pm$ 14.9 & 60.0 $\pm$ 27.9  &  23.0   \\
+\bottomrule
+\end{tabular}
+}
+\vspace{-5pt}
+\caption[]{\textbf{Visual Planning on iTHOR.} We report the mean success rate across 9 object navigation tasks in iTHOR. Each table entry shows the average success rate aggregated from $5$ seeds. ``$*$'' denotes seen tasks during adaptation.} %
+\label{table:mw_videoplanning_ithor}
+\vspace{-5pt}
+\end{table*}
+
+We provide additional experimentation of adaptation techniques on iTHOR~\citep{eric2017ai2thor}, in which a mobile robotic agent is asked to perform egocentric navigation to a specified target object in different scenes. This benchmark poses challenges of navigating in partially observable settings and allows us to further evaluate adaptation methods on in-domain video generation from egocentric views. To perform adaptation, we reuse the video dataset provided by AVDC~\citep{ko2024avdc}, which spans 12 target objects and includes 25 successful navigation trajectories for each object. We report the success rates of visual planning across 9 navigation tasks in Table~\ref{table:mw_videoplanning_ithor}, in which 4 tasks are unseen during adaptation. We provide a detailed list of iTHOR tasks along with their corresponding text prompts in Table~\ref{table:text_prompts_ithor}. In Table~\ref{table:mw_videoplanning_ithor}, we again observe that the overall performance of both probabilistic adaptation and its inverse outperform that of in-domain-only baseline by a large margin, highlighting that the internet knowledge of pretrained video models can be effectively utilized for various downstream robotic applications through proper adaptation.  This result further highlights how adaptation can be flexibly applied across varied robotic settings.
+
+
+
+\section{Step Counts to Task Success in Close-loop Visual Planning}
+
+
+\begin{table*}[h]
+\centering
+\small
+
+\setlength{\tabcolsep}{4.8pt}
+ \scalebox{0.9}{
+\begin{tabular}{lccccc}\toprule
+Step Count  w/ & Door Close$^*$ & Door Open & Window Close & Window Open & Drawer Close  \\
+\midrule
+In-Domain-Only & 80.0 & - & 176.0  & 344.0 & 25.3 \\
+Vanilla AnimateDiff & 122.3  & -  & 323.0  & 217.3   & 160.9    \\
+\midrule
+Direct Finetuning & 96.0 & - & 159.2 & 333.3 & 63.8 \\
+Subject Customization  & 150.5 & - & - & 297.3 & 238.7 \\
+Prob. Adaptation & 75.4   & - & 171.5  & 312.0 & 31.0   \\
+Inverse Prob. Adaptation & 87.0 & -  & 222.6  & -  & 35.8    \\
+\midrule
+\midrule
+Step Count  w/ & Drawer Open & Coffee Push$^*$ & Soccer & Button Press &    \\
+\midrule
+In-Domain-Only &  -  & - & - & 204.0 &     \\
+Vanilla AnimateDiff & - & -  & -  & -  &     \\
+\midrule
+Direct Finetuning & - & - & - & - & \\
+Subject Customization & - & 155.0 & - & - & \\
+Prob. Adaptation & 244.0 & 52.0  & -  & 183.2  &      \\
+Inverse Prob. Adaptation & - & - & 144.0 & 192.0 &     \\
+\bottomrule
+\end{tabular}
+}
+\vspace{-5pt}
+\caption[]{\textbf{Step Counts of Visual Planning on MetaWorld.} We report the average number of taken steps in successful evaluation rollouts across 9 manipulation tasks in MetaWorld. Unsuccessful rollouts are omitted. We observed that probabilistic adaptation in general achieves task success using fewer number of steps.} %
+\label{table:mw_visualplanning_stepcount}
+\vspace{-5pt}
+\end{table*}
+
+
+
+
+

@@ -1,0 +1,100 @@
+\documentclass{article}
+
+
+\PassOptionsToPackage{numbers, compress}{natbib}
+
+
+ 
+\usepackage[final]{neurips_2024}
+\usepackage{amsmath} 
+ 
+
+
+\usepackage[utf8]{inputenc} %
+\usepackage[T1]{fontenc}    %
+\usepackage{url}            %
+\usepackage{booktabs}       %
+\usepackage{titlesec}
+\usepackage[pdftex]{graphicx}
+
+\usepackage{amsfonts}       %
+\usepackage{nicefrac}       %
+\usepackage{microtype}      %
+\usepackage{xcolor}         %
+\usepackage{graphicx}
+\usepackage{colortbl}
+\usepackage[font={small}]{caption}
+
+\usepackage[bookmarks=true,colorlinks]{hyperref}
+ 
+\usepackage{algorithm}
+\usepackage[noend]{algorithmic}
+\usepackage[font={small}]{caption}
+
+\definecolor{lightblue}{HTML}{0071BC}
+
+\hypersetup{colorlinks,allcolors=lightblue, urlcolor=lightblue, citecolor=lightblue}
+\newcommand{\edit}[1]{\textcolor{blue}{#1}}
+
+\newcommand{\lirui}[1]{\textcolor{blue}{[Lirui: #1]}}
+\newcommand{\xinlei}[1]{\textcolor{orange}{XC: #1}}
+\newcommand{\methodname}{{HPT}}
+\pdfminorversion=6
+
+\definecolor{Gray}{gray}{0.5}
+\definecolor{nicergreen}{rgb}{0.13, 0.54, 0.13}
+\definecolor{nicered}{rgb}{0.83, 0.16, 0.16}
+\definecolor{Highlight}{HTML}{39b54a}
+\definecolor{Gray}{gray}{0.85}
+\definecolor{apricot}{HTML}{FFEAD0}
+\definecolor{bluebell}{HTML}{BEBCDE}
+ \definecolor{darkseagreen}{HTML}{B6DEC2}
+
+
+\setlength{\abovedisplayskip}{1pt}
+\setlength{\belowdisplayskip}{1pt}
+\setlength{\abovecaptionskip}{3pt}
+\setlength{\belowcaptionskip}{0pt}
+
+\titlespacing\section{0pt}{5pt plus 1pt minus 1pt}{4pt plus 1pt minus 1pt}
+\titlespacing\subsection{0pt}{4pt plus 1pt minus 1pt}{4pt plus 1pt minus 1pt}
+
+\newcolumntype{a}{>{\columncolor{Gray}}c}
+
+\newcommand{\textdarkseagreen}[1]{\colorbox{darkseagreen}{#1}}
+\newcommand{\textbluebell}[1]{\colorbox{bluebell}{#1}}
+\newcommand{\textapricot}[1]{\colorbox{apricot}{#1}}
+ 
+ \newcommand{\cgaphl}[2]{
+\fontsize{6pt}{1em}\selectfont{\textcolor{nicergreen}{(${#1}$\textbf{#2})}} 
+}
+
+\title{{Scaling Proprioceptive-Visual Learning with \\ Heterogeneous Pre-trained Transformers}}
+ 
+
+\author{Lirui Wang$^1$ \quad Xinlei Chen$^2$ \quad Jialiang Zhao$^1$ \quad Kaiming He$^{1}$  \\ $^1$MIT CSAIL \quad $^2$Meta, FAIR \vspace{.5em} \\ \href{https://liruiw.github.io/hpt}{ \texttt{https://liruiw.github.io/hpt}} }
+
+
+
+\begin{document}
+
+\maketitle
+\begin{abstract}
+One of the roadblocks for training generalist robotic models today is heterogeneity. Previous robot learning methods often collect data to train with one specific embodiment for one task, which is expensive and prone to overfitting. This work studies the problem of learning policy representations through \textit{heterogeneous pre-training} on robot data across different embodiments and tasks at scale. We propose Heterogeneous Pre-trained Transformers (HPT), which pre-train a large, shareable trunk of a policy neural network to learn a task and embodiment agnostic shared representation. This general architecture aligns the specific proprioception and vision inputs from distinct embodiments to a short sequence of tokens and then processes such tokens to map to control robots for different tasks.  Leveraging the recent large-scale multi-embodiment real-world robotic datasets as well as simulation, deployed robots, and human video datasets, we investigate pre-training policies across heterogeneity. We conduct experiments to investigate the {scaling behaviors} of training objectives, to the extent of 52 datasets. HPTs outperform several baselines and enhance the fine-tuned policy performance by over 20\% on unseen tasks in multiple simulator benchmarks and real-world settings. 
+\end{abstract}
+\vspace{.5em}
+
+\input{introduction.tex}
+\input{relatedworks.tex}
+\input{method.tex}
+\input{implementation.tex}
+\input{experiments.tex}
+\input{conclusion.tex}
+\input{acknowledgement.tex} %
+
+\bibliographystyle{plain}
+\bibliography{references.bib}
+\input{appendix}
+
+
+\end{document}

@@ -1,0 +1,28 @@
+\section{Introduction}
+
+Recent advancements in video generative models have made promising their application to interactive problems and decision-making.  Such video models trained explicitly on in-domain demonstrations have demonstrated accurate encoding of environment-specific visual details and dynamics, and have been popular choices to utilize for robotic learning~\citep{du2024video, huang2023diffusion, yang2023learning,  ko2024avdc, liang2024dreamitate}.  When optimized on expert video demonstrations, their encoded understanding of expert behavior can be directly used to supervise the learning of high-performing policies~\citep{huang2023diffusion, escontrela2024video}, and applied as performant visual planners~\citep{du2024learning} in robotic settings.  However, for arbitrary robotic environments, there is usually a severe difference in scale of tractably available expert demonstration data, especially with associated text labelling, in comparison with general internet-scale datasets of videos paired with natural language.  As a result, such in-domain video generative models usually suffer from weaker generalization capability, across novel text specifications and motions of interest.
+
+
+\looseness=-1
+Instead of training directly on in-domain demonstrations, stronger generalization performance can be obtained by using text-to-video models pretrained on internet-scale data.  Having summarized powerful priors over visual styles, natural motion, and alignment with natural language from large-scale data, such models can be leveraged to supervise policies that behave flexibly conditioned on text across multiple environment visual styles without modification~\citep{luo2024text}.  However, interaction is often performed in a fixed environment with specific visual characteristics and potentially unique interaction dynamics, which a general environment-agnostic video model may not inherently understand or respect.  Thus, directly applying a large-scale pretrained video generative model without modification comes with a potential drawback; they may not understand the intricacies of particular environments of interest to successfully facilitate high-performance behavior within them.
+
+
+These considerations naturally motivate the investigation of ways to mutually cover the independent deficiencies of each approach.  In this work, we perform a thorough study on novel task generalization via adapting internet video knowledge; we seek to illuminate how in-domain information can be best integrated into large-scale pretrained text-to-video models, such that powerful zero-shot text-conditioned generalization capabilities are enabled while considering environment-specific knowledge pertaining to visual styles and interaction dynamics.  We compare the downstream robotic performance of multiple adaptation techniques and contrast their respective requirements on in-domain data samples, which range from utilizing only a few still-frames of the agent to text-labelled video demonstrations, and training resources, which span from direct finetuning of the large-scale video model to utilizing it only for inference without any updates.  Broadly, we provide this study of adaptation for facilitating action prediction (\textbf{Adapt2Act}) as valuable insight to the practitioner interested in balancing performance with resource availability.
+
+
+
+We perform standardized evaluations across both robotic manipulation tasks~\citep{yu2020meta} and continuous control~\citep{tassa2018deepmind}, and demonstrate that adapted video generative models are able to successfully act as accurate video planners for novel text-conditioned specifications across a variety of robotic tasks, and can also supervise the learning of novel text-conditioned policies. Furthermore, in this work we propose a novel adaptation technique termed \textit{Inverse Probabilistic Adaptation}, which we highlight achieves consistently strong generalization performance across robotic environments and downstream evaluation approaches.  We also discover that even when only suboptimal in-domain demonstrations are provided, it can still effectively leverage web-scale priors and text conditioning to generate coherent video plans and successfully solve novel tasks.  Visualizations and code are provided at \href{https://diffusion-supervision.github.io/adapt2act/}{\nolinkurl{diffusion-supervision.github.io/adapt2act/}}.
+
+
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.9\linewidth]{figures/adaptation_techniques_adjusted_new.png}
+    \vspace{-5pt}
+    \caption{\textbf{Adaptation Techniques.} We explore how in-domain information can be integrated into large-scale text-to-video models through three different adaptation techniques: Subject Customization, Probabilistic Adaptation, and Direct Finetuning.  Subject Customization only modifies the image and text encoder, rather than the motion module, and is lightweight in terms of data requirements: it only utilizes pairs of static images and text annotated with a special identifier.  Probabilistic Adaptation learns a small in-domain model from paired video data, which is then used through score composition with a large-scale video model that is kept frozen.  The small in-domain model can be flexibly parameterized to consider available training resources. Direct Finetuning seeks to update the motion module of the large-scale pretrained video model with in-domain paired video data.}
+    \label{fig:adaptation}
+    \vspace{-15pt}
+\end{figure}
+
+
+

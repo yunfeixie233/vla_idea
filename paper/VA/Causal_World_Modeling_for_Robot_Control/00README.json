@@ -1,0 +1,25 @@
+{
+   "sources" : [
+      {
+         "usage" : "toplevel",
+         "filename" : "main.tex"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "assets/antgroup.png"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "assets/antgroup_robbyant.png"
+      },
+      {
+         "usage" : "ignore",
+         "filename" : "assets/robbyant.png"
+      }
+   ],
+   "spec_version" : 1,
+   "texlive_version" : "2025",
+   "process" : {
+      "compiler" : "pdflatex"
+   }
+}

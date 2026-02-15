@@ -1,0 +1,95 @@
+\documentclass[onecolumn]{robbyant}           %
+
+
+\newcommand\nonumfootnote[1]{%
+\begingroup%
+    \renewcommand\thefootnote{}\footnote{\hspace{-4pt}#1}%
+    \addtocounter{footnote}{-1}%
+\endgroup%
+}
+
+
+
+\metadata[Website]{\url{https://technology.robbyant.com/lingbot-va}}
+\metadata[Github]{\url{https://github.com/robbyant/lingbot-va}}
+\metadata[Checkpoints]{\url{https://huggingface.co/robbyant/lingbot-va}}
+\newcommand\methodname{LingBot-VA}
+
+\newcommand{\method}{\texttt{\methodname}\xspace}
+
+
+\usepackage{tikz}
+\usetikzlibrary{tikzmark, calc}
+\usepackage{makecell} 
+
+\newcommand{\Func}[1]{\textsc{#1}}
+\newcommand{\Var}[1]{\texttt{#1}}
+
+\newcommand{\DrawScopeLine}[5]{
+    \begin{tikzpicture}[overlay, remember picture]
+        \coordinate (TopPoint) at ($ (pic cs:#1) + (-#3, #4) $);
+        
+        \coordinate (BottomRef) at ($ (pic cs:#2) + (0, -#5) $);
+        
+        \draw[gray!50, thick] (TopPoint) -- (TopPoint |- BottomRef);
+    \end{tikzpicture}
+}
+
+\algblockdefx[MainLoop]{MainLoop}{EndMainLoop}{\textbf{loop}}{\textbf{end loop}}
+\newcommand{\my}[1]{{\color{red} [Mingyu: #1]}}
+\renewcommand{\algorithmiccomment}[1]{\hfill \textcolor{gray!80}{\footnotesize $\triangleright$~#1}}
+
+\newcommand{\IndBranch}{\hspace{1.5em}} 
+\newcommand{\IndCode}{\hspace{3.0em}}   
+\newcommand{\IndInner}{\hspace{4.5em}}  
+
+
+\newcommand{\StateNoNum}[1]{\Statex \hspace{\algorithmicindent} #1}
+
+
+\title{Causal World Modeling for Robot Control}
+
+
+\author{
+\begin{center}
+    Lin Li$^{*}$ \quad
+    Qihang Zhang$^{*\dagger}$ \quad
+    Yiming Luo$^{*}$ \quad
+    Shuai Yang \quad
+    Ruilin Wang \quad
+    Fei Han \quad
+    \\[5pt]
+    Mingrui Yu \quad
+    Zelin Gao \quad
+    Nan Xue \quad
+    Xing Zhu \quad
+    Yujun Shen \quad
+    Yinghao Xu$^\ddagger$
+    \\[12pt]
+    $^{*}$Equal Contribution \qquad
+    $^{\dagger}$Project Lead \qquad
+    $^{\ddagger}$Corresponding Author
+\end{center}
+}
+
+
+\begin{document}
+
+
+\input{sections/0_abstract.tex}
+
+
+\maketitle
+
+
+\justifying
+\input{sections/1_introduction.tex}
+\input{sections/2_method.tex}
+\input{sections/3_experiments.tex}
+\input{sections/4_related.tex}
+\input{sections/5_conclusion.tex}
+\input{sections/6_reference.tex}
+\input{sections/7_appendix.tex}
+
+
+\end{document}

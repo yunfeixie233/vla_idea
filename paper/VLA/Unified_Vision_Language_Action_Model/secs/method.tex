@@ -1,0 +1,45 @@
+\begin{figure}[tbp]
+    \centering
+    \includegraphics[width=1.0\linewidth]{images/pipelinev2.pdf}
+    \caption{\textbf{Overview of the \methodname{} framework.} Our model unifies information from different modalities into a discrete interleaved sequence, which is modeled using an autoregressive Transformer. To enable unified modeling, images are discretized using vector-quantized (VQ) encoders, while actions are transformed into the frequency domain and discretized via Discrete Cosine Transform (DCT) encoding. This causal multimodal sequence naturally preserves the temporal dynamics and causality required for real-world tasks. The model builds upon a pretrained vision-language model and follows a two-stage training strategy: (1) a post-training phase that adopts world-model training on large-scale datasets without requiring actions, and (2) a fine-tuning phase that interleaves actions into the sequence, enabling policy learning on downstream tasks.}
+    \label{fig:pipeline_univla}
+    \vspace{-4mm}
+\end{figure}
+
+\section{Unified Vision-Language-Action Model}
+In this section, we present the design of \methodname{}, as illustrated in Figure~\ref{fig:pipeline_univla}. Unlike previous VLA models~\cite{kim2024openvla, black2024pi_0} that rely on ViT~\cite{dosovitskiyimage} for image encoding, our approach adopts an encoder-free architecture, converting all modalities into discrete tokens and learning them autoregressively. The overall design is simple yet effective, demonstrating strong scalability.
+
+Our \emph{unified paradigm} has two key aspects: first, it \emph{unifies the learning of multiple modalities}, integrating various modality tokens into a shared representation space and employing a transformer for autoregressive learning; Second, it \emph{unifies sequence modeling across tasks} through the natural interleaving of modalities, facilitating the seamless combination of tasks such as video generation, visual grounding, and action learning. In the following sections, we will introduce the method from the perspectives of \emph{Unified Multimodal Model} and \emph{Unified Multimodal Sequence Modeling}.
+
+%---------------------------------------------------------------------------------------------------------
+\subsection{Unified Multimodal Model}
+% introduce model
+As illustrated in Figure~\ref{fig:pipeline_univla}, our method unifies language, vision, and action modalities by converting each into discrete tokens and concatenating them into a single multimodal sequence \(L\). Specifically, \(L_t\), \(L_v\), and \(L_a\) denote the discrete token sequences for language, vision, and action, respectively, all drawn from a shared vocabulary. The superscript indicates the temporal step, with tokens interleaved across modalities to preserve temporal alignment.
+
+For example, in the robotic manipulation task, a textual instruction is provided only at the beginning, followed by a naturally interleaved sequence of visual observations and actions. The language and vision tokenizers adopt the same design as Emu3~\cite{wang2024emu3}; visual observations are discretized using a VQ tokenizer~\cite{zheng2022movq}, while actions are encoded using FAST~\cite{pertsch2025fast}. To clearly demarcate modality boundaries, we employ special tokens—\texttt{boi} (begin of image), \texttt{eoi} (end of image), \texttt{boa} (begin of action), and \texttt{eoa} (end of action)—to encapsulate image and action tokens, respectively.
+
+\vspace{-2mm}
+\paragraph{Action Modeling}
+We follow FAST~\cite{pertsch2025fast} and apply the Discrete Cosine Transform (DCT) to convert continuous action sequences into discrete action tokens. Specifically, given an action sequence within a time window, we define \( L_a \) at a given time step as a sequence of action tokens \( [T_1, \dots, T_n] \). The raw action sequence \( A_{1:H} = \{a_1, a_2, \dots, a_H\} \) spans a window of size \( H \), where each action \( a_t \) is a \( d \)-dimensional vector. The FAST action tokenizer encodes \( A_{1:H} \) into a discrete token sequence \( [T_1, \dots, T_n] \), with \( n \) tokens drawn from a vocabulary of size \( |V| \). Similar to natural language processing, action sequences can vary in token length, resulting in a variable-length ($n$) discrete representation.
+\vspace{-2mm}
+\paragraph{Training Objective}
+Since all modality signals are transformed into discrete tokens, the training objective is simplified to a standard next-token prediction task using cross-entropy loss. To accommodate different task formats, we selectively include specific tokens in the loss computation, ensuring compatibility and flexibility across diverse tasks.
+%---------------------------------------------------------------------------------------------------------
+\subsection{Unified Multimodal Sequence Modeling}
+% introduce task modeling
+As shown in Figure~\ref{fig:pipeline_univla}, our multimodal sequence representation naturally captures the temporal dynamics and causal structure inherent in task execution. The embodied planning problem can be formulated as a Markov Decision Process (MDP), a general mathematical framework for decision-making in partially stochastic environments. For example, in the task of picking a carrot, the instruction and current observation inform the action; this action alters the environment, leading to a new observation that subsequently guides the next action. Building on this interleaved Markovian formulation, we unify a variety of tasks within a shared sequence modeling framework, and present the task-specific modeling strategies in the following.
+
+\vspace{-2mm}
+\paragraph{World Model (Post-train)}
+Within the MDP framework, a world model aims to learn the dynamics of the environment by modeling the transition function \( P(\mathbf{s}_{t+1} | \mathbf{s}_t, \mathbf{a}_t) \). The learned world model enables agents to simulate future trajectories, plan actions, and reason about consequences without direct interaction with the environment. Specifically, in the context of robotic tasks, we treat the language instructiom as a general form of action. Given the current observation $L_v^1$ and the instruction $L_t^1$, the world model need to predict future visual content. In this setting, we use the loss computed solely from the vision tokens as the supervisory signal, enabling the model to generate visual predictions conditioned on the given instruction and observed state. Sequence $S_v$ formulation is as follows:
+\begin{equation}
+    S_v = \{L_t^1, L_v^1, L_v^2, ..., L_v^t\}
+\end{equation}
+\vspace{-2mm}
+\paragraph{Policy Learning (Fine-tune)} 
+Policy learning enables the agent to determine optimal actions based on both current observations and prior states, thereby effectively guiding task execution. In this setting, we employ a loss function computed solely from the action tokens. The sequence \( S_a \) representing the interactions over time is formulated as:
+\begin{equation}
+    S_a = \{L_t^1, L_v^1, L_a^1, L_v^2, L_a^2, \dots, L_v^t, L_a^t\}
+\end{equation}
+
+As illustrated in Figure~\ref{fig:pipeline_univla}, in this interleaved format, we adopt a two-stage training paradigm for robotic tasks. The model is initialized with a vision-language (VL) aligned checkpoint, endowing it with basic vision-language capabilities. The post-training stage leverages a world model objective to capture video dynamics, treating world modeling as a general visual learning task. Building upon the learned world model, the fine-tuning stage focuses on action learning to refine task-specific behaviors. We observe that incorporating the world model significantly enhances the efficiency and effectiveness of policy learning.

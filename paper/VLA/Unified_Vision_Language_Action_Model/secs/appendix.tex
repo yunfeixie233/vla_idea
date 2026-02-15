@@ -1,0 +1,44 @@
+\section*{Appendix}
+\section{Implementation Details}
+\paragraph{Post-training Stage}
+We began by selecting several high-quality robotics datasets for post-training, as summarized in Table~\ref{tab:dataset_weights}. To account for differences in data collection frequencies across datasets, we applied dataset-specific frame sampling intervals to ensure that the temporal gap between keyframes is approximately one second. We further filtered out video sequences containing fewer than six frames, as well as those lacking corresponding text instructions.
+Due to the large number of videos from the Kuka~\cite{kalashnikov2018scalable} dataset, we randomly retained 100k videos to prevent it from dominating the overall training data.
+\input{tables/post_train_datasets}
+
+% experiments
+For the experiments in Table~\ref{abl:post_train}, to ensure a fair comparison of different post-training strategies, all models are trained on the same dataset (excluding SSV2~\cite{goyal2017something}, which does not contain action annotations), with only the post-training strategy varied.
+For the \emph{action prediction} task, we organize the input as $(T, I, A)$, where $T$ denotes the text instruction, $I$ the image observations, and $A$ the action sequence. During training, only the action tokens $A$ are supervised in the loss computation.
+For the \emph{text-to-image} task, the input is organized as $(T, I)$, where $T$ denotes the input text and $I$ denotes the target image. During training, the loss is only computed on the vision tokens corresponding to $I$.
+For the \emph{video prediction} task, the input is organized as $(I_1,...,I_t)$, where $I$ denotes the video frame. During training, the loss is computed on the vision tokens.
+For the \emph{world model} task, the input is organized as $(T,I_1,...,I_t)$, where $T$ denotes the input text, $I$ denotes the video frame. During training, the loss is computed on the vision tokens.
+
+% compute
+During training, the observations are resized to 256$\times$256, using six frames as input, with the maximum sequence length set to 6400. We perform full-parameter training for 50k steps using 32 A100 GPUs (40GB), which takes approximately 4–5 days.
+
+\paragraph{Simulation Finetuning}
+The training setup is described in the main paper. We adopt full-parameter training, and for evaluation, we follow the testing protocols of OpenVLA~\cite{kim2024openvla} and RoboVLMs~\cite{li2024towards} across various benchmarks. By default, our model is trained using video-format sequences; however, it also supports fine-tuning with image-format sequences. In the ablation study evaluating the effect of visual prediction, when post-training is not applied, the visual token weight is set to 0.5 while the action token weight is set to 1.0, in order to maintain balance between the two modalities.
+
+\paragraph{Real-robot Finetuning}
+For real-world evaluation, we conduct experiments on the ALOHA platform, using images captured from three perspectives: \texttt{cam high}, \texttt{wrist left}, and \texttt{wrist right}. 
+The real-robot is controlled using end-effector (EE) pose. All input images are resized to a resolution of 128$\times$128. The model outputs a 14-dimensional action vector. The action chunk size is set to 20. For each task, we train for 8k steps with a batch size of 256. The learning rate is set to $5\times 10^{-5}$, and all other settings remain consistent with the above.
+We also leverage world model pretraining, using video-based post-training on a collected real-aloha dataset (Table~\ref{tab:task_counts}). Interestingly, this post-training provides substantial benefits even when transferring to real-robot execution.
+
+\section{Real-Robot Experiments}
+\input{figures/songling_setup}
+\subsection{ALOHA Experimental Setup}
+The robotic platform used in this paper is \textbf{AgileX Cobot Magic V2.0}, a dual-arm robot. As shown in Figure~\ref{fig:songling}, the robot is equipped with two arms and three camera views, enabling it to perform a variety of manipulation tasks. For example, Figure~\ref{fig:task} illustrates a range of manipulation tasks collected from real-world scenarios.
+
+\input{figures/task}
+\paragraph{Real-World Task Collection}
+Table~\ref{tab:task_counts} provides a summary of the real-world data collected from the physical robot, recorded at an actual frequency of 30 Hz. A total of 8 tasks were included, with each task collecting approximately 500 trajectories on average. During preprocessing, static frames at the beginning and end of each trajectory were filtered out.
+\input{tables/real_tasks}
+
+\paragraph{Data Processing}
+To reduce redundancy and improve training efficiency, we select keyframes based on thresholding the changes in recorded action joint values. For each selected sequence, the action chunk is normalized by subtracting the joint values of the first frame.
+
+
+\section{Autonomous Driving Experiments}
+\paragraph{NAVSIM Setup}
+The NAVSIM dataset~\cite{dauner2024navsim}, resampled from OpenScene to emphasize challenging scenarios, is currently one of the most established end-to-end evaluation benchmarks in the autonomous driving domain. The dataset is divided into two parts: Navtrain and Navtest, comprising 1,192 scenarios for training and validation, and 136 scenarios for testing.
+
+For model training, the input images are resized to a resolution of 512$\times$288. We follow the standard training setup, using the current image frame and ego status to predict trajectories for the next 8 frames. Both the action and ego status are encoded using the fast tokenizer.

@@ -1,0 +1,10 @@
+\begin{abstract}
+Lifelong learning offers a promising paradigm of building a generalist agent that learns and adapts over its lifespan. 
+%
+Unlike traditional lifelong learning problems in image and text domains, which primarily involve the transfer of declarative knowledge of entities and concepts, lifelong learning in decision-making (\lldm{}) also necessitates the transfer of procedural knowledge, such as actions and behaviors.
+%
+To advance research in \lldm{}, we introduce \lb{}, a novel benchmark of lifelong learning for robot manipulation. Specifically, \lb{} highlights five key research topics in \lldm{}: \textbf{1)} how to efficiently transfer declarative knowledge, procedural knowledge, or the mixture of both; \textbf{2)} how to design effective policy architectures and \textbf{3)} effective algorithms for \lldm{}; \textbf{4)} the robustness of a lifelong learner with respect to task ordering; and \textbf{5)} the effect of model pretraining for \lldm{}.
+We develop an extendible \emph{procedural generation} pipeline that can in principle generate infinitely many tasks. For benchmarking purpose, we create four task suites (130 tasks in total) that we use to investigate the above-mentioned research topics. To support sample-efficient learning, we provide high-quality human-teleoperated demonstration data for all tasks.
+%
+Our extensive experiments present several insightful or even \emph{unexpected} discoveries: sequential finetuning outperforms existing lifelong learning methods in forward transfer, no single visual encoder architecture excels at all types of knowledge transfer, and naive supervised pretraining can hinder agents' performance in the subsequent \lldm{}.\footnote{Check the website at \url{https://libero-project.github.io} for the code and the datasets.}
+\end{abstract}

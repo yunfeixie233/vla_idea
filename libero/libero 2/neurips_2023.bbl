@@ -1,0 +1,485 @@
+\begin{thebibliography}{10}
+
+\bibitem{ahmed2020causalworld}
+Ossama Ahmed, Frederik Tr{\"a}uble, Anirudh Goyal, Alexander Neitz, Yoshua
+  Bengio, Bernhard Sch{\"o}lkopf, Manuel W{\"u}thrich, and Stefan Bauer.
+\newblock Causalworld: A robotic manipulation benchmark for causal structure
+  and transfer learning.
+\newblock {\em arXiv preprint arXiv:2010.04296}, 2020.
+
+\bibitem{ayub2022few}
+Ali Ayub and Carter Fendley.
+\newblock Few-shot continual active learning by a robot.
+\newblock {\em arXiv preprint arXiv:2210.04137}, 2022.
+
+\bibitem{ayub2021f}
+Ali Ayub and Alan~R Wagner.
+\newblock F-siol-310: A robotic dataset and benchmark for few-shot incremental
+  object learning.
+\newblock In {\em 2021 IEEE International Conference on Robotics and Automation
+  (ICRA)}, pages 13496--13502. IEEE, 2021.
+
+\bibitem{bain1995framework}
+Michael Bain and Claude Sammut.
+\newblock A framework for behavioural cloning.
+\newblock In {\em Machine Intelligence 15}, pages 103--129, 1995.
+
+\bibitem{ben2022lifelong}
+Eseoghene Ben-Iwhiwhu, Saptarshi Nath, Praveen~K Pilly, Soheil Kolouri, and
+  Andrea Soltoggio.
+\newblock Lifelong reinforcement learning with modulating masks.
+\newblock {\em arXiv preprint arXiv:2212.11110}, 2022.
+
+\bibitem{bengio2009curriculum}
+Yoshua Bengio, J{\'e}r{\^o}me Louradour, Ronan Collobert, and Jason Weston.
+\newblock Curriculum learning.
+\newblock In {\em Proceedings of the 26th annual international conference on
+  machine learning}, pages 41--48, 2009.
+
+\bibitem{biesialska2020continual}
+Magdalena Biesialska, Katarzyna Biesialska, and Marta~R Costa-Jussa.
+\newblock Continual lifelong learning in natural language processing: A survey.
+\newblock {\em arXiv preprint arXiv:2012.09823}, 2020.
+
+\bibitem{bishop1994mixture}
+Christopher~M Bishop.
+\newblock Mixture density networks.
+\newblock 1994.
+
+\bibitem{buzzega2020dark}
+Pietro Buzzega, Matteo Boschini, Angelo Porrello, Davide Abati, and Simone
+  Calderara.
+\newblock Dark experience for general continual learning: a strong, simple
+  baseline.
+\newblock {\em Advances in neural information processing systems},
+  33:15920--15930, 2020.
+
+\bibitem{caruana1997multitask}
+Rich Caruana.
+\newblock Multitask learning.
+\newblock {\em Machine learning}, 28(1):41--75, 1997.
+
+\bibitem{chaudhry2018riemannian}
+Arslan Chaudhry, Puneet~K Dokania, Thalaiyasingam Ajanthan, and Philip~HS Torr.
+\newblock Riemannian walk for incremental learning: Understanding forgetting
+  and intransigence.
+\newblock In {\em Proceedings of the European Conference on Computer Vision
+  (ECCV)}, pages 532--547, 2018.
+
+\bibitem{chaudhry2018efficient}
+Arslan Chaudhry, Marc'Aurelio Ranzato, Marcus Rohrbach, and Mohamed Elhoseiny.
+\newblock Efficient lifelong learning with a-gem.
+\newblock {\em arXiv preprint arXiv:1812.00420}, 2018.
+
+\bibitem{chaudhry2019tiny}
+Arslan Chaudhry, Marcus Rohrbach, Mohamed Elhoseiny, Thalaiyasingam Ajanthan,
+  Puneet~K Dokania, Philip~HS Torr, and Marc'Aurelio Ranzato.
+\newblock On tiny episodic memories in continual learning.
+\newblock {\em arXiv preprint arXiv:1902.10486}, 2019.
+
+\bibitem{cheung2019superposition}
+Brian Cheung, Alexander Terekhov, Yubei Chen, Pulkit Agrawal, and Bruno
+  Olshausen.
+\newblock Superposition of many models into one.
+\newblock {\em Advances in neural information processing systems}, 32, 2019.
+
+\bibitem{cobbe2020leveraging}
+Karl Cobbe, Chris Hesse, Jacob Hilton, and John Schulman.
+\newblock Leveraging procedural generation to benchmark reinforcement learning.
+\newblock In {\em International conference on machine learning}, pages
+  2048--2056. PMLR, 2020.
+
+\bibitem{de2021continual}
+Matthias De~Lange, Rahaf Aljundi, Marc Masana, Sarah Parisot, Xu~Jia,
+  Ale{\v{s}} Leonardis, Gregory Slabaugh, and Tinne Tuytelaars.
+\newblock A continual learning survey: Defying forgetting in classification
+  tasks.
+\newblock {\em IEEE transactions on pattern analysis and machine intelligence},
+  44(7):3366--3385, 2021.
+
+\bibitem{deng2009imagenet}
+Jia Deng, Wei Dong, Richard Socher, Li-Jia Li, Kai Li, and Li~Fei-Fei.
+\newblock Imagenet: A large-scale hierarchical image database.
+\newblock In {\em 2009 IEEE conference on computer vision and pattern
+  recognition}, pages 248--255. Ieee, 2009.
+
+\bibitem{deng2012mnist}
+Li~Deng.
+\newblock The mnist database of handwritten digit images for machine learning
+  research.
+\newblock {\em IEEE Signal Processing Magazine}, 29(6):141--142, 2012.
+
+\bibitem{devlin2018bert}
+Jacob Devlin, Ming-Wei Chang, Kenton Lee, and Kristina Toutanova.
+\newblock Bert: Pre-training of deep bidirectional transformers for language
+  understanding.
+\newblock {\em arXiv preprint arXiv:1810.04805}, 2018.
+
+\bibitem{diaz2018don}
+Natalia D{\'\i}az-Rodr{\'\i}guez, Vincenzo Lomonaco, David Filliat, and Davide
+  Maltoni.
+\newblock Don't forget, there is more than forgetting: new metrics for
+  continual learning.
+\newblock {\em arXiv preprint arXiv:1810.13166}, 2018.
+
+\bibitem{ermis2022memory}
+Beyza Ermis, Giovanni Zappella, Martin Wistuba, and C{\'e}dric Archambeau.
+\newblock Memory efficient continual learning with transformers.
+\newblock 2022.
+
+\bibitem{grauman2022ego4d}
+Kristen Grauman, Andrew Westbury, Eugene Byrne, Zachary Chavis, Antonino
+  Furnari, Rohit Girdhar, Jackson Hamburger, Hao Jiang, Miao Liu, Xingyu Liu,
+  et~al.
+\newblock Ego4d: Around the world in 3,000 hours of egocentric video.
+\newblock In {\em Proceedings of the IEEE/CVF Conference on Computer Vision and
+  Pattern Recognition}, pages 18995--19012, 2022.
+
+\bibitem{Greydanus2017VisualizingAU}
+Sam Greydanus, Anurag Koul, Jonathan Dodge, and Alan Fern.
+\newblock Visualizing and understanding atari agents.
+\newblock {\em ArXiv}, abs/1711.00138, 2017.
+
+\bibitem{gu2023maniskill2}
+Jiayuan Gu, Fanbo Xiang, Xuanlin Li, Zhan Ling, Xiqiang Liu, Tongzhou Mu, Yihe
+  Tang, Stone Tao, Xinyue Wei, Yunchao Yao, et~al.
+\newblock Maniskill2: A unified benchmark for generalizable manipulation
+  skills.
+\newblock {\em arXiv preprint arXiv:2302.04659}, 2023.
+
+\bibitem{hausknecht2015deep}
+Matthew Hausknecht and Peter Stone.
+\newblock Deep recurrent q-learning for partially observable mdps.
+\newblock In {\em 2015 aaai fall symposium series}, 2015.
+
+\bibitem{hung2019compacting}
+Ching-Yi Hung, Cheng-Hao Tu, Cheng-En Wu, Chien-Hung Chen, Yi-Ming Chan, and
+  Chu-Song Chen.
+\newblock Compacting, picking and growing for unforgetting continual learning.
+\newblock {\em Advances in Neural Information Processing Systems}, 32, 2019.
+
+\bibitem{james2020rlbench}
+Stephen James, Zicong Ma, David~Rovick Arrojo, and Andrew~J Davison.
+\newblock Rlbench: The robot learning benchmark \& learning environment.
+\newblock {\em IEEE Robotics and Automation Letters}, 5(2):3019--3026, 2020.
+
+\bibitem{kaelbling2020foundation}
+Leslie~Pack Kaelbling.
+\newblock The foundation of efficient robot learning.
+\newblock {\em Science}, 369(6506):915--916, 2020.
+
+\bibitem{kang2022class}
+Minsoo Kang, Jaeyoo Park, and Bohyung Han.
+\newblock Class-incremental learning by knowledge distillation with adaptive
+  feature consolidation.
+\newblock In {\em Proceedings of the IEEE/CVF conference on computer vision and
+  pattern recognition}, pages 16071--16080, 2022.
+
+\bibitem{kempka2016vizdoom}
+Micha{\l} Kempka, Marek Wydmuch, Grzegorz Runc, Jakub Toczek, and Wojciech
+  Ja{\'s}kowski.
+\newblock Vizdoom: A doom-based ai research platform for visual reinforcement
+  learning.
+\newblock In {\em 2016 IEEE conference on computational intelligence and games
+  (CIG)}, pages 1--8. IEEE, 2016.
+
+\bibitem{kim2021vilt}
+Wonjae Kim, Bokyung Son, and Ildoo Kim.
+\newblock Vilt: Vision-and-language transformer without convolution or region
+  supervision.
+\newblock In {\em International Conference on Machine Learning}, pages
+  5583--5594. PMLR, 2021.
+
+\bibitem{kingma2014adam}
+Diederik~P Kingma and Jimmy Ba.
+\newblock Adam: A method for stochastic optimization.
+\newblock {\em arXiv preprint arXiv:1412.6980}, 2014.
+
+\bibitem{kirkpatrick2017overcoming}
+James Kirkpatrick, Razvan Pascanu, Neil Rabinowitz, Joel Veness, Guillaume
+  Desjardins, Andrei~A Rusu, Kieran Milan, John Quan, Tiago Ramalho, Agnieszka
+  Grabska-Barwinska, et~al.
+\newblock Overcoming catastrophic forgetting in neural networks.
+\newblock {\em Proceedings of the national academy of sciences},
+  114(13):3521--3526, 2017.
+
+\bibitem{krizhevsky2009learning}
+Alex Krizhevsky, Geoffrey Hinton, et~al.
+\newblock Learning multiple layers of features from tiny images.
+\newblock 2009.
+
+\bibitem{li2023behavior}
+Chengshu Li, Ruohan Zhang, Josiah Wong, Cem Gokmen, Sanjana Srivastava, Roberto
+  Mart{\'\i}n-Mart{\'\i}n, Chen Wang, Gabrael Levine, Michael Lingelbach,
+  Jiankai Sun, et~al.
+\newblock Behavior-1k: A benchmark for embodied ai with 1,000 everyday
+  activities and realistic simulation.
+\newblock In {\em Conference on Robot Learning}, pages 80--93. PMLR, 2023.
+
+\bibitem{Liu2022ContinualLA}
+B.~Liu, Qian Liu, and Peter Stone.
+\newblock Continual learning and private unlearning.
+\newblock In {\em CoLLAs}, 2022.
+
+\bibitem{liu2022continual}
+Hao Liu and Huaping Liu.
+\newblock Continual learning with recursive gradient optimization.
+\newblock {\em arXiv preprint arXiv:2201.12522}, 2022.
+
+\bibitem{lomonaco2017core50}
+Vincenzo Lomonaco and Davide Maltoni.
+\newblock Core50: a new dataset and benchmark for continuous object
+  recognition.
+\newblock In {\em Conference on Robot Learning}, pages 17--26. PMLR, 2017.
+
+\bibitem{lopez2017gradient}
+David Lopez-Paz and Marc'Aurelio Ranzato.
+\newblock Gradient episodic memory for continual learning.
+\newblock {\em Advances in neural information processing systems}, 30, 2017.
+
+\bibitem{mai2022online}
+Zheda Mai, Ruiwen Li, Jihwan Jeong, David Quispe, Hyunwoo Kim, and Scott
+  Sanner.
+\newblock Online continual learning in image classification: An empirical
+  survey.
+\newblock {\em Neurocomputing}, 469:28--51, 2022.
+
+\bibitem{mallya2018packnet}
+Arun Mallya and Svetlana Lazebnik.
+\newblock Packnet: Adding multiple tasks to a single network by iterative
+  pruning.
+\newblock In {\em Proceedings of the IEEE conference on Computer Vision and
+  Pattern Recognition}, pages 7765--7773, 2018.
+
+\bibitem{mandlekar2021matters}
+Ajay Mandlekar, Danfei Xu, Josiah Wong, Soroush Nasiriany, Chen Wang, Rohun
+  Kulkarni, Li~Fei-Fei, Silvio Savarese, Yuke Zhu, and Roberto
+  Mart{\'\i}n-Mart{\'\i}n.
+\newblock What matters in learning from offline human demonstrations for robot
+  manipulation.
+\newblock {\em arXiv preprint arXiv:2108.03298}, 2021.
+
+\bibitem{mcdermott1998pddl}
+Drew McDermott, Malik Ghallab, Adele Howe, Craig Knoblock, Ashwin Ram, Manuela
+  Veloso, Daniel Weld, and David Wilkins.
+\newblock Pddl-the planning domain definition language.
+\newblock 1998.
+
+\bibitem{mendez2022composuite}
+Jorge~A Mendez, Marcel Hussing, Meghna Gummadi, and Eric Eaton.
+\newblock Composuite: A compositional reinforcement learning benchmark.
+\newblock {\em arXiv preprint arXiv:2207.04136}, 2022.
+
+\bibitem{mirzadeh2022architecture}
+Seyed~Iman Mirzadeh, Arslan Chaudhry, Dong Yin, Timothy Nguyen, Razvan Pascanu,
+  Dilan Gorur, and Mehrdad Farajtabar.
+\newblock Architecture matters in continual learning.
+\newblock {\em arXiv preprint arXiv:2202.00275}, 2022.
+
+\bibitem{mnih2013playing}
+Volodymyr Mnih, Koray Kavukcuoglu, David Silver, Alex Graves, Ioannis
+  Antonoglou, Daan Wierstra, and Martin Riedmiller.
+\newblock Playing atari with deep reinforcement learning.
+\newblock {\em arXiv preprint arXiv:1312.5602}, 2013.
+
+\bibitem{mu2021maniskill}
+Tongzhou Mu, Zhan Ling, Fanbo Xiang, Derek Yang, Xuanlin Li, Stone Tao, Zhiao
+  Huang, Zhiwei Jia, and Hao Su.
+\newblock Maniskill: Generalizable manipulation skill benchmark with
+  large-scale demonstrations.
+\newblock {\em arXiv preprint arXiv:2107.14483}, 2021.
+
+\bibitem{narvekar2020curriculum}
+Sanmit Narvekar, Bei Peng, Matteo Leonetti, Jivko Sinapov, Matthew~E Taylor,
+  and Peter Stone.
+\newblock Curriculum learning for reinforcement learning domains: A framework
+  and survey.
+\newblock {\em arXiv preprint arXiv:2003.04960}, 2020.
+
+\bibitem{parisi2019continual}
+German~I Parisi, Ronald Kemker, Jose~L Part, Christopher Kanan, and Stefan
+  Wermter.
+\newblock Continual lifelong learning with neural networks: A review.
+\newblock {\em Neural Networks}, 113:54--71, 2019.
+
+\bibitem{perez2018film}
+Ethan Perez, Florian Strub, Harm De~Vries, Vincent Dumoulin, and Aaron
+  Courville.
+\newblock Film: Visual reasoning with a general conditioning layer.
+\newblock In {\em Proceedings of the AAAI Conference on Artificial
+  Intelligence}, volume~32, 2018.
+
+\bibitem{powers2021cora}
+Sam Powers, Eliot Xing, Eric Kolve, Roozbeh Mottaghi, and Abhinav Gupta.
+\newblock Cora: Benchmarks, baselines, and metrics as a platform for continual
+  reinforcement learning agents.
+\newblock {\em arXiv preprint arXiv:2110.10067}, 2021.
+
+\bibitem{radford2021learning}
+Alec Radford, Jong~Wook Kim, Chris Hallacy, Aditya Ramesh, Gabriel Goh,
+  Sandhini Agarwal, Girish Sastry, Amanda Askell, Pamela Mishkin, Jack Clark,
+  et~al.
+\newblock Learning transferable visual models from natural language
+  supervision.
+\newblock In {\em International conference on machine learning}, pages
+  8748--8763. PMLR, 2021.
+
+\bibitem{radford2019language}
+Alec Radford, Jeffrey Wu, Rewon Child, David Luan, Dario Amodei, Ilya
+  Sutskever, et~al.
+\newblock Language models are unsupervised multitask learners.
+\newblock {\em OpenAI blog}, 1(8):9, 2019.
+
+\bibitem{rios2020lifelong}
+Amanda Rios and Laurent Itti.
+\newblock Lifelong learning without a task oracle.
+\newblock In {\em 2020 IEEE 32nd International Conference on Tools with
+  Artificial Intelligence (ICTAI)}, pages 255--263. IEEE, 2020.
+
+\bibitem{ross2011reduction}
+St{\'e}phane Ross, Geoffrey Gordon, and Drew Bagnell.
+\newblock A reduction of imitation learning and structured prediction to
+  no-regret online learning.
+\newblock In {\em Proceedings of the fourteenth international conference on
+  artificial intelligence and statistics}, pages 627--635. JMLR Workshop and
+  Conference Proceedings, 2011.
+
+\bibitem{rusu2016progressive}
+Andrei~A Rusu, Neil~C Rabinowitz, Guillaume Desjardins, Hubert Soyer, James
+  Kirkpatrick, Koray Kavukcuoglu, Razvan Pascanu, and Raia Hadsell.
+\newblock Progressive neural networks.
+\newblock {\em arXiv preprint arXiv:1606.04671}, 2016.
+
+\bibitem{saha2021space}
+Gobinda Saha, Isha Garg, Aayush Ankit, and Kaushik Roy.
+\newblock Space: Structured compression and sharing of representational space
+  for continual learning.
+\newblock {\em IEEE Access}, 9:150480--150494, 2021.
+
+\bibitem{samvelyan2021minihack}
+Mikayel Samvelyan, Robert Kirk, Vitaly Kurin, Jack Parker-Holder, Minqi Jiang,
+  Eric Hambro, Fabio Petroni, Heinrich K{\"u}ttler, Edward Grefenstette, and
+  Tim Rockt{\"a}schel.
+\newblock Minihack the planet: A sandbox for open-ended reinforcement learning
+  research.
+\newblock {\em arXiv preprint arXiv:2109.13202}, 2021.
+
+\bibitem{sarlin2020superglue}
+Paul-Edouard Sarlin, Daniel DeTone, Tomasz Malisiewicz, and Andrew Rabinovich.
+\newblock Superglue: Learning feature matching with graph neural networks.
+\newblock In {\em Proceedings of the IEEE/CVF conference on computer vision and
+  pattern recognition}, pages 4938--4947, 2020.
+
+\bibitem{schwarz2018progress}
+Jonathan Schwarz, Wojciech Czarnecki, Jelena Luketina, Agnieszka
+  Grabska-Barwinska, Yee~Whye Teh, Razvan Pascanu, and Raia Hadsell.
+\newblock Progress \& compress: A scalable framework for continual learning.
+\newblock In {\em International Conference on Machine Learning}, pages
+  4528--4537. PMLR, 2018.
+
+\bibitem{she2020openloris}
+Qi~She, Fan Feng, Xinyue Hao, Qihan Yang, Chuanlin Lan, Vincenzo Lomonaco,
+  Xuesong Shi, Zhengwei Wang, Yao Guo, Yimin Zhang, et~al.
+\newblock Openloris-object: A robotic vision dataset and benchmark for lifelong
+  deep learning.
+\newblock In {\em 2020 IEEE international conference on robotics and automation
+  (ICRA)}, pages 4767--4773. IEEE, 2020.
+
+\bibitem{shridhar2020alfred}
+Mohit Shridhar, Jesse Thomason, Daniel Gordon, Yonatan Bisk, Winson Han,
+  Roozbeh Mottaghi, Luke Zettlemoyer, and Dieter Fox.
+\newblock Alfred: A benchmark for interpreting grounded instructions for
+  everyday tasks.
+\newblock In {\em Proceedings of the IEEE/CVF conference on computer vision and
+  pattern recognition}, pages 10740--10749, 2020.
+
+\bibitem{srivastava2022behavior}
+Sanjana Srivastava, Chengshu Li, Michael Lingelbach, Roberto
+  Mart{\'\i}n-Mart{\'\i}n, Fei Xia, Kent~Elliott Vainio, Zheng Lian, Cem
+  Gokmen, Shyamal Buch, Karen Liu, et~al.
+\newblock Behavior: Benchmark for everyday household activities in virtual,
+  interactive, and ecological environments.
+\newblock In {\em Conference on Robot Learning}, pages 477--490. PMLR, 2022.
+
+\bibitem{team2021open}
+Open Ended~Learning Team, Adam Stooke, Anuj Mahajan, Catarina Barros, Charlie
+  Deck, Jakob Bauer, Jakub Sygnowski, Maja Trebacz, Max Jaderberg, Michael
+  Mathieu, et~al.
+\newblock Open-ended learning leads to generally capable agents.
+\newblock {\em arXiv preprint arXiv:2107.12808}, 2021.
+
+\bibitem{thrun1995lifelong}
+Sebastian Thrun and Tom~M Mitchell.
+\newblock Lifelong robot learning.
+\newblock {\em Robotics and autonomous systems}, 15(1-2):25--46, 1995.
+
+\bibitem{vaswani2017attention}
+Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones,
+  Aidan~N Gomez, {\L}ukasz Kaiser, and Illia Polosukhin.
+\newblock Attention is all you need.
+\newblock {\em Advances in neural information processing systems}, 30, 2017.
+
+\bibitem{wang2018glue}
+Alex Wang, Amanpreet Singh, Julian Michael, Felix Hill, Omer Levy, and Samuel~R
+  Bowman.
+\newblock Glue: A multi-task benchmark and analysis platform for natural
+  language understanding.
+\newblock {\em arXiv preprint arXiv:1804.07461}, 2018.
+
+\bibitem{wang2023mimicplay}
+Chen Wang, Linxi Fan, Jiankai Sun, Ruohan Zhang, Li~Fei-Fei, Danfei Xu, Yuke
+  Zhu, and Anima Anandkumar.
+\newblock Mimicplay: Long-horizon imitation learning by watching human play.
+\newblock {\em arXiv preprint arXiv:2302.12422}, 2023.
+
+\bibitem{Woczyk2021ContinualWA}
+Maciej Wołczyk, Michal Zajkac, Razvan Pascanu, Lukasz Kuci'nski, and Piotr
+  Milo's.
+\newblock Continual world: A robotic benchmark for continual reinforcement
+  learning.
+\newblock In {\em Neural Information Processing Systems}, 2021.
+
+\bibitem{Woczyk2022DisentanglingTI}
+Maciej Wołczyk, Michal Zajkac, Razvan Pascanu, Lukasz Kuci'nski, and Piotr
+  Milo's.
+\newblock Disentangling transfer in continual reinforcement learning.
+\newblock {\em ArXiv}, abs/2209.13900, 2022.
+
+\bibitem{wu2020firefly}
+Lemeng Wu, Bo~Liu, Peter Stone, and Qiang Liu.
+\newblock Firefly neural architecture descent: a general approach for growing
+  neural networks.
+\newblock {\em Advances in Neural Information Processing Systems},
+  33:22373--22383, 2020.
+
+\bibitem{yoon2017lifelong}
+Jaehong Yoon, Eunho Yang, Jeongtae Lee, and Sung~Ju Hwang.
+\newblock Lifelong learning with dynamically expandable networks.
+\newblock {\em arXiv preprint arXiv:1708.01547}, 2017.
+
+\bibitem{yu2020meta}
+Tianhe Yu, Deirdre Quillen, Zhanpeng He, Ryan Julian, Karol Hausman, Chelsea
+  Finn, and Sergey Levine.
+\newblock Meta-world: A benchmark and evaluation for multi-task and meta
+  reinforcement learning.
+\newblock In {\em Conference on robot learning}, pages 1094--1100. PMLR, 2020.
+
+\bibitem{zhou2022forward}
+Da-Wei Zhou, Fu-Yun Wang, Han-Jia Ye, Liang Ma, Shiliang Pu, and De-Chuan Zhan.
+\newblock Forward compatible few-shot class-incremental learning.
+\newblock In {\em Proceedings of the IEEE/CVF Conference on Computer Vision and
+  Pattern Recognition}, pages 9046--9056, 2022.
+
+\bibitem{zhu2022viola}
+Yifeng Zhu, Abhishek Joshi, Peter Stone, and Yuke Zhu.
+\newblock Viola: Imitation learning for vision-based manipulation with object
+  proposal priors.
+\newblock {\em arXiv preprint arXiv:2210.11339}, 2022.
+
+\bibitem{zhu2020robosuite}
+Yuke Zhu, Josiah Wong, Ajay Mandlekar, and Roberto Mart{\'\i}n-Mart{\'\i}n.
+\newblock robosuite: A modular simulation framework and benchmark for robot
+  learning.
+\newblock {\em arXiv preprint arXiv:2009.12293}, 2020.
+
+\end{thebibliography}

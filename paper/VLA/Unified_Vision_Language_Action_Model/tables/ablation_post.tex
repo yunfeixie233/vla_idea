@@ -1,0 +1,21 @@
+\definecolor{DeepGreen}{rgb}{0.0, 0.8, 0.0}
+
+\begin{table}[tbp]
+\centering
+\caption{\textbf{Effectiveness of World Model Post-Training.} We compare different post-training strategies by fine-tuning only with action prediction on the downstream benchmarks.}
+\resizebox{\linewidth}{!}{
+\begin{tabular}{ccc|cc|cc}
+\toprule
+\multicolumn{3}{c|}{\textbf{Post-training Stage}} & \multicolumn{2}{c|}{\textbf{Generalization}} & \multicolumn{2}{c}{\textbf{Long-horizon}} \\
+\textbf{Strategy} & \textbf{Sequence} & \textbf{Supervision} & \textbf{LIBERO} & \textbf{SimplerEnv-WidowX} & \textbf{LIBERO-Long} & \textbf{CALVIN} \\
+\midrule
+& & &  48.5 & 0.0 & 17.4 & 1.46 \\
+action prediction & $T, I, A$ & action &43.9 (\textcolor{red}{-4.6}) & 0.0 & 10.6 (\textcolor{red}{-6.8})& 0.52(\textcolor{red}{-0.94})\\
+text-to-image    & $T,I$ & vision & 69.8 (\textcolor{DeepGreen}{+21.3}) & 6.3 (\textcolor{DeepGreen}{+6.3}) & 55.8 (\textcolor{DeepGreen}{+38.4}) & 3.79 (\textcolor{DeepGreen}{+2.33}) \\
+video prediction & $I_1,...,I_t$ & vision & 78.9 (\textcolor{DeepGreen}{+30.4})& 17.7 (\textcolor{DeepGreen}{+17.7}) & 80.8 (\textcolor{DeepGreen}{+63.4}) & 3.59 (\textcolor{DeepGreen}{+2.13}) \\
+\rowcolor[gray]{0.9} world model      & $T,I_1,...,I_t$ & vision & \textbf{94.2} (\textcolor{DeepGreen}{+45.7}) & \textbf{64.6} (\textcolor{DeepGreen}{+64.6}) & \textbf{89.2} (\textcolor{DeepGreen}{+71.8}) & \textbf{4.61} (\textcolor{DeepGreen}{+3.15}) \\
+\bottomrule
+\end{tabular}}
+\label{abl:post_train}
+\vspace{-5mm}
+\end{table}

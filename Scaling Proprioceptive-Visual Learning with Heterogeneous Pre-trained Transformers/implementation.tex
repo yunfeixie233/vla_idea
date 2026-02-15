@@ -1,0 +1,15 @@
+
+
+\section{Experiments on Pre-training}
+In this section, we aim to answer the following question:  Does HPT pre-training have a \textit{scaling behavior}  under heterogeneous data across domains? 
+
+\label{sect:dataset}
+
+
+
+\textbf{Default Setting.}  We use 27 robot teleoperation datasets, including a subset of the recently public Open-X Embodiment dataset \cite{open_x_embodiment_rt_x_2023}  as the training corpus.  By default, we use one camera view of the scene with the pre-trained frozen ResNet18 image encode to compute the vision features. We use proprioception information,  such as end-effector poses and joint positions, whenever they are available and provided. We use a maximum of 1000 trajectories from each dataset and a total number of 16k trajectories, and a held-out validation dataset with a maximum 200 trajectories per data source. Furthermore, we use a model with a trunk size of 3.17 million parameters, which is denoted as HPT-Small (Table \ref{tab:model_size_table}). The training uses a batch size of 256 for 80k iterations, which is around 0.65B tokens in the latent space that feeds into HPTs and around 5B tokens in the vision and proprioception token spaces (horizon-dependent). While we do not align or preprocess action space or observation space \cite{octo_2023,yang2024pushing} other than normalization, data cleanup and filtering would be very helpful. 
+
+
+
+\textbf{Scaled Setting.} We use 200k trajectories with 52 datasets, including simulation (e.g. \cite{robomimic2021}), deployed robots (e.g. \cite{frodobots2024frodobots2k}), human videos (e.g. \cite{Damen2018EPICKITCHENS}), from distinct embodiments in the training process. This includes many public and accessible robotic datasets. In addition to different tasks in different institutes, these heterogeneous mixtures of datasets (Fig. \ref{fig:dataset_main} and Fig. \ref{fig:dataset}) come with multiple views, language inputs, and different observation inputs in different environments. 
+

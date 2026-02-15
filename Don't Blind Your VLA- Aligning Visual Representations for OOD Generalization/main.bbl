@@ -1,0 +1,733 @@
+%%% -*-BibTeX-*-
+%%% Do NOT edit. File created by BibTeX with style
+%%% ACM-Reference-Format-Journals [18-Jan-2012].
+
+\begin{thebibliography}{56}
+
+%%% ====================================================================
+%%% NOTE TO THE USER: you can override these defaults by providing
+%%% customized versions of any of these macros before the \bibliography
+%%% command.  Each of them MUST provide its own final punctuation,
+%%% except for \shownote{}, \showDOI{}, and \showURL{}.  The latter two
+%%% do not use final punctuation, in order to avoid confusing it with
+%%% the Web address.
+%%%
+%%% To suppress output of a particular field, define its macro to expand
+%%% to an empty string, or better, \unskip, like this:
+%%%
+%%% \newcommand{\showDOI}[1]{\unskip}   % LaTeX syntax
+%%%
+%%% \def \showDOI #1{\unskip}           % plain TeX syntax
+%%%
+%%% ====================================================================
+
+\ifx \showCODEN    \undefined \def \showCODEN     #1{\unskip}     \fi
+\ifx \showDOI      \undefined \def \showDOI       #1{#1}\fi
+\ifx \showISBNx    \undefined \def \showISBNx     #1{\unskip}     \fi
+\ifx \showISBNxiii \undefined \def \showISBNxiii  #1{\unskip}     \fi
+\ifx \showISSN     \undefined \def \showISSN      #1{\unskip}     \fi
+\ifx \showLCCN     \undefined \def \showLCCN      #1{\unskip}     \fi
+\ifx \shownote     \undefined \def \shownote      #1{#1}          \fi
+\ifx \showarticletitle \undefined \def \showarticletitle #1{#1}   \fi
+\ifx \showURL      \undefined \def \showURL       {\relax}        \fi
+% The following commands are used for tagged output and should be
+% invisible to TeX
+\providecommand\bibfield[2]{#2}
+\providecommand\bibinfo[2]{#2}
+\providecommand\natexlab[1]{#1}
+\providecommand\showeprint[2][]{arXiv:#2}
+
+\bibitem[\protect\citeauthoryear{Arefin, Subbaraj, Gontier, LeCun, Rish, Shwartz-Ziv, and Pal}{Arefin et~al\mbox{.}}{2024}]%
+        {collapse2}
+\bibfield{author}{\bibinfo{person}{Md~Rifat Arefin}, \bibinfo{person}{Gopeshh Subbaraj}, \bibinfo{person}{Nicolas Gontier}, \bibinfo{person}{Yann LeCun}, \bibinfo{person}{Irina Rish}, \bibinfo{person}{Ravid Shwartz-Ziv}, {and} \bibinfo{person}{Christopher Pal}.} \bibinfo{year}{2024}\natexlab{}.
+\newblock \showarticletitle{Seq-VCR: Preventing collapse in intermediate transformer representations for enhanced reasoning}.
+\newblock \bibinfo{journal}{\emph{arXiv preprint arXiv:2411.02344}} (\bibinfo{year}{2024}).
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Awadalla, Gao, Gardner, Hessel, Hanafy, Zhu, Marathe, Bitton, Gadre, Sagawa, Jitsev, Kornblith, Koh, Ilharco, Wortsman, and Schmidt}{Awadalla et~al\mbox{.}}{2023}]%
+        {openflamingo2023}
+\bibfield{author}{\bibinfo{person}{Anas Awadalla}, \bibinfo{person}{Irena Gao}, \bibinfo{person}{Josh Gardner}, \bibinfo{person}{Jack Hessel}, \bibinfo{person}{Yusuf Hanafy}, \bibinfo{person}{Wanrong Zhu}, \bibinfo{person}{Kalyani Marathe}, \bibinfo{person}{Yonatan Bitton}, \bibinfo{person}{Samir Gadre}, \bibinfo{person}{Shiori Sagawa}, \bibinfo{person}{Jenia Jitsev}, \bibinfo{person}{Simon Kornblith}, \bibinfo{person}{Pang~Wei Koh}, \bibinfo{person}{Gabriel Ilharco}, \bibinfo{person}{Mitchell Wortsman}, {and} \bibinfo{person}{Ludwig Schmidt}.} \bibinfo{year}{2023}\natexlab{}.
+\newblock \showarticletitle{OpenFlamingo: An Open-Source Framework for Training Large Autoregressive Vision-Language Models}.
+\newblock \bibinfo{journal}{\emph{arXiv preprint}} (\bibinfo{year}{2023}).
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.48550/arXiv.2308.01390}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Bai, Chen, Liu, Wang, Ge, Song, Dang, and et~al.}{Bai et~al\mbox{.}}{2025}]%
+        {Qwen2.5-VL}
+\bibfield{author}{\bibinfo{person}{Shuai Bai}, \bibinfo{person}{Keqin Chen}, \bibinfo{person}{Xuejing Liu}, \bibinfo{person}{Jialin Wang}, \bibinfo{person}{Wenbin Ge}, \bibinfo{person}{Sibo Song}, \bibinfo{person}{Kai Dang}, {and} \bibinfo{person}{et al.}} \bibinfo{year}{2025}\natexlab{}.
+\newblock \bibinfo{title}{Qwen2.5-VL Technical Report}.
+\newblock
+\newblock
+\showeprint[arxiv]{2502.13923}~[cs.CV]
+\urldef\tempurl%
+\url{https://arxiv.org/abs/2502.13923}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Barbero, Banino, Kapturowski, Kumaran, Madeira~Ara{\'u}jo, Vitvitskyi, Pascanu, and Veli{\v{c}}kovi{\'c}}{Barbero et~al\mbox{.}}{2024}]%
+        {collapse1}
+\bibfield{author}{\bibinfo{person}{Federico Barbero}, \bibinfo{person}{Andrea Banino}, \bibinfo{person}{Steven Kapturowski}, \bibinfo{person}{Dharshan Kumaran}, \bibinfo{person}{Jo{\~a}o Madeira~Ara{\'u}jo}, \bibinfo{person}{Oleksandr Vitvitskyi}, \bibinfo{person}{Razvan Pascanu}, {and} \bibinfo{person}{Petar Veli{\v{c}}kovi{\'c}}.} \bibinfo{year}{2024}\natexlab{}.
+\newblock \showarticletitle{Transformers need glasses! information over-squashing in language tasks}.
+\newblock \bibinfo{journal}{\emph{Advances in Neural Information Processing Systems}}  \bibinfo{volume}{37} (\bibinfo{year}{2024}), \bibinfo{pages}{98111--98142}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Beyer, Steiner, Pinto, Kolesnikov, Wang, Salz, Neumann, Alabdulmohsin, Tschannen, Bugliarello, Unterthiner, Keysers, Koppula, Liu, Grycner, Gritsenko, Houlsby, Kumar, Rong, Eisenschlos, Kabra, Bauer, Bošnjak, Chen, Minderer, Voigtlaender, Bica, Balazevic, Puigcerver, Papalampidi, Henaff, Xiong, Soricut, Harmsen, and Zhai}{Beyer et~al\mbox{.}}{2024}]%
+        {paligemma}
+\bibfield{author}{\bibinfo{person}{Lucas Beyer}, \bibinfo{person}{Andreas Steiner}, \bibinfo{person}{André~Susano Pinto}, \bibinfo{person}{Alexander Kolesnikov}, \bibinfo{person}{Xiao Wang}, \bibinfo{person}{Daniel Salz}, \bibinfo{person}{Maxim Neumann}, \bibinfo{person}{Ibrahim Alabdulmohsin}, \bibinfo{person}{Michael Tschannen}, \bibinfo{person}{Emanuele Bugliarello}, \bibinfo{person}{Thomas Unterthiner}, \bibinfo{person}{Daniel Keysers}, \bibinfo{person}{Skanda Koppula}, \bibinfo{person}{Fangyu Liu}, \bibinfo{person}{Adam Grycner}, \bibinfo{person}{Alexey Gritsenko}, \bibinfo{person}{Neil Houlsby}, \bibinfo{person}{Manoj Kumar}, \bibinfo{person}{Keran Rong}, \bibinfo{person}{Julian Eisenschlos}, \bibinfo{person}{Rishabh Kabra}, \bibinfo{person}{Matthias Bauer}, \bibinfo{person}{Matko Bošnjak}, \bibinfo{person}{Xi Chen}, \bibinfo{person}{Matthias Minderer}, \bibinfo{person}{Paul Voigtlaender}, \bibinfo{person}{Ioana Bica}, \bibinfo{person}{Ivana Balazevic}, \bibinfo{person}{Joan Puigcerver},
+  \bibinfo{person}{Pinelopi Papalampidi}, \bibinfo{person}{Olivier Henaff}, \bibinfo{person}{Xi Xiong}, \bibinfo{person}{Radu Soricut}, \bibinfo{person}{Jeremiah Harmsen}, {and} \bibinfo{person}{Xiaohua Zhai}.} \bibinfo{year}{2024}\natexlab{}.
+\newblock \bibinfo{title}{PaliGemma: A versatile 3B VLM for transfer}.
+\newblock
+\newblock
+\showeprint[arxiv]{2407.07726}~[cs.CV]
+\urldef\tempurl%
+\url{https://arxiv.org/abs/2407.07726}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Black, Brown, Driess, Esmail, Equi, Finn, Fusai, Groom, Hausman, Ichter, Jakubczak, Jones, Ke, Levine, Li-Bell, Mothukuri, Nair, Pertsch, Shi, Tanner, Vuong, Walling, Wang, and Zhilinsky}{Black et~al\mbox{.}}{2024}]%
+        {pi0}
+\bibfield{author}{\bibinfo{person}{Kevin Black}, \bibinfo{person}{Noah Brown}, \bibinfo{person}{Danny Driess}, \bibinfo{person}{Adnan Esmail}, \bibinfo{person}{Michael Equi}, \bibinfo{person}{Chelsea Finn}, \bibinfo{person}{Niccolo Fusai}, \bibinfo{person}{Lachy Groom}, \bibinfo{person}{Karol Hausman}, \bibinfo{person}{Brian Ichter}, \bibinfo{person}{Szymon Jakubczak}, \bibinfo{person}{Tim Jones}, \bibinfo{person}{Liyiming Ke}, \bibinfo{person}{Sergey Levine}, \bibinfo{person}{Adrian Li-Bell}, \bibinfo{person}{Mohith Mothukuri}, \bibinfo{person}{Suraj Nair}, \bibinfo{person}{Karl Pertsch}, \bibinfo{person}{Lucy~Xiaoyang Shi}, \bibinfo{person}{James Tanner}, \bibinfo{person}{Quan Vuong}, \bibinfo{person}{Anna Walling}, \bibinfo{person}{Haohuan Wang}, {and} \bibinfo{person}{Ury Zhilinsky}.} \bibinfo{year}{2024}\natexlab{}.
+\newblock \bibinfo{title}{$\pi_0$: A Vision-Language-Action Flow Model for General Robot Control}.
+\newblock
+\newblock
+\showeprint[arxiv]{2410.24164}~[cs.LG]
+\urldef\tempurl%
+\url{https://arxiv.org/abs/2410.24164}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Brohan, Brown, Carbajal, Chebotar, Chen, Choromanski, Ding, Driess, Dubey, Finn, Florence, Fu, Arenas, Gopalakrishnan, Han, Hausman, Herzog, Hsu, Ichter, Irpan, Joshi, Julian, Kalashnikov, Kuang, Leal, Lee, Lee, Levine, Lu, Michalewski, Mordatch, Pertsch, Rao, Reymann, Ryoo, Salazar, Sanketi, Sermanet, Singh, Singh, Soricut, Tran, Vanhoucke, Vuong, Wahid, Welker, Wohlhart, Wu, Xia, Xiao, Xu, Xu, Yu, and Zitkovich}{Brohan et~al\mbox{.}}{2023a}]%
+        {rt2}
+\bibfield{author}{\bibinfo{person}{Anthony Brohan}, \bibinfo{person}{Noah Brown}, \bibinfo{person}{Justice Carbajal}, \bibinfo{person}{Yevgen Chebotar}, \bibinfo{person}{Xi Chen}, \bibinfo{person}{Krzysztof Choromanski}, \bibinfo{person}{Tianli Ding}, \bibinfo{person}{Danny Driess}, \bibinfo{person}{Avinava Dubey}, \bibinfo{person}{Chelsea Finn}, \bibinfo{person}{Pete Florence}, \bibinfo{person}{Chuyuan Fu}, \bibinfo{person}{Montse~Gonzalez Arenas}, \bibinfo{person}{Keerthana Gopalakrishnan}, \bibinfo{person}{Kehang Han}, \bibinfo{person}{Karol Hausman}, \bibinfo{person}{Alexander Herzog}, \bibinfo{person}{Jasmine Hsu}, \bibinfo{person}{Brian Ichter}, \bibinfo{person}{Alex Irpan}, \bibinfo{person}{Nikhil Joshi}, \bibinfo{person}{Ryan Julian}, \bibinfo{person}{Dmitry Kalashnikov}, \bibinfo{person}{Yuheng Kuang}, \bibinfo{person}{Isabel Leal}, \bibinfo{person}{Lisa Lee}, \bibinfo{person}{Tsang-Wei~Edward Lee}, \bibinfo{person}{Sergey Levine}, \bibinfo{person}{Yao Lu}, \bibinfo{person}{Henryk Michalewski},
+  \bibinfo{person}{Igor Mordatch}, \bibinfo{person}{Karl Pertsch}, \bibinfo{person}{Kanishka Rao}, \bibinfo{person}{Krista Reymann}, \bibinfo{person}{Michael Ryoo}, \bibinfo{person}{Grecia Salazar}, \bibinfo{person}{Pannag Sanketi}, \bibinfo{person}{Pierre Sermanet}, \bibinfo{person}{Jaspiar Singh}, \bibinfo{person}{Anikait Singh}, \bibinfo{person}{Radu Soricut}, \bibinfo{person}{Huong Tran}, \bibinfo{person}{Vincent Vanhoucke}, \bibinfo{person}{Quan Vuong}, \bibinfo{person}{Ayzaan Wahid}, \bibinfo{person}{Stefan Welker}, \bibinfo{person}{Paul Wohlhart}, \bibinfo{person}{Jialin Wu}, \bibinfo{person}{Fei Xia}, \bibinfo{person}{Ted Xiao}, \bibinfo{person}{Peng Xu}, \bibinfo{person}{Sichun Xu}, \bibinfo{person}{Tianhe Yu}, {and} \bibinfo{person}{Brianna Zitkovich}.} \bibinfo{year}{2023}\natexlab{a}.
+\newblock \bibinfo{title}{RT-2: Vision-Language-Action Models Transfer Web Knowledge to Robotic Control}.
+\newblock
+\newblock
+\showeprint[arxiv]{2307.15818}~[cs.RO]
+\urldef\tempurl%
+\url{https://arxiv.org/abs/2307.15818}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Brohan, Brown, Carbajal, Chebotar, Dabis, Finn, Gopalakrishnan, Hausman, Herzog, Hsu, Ibarz, Ichter, Irpan, Jackson, Jesmonth, Joshi, Julian, Kalashnikov, Kuang, Leal, Lee, Levine, Lu, Malla, Manjunath, Mordatch, Nachum, Parada, Peralta, Perez, Pertsch, Quiambao, Rao, Ryoo, Salazar, Sanketi, Sayed, Singh, Sontakke, Stone, Tan, Tran, Vanhoucke, Vega, Vuong, Xia, Xiao, Xu, Xu, Yu, and Zitkovich}{Brohan et~al\mbox{.}}{2023b}]%
+        {rt1}
+\bibfield{author}{\bibinfo{person}{Anthony Brohan}, \bibinfo{person}{Noah Brown}, \bibinfo{person}{Justice Carbajal}, \bibinfo{person}{Yevgen Chebotar}, \bibinfo{person}{Joseph Dabis}, \bibinfo{person}{Chelsea Finn}, \bibinfo{person}{Keerthana Gopalakrishnan}, \bibinfo{person}{Karol Hausman}, \bibinfo{person}{Alex Herzog}, \bibinfo{person}{Jasmine Hsu}, \bibinfo{person}{Julian Ibarz}, \bibinfo{person}{Brian Ichter}, \bibinfo{person}{Alex Irpan}, \bibinfo{person}{Tomas Jackson}, \bibinfo{person}{Sally Jesmonth}, \bibinfo{person}{Nikhil~J Joshi}, \bibinfo{person}{Ryan Julian}, \bibinfo{person}{Dmitry Kalashnikov}, \bibinfo{person}{Yuheng Kuang}, \bibinfo{person}{Isabel Leal}, \bibinfo{person}{Kuang-Huei Lee}, \bibinfo{person}{Sergey Levine}, \bibinfo{person}{Yao Lu}, \bibinfo{person}{Utsav Malla}, \bibinfo{person}{Deeksha Manjunath}, \bibinfo{person}{Igor Mordatch}, \bibinfo{person}{Ofir Nachum}, \bibinfo{person}{Carolina Parada}, \bibinfo{person}{Jodilyn Peralta}, \bibinfo{person}{Emily Perez},
+  \bibinfo{person}{Karl Pertsch}, \bibinfo{person}{Jornell Quiambao}, \bibinfo{person}{Kanishka Rao}, \bibinfo{person}{Michael Ryoo}, \bibinfo{person}{Grecia Salazar}, \bibinfo{person}{Pannag Sanketi}, \bibinfo{person}{Kevin Sayed}, \bibinfo{person}{Jaspiar Singh}, \bibinfo{person}{Sumedh Sontakke}, \bibinfo{person}{Austin Stone}, \bibinfo{person}{Clayton Tan}, \bibinfo{person}{Huong Tran}, \bibinfo{person}{Vincent Vanhoucke}, \bibinfo{person}{Steve Vega}, \bibinfo{person}{Quan Vuong}, \bibinfo{person}{Fei Xia}, \bibinfo{person}{Ted Xiao}, \bibinfo{person}{Peng Xu}, \bibinfo{person}{Sichun Xu}, \bibinfo{person}{Tianhe Yu}, {and} \bibinfo{person}{Brianna Zitkovich}.} \bibinfo{year}{2023}\natexlab{b}.
+\newblock \bibinfo{title}{RT-1: Robotics Transformer for Real-World Control at Scale}.
+\newblock
+\newblock
+\showeprint[arxiv]{2212.06817}~[cs.RO]
+\urldef\tempurl%
+\url{https://arxiv.org/abs/2212.06817}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Chen, Kornblith, Norouzi, and Hinton}{Chen et~al\mbox{.}}{2020}]%
+        {chen2020simpleframeworkcontrastivelearning}
+\bibfield{author}{\bibinfo{person}{Ting Chen}, \bibinfo{person}{Simon Kornblith}, \bibinfo{person}{Mohammad Norouzi}, {and} \bibinfo{person}{Geoffrey Hinton}.} \bibinfo{year}{2020}\natexlab{}.
+\newblock \bibinfo{title}{A Simple Framework for Contrastive Learning of Visual Representations}.
+\newblock
+\newblock
+\showeprint[arxiv]{2002.05709}~[cs.LG]
+\urldef\tempurl%
+\url{https://arxiv.org/abs/2002.05709}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Chen, Belkhale, Mirchandani, Mees, Driess, Pertsch, and Levine}{Chen et~al\mbox{.}}{2025}]%
+        {ecot_lite}
+\bibfield{author}{\bibinfo{person}{William Chen}, \bibinfo{person}{Suneel Belkhale}, \bibinfo{person}{Suvir Mirchandani}, \bibinfo{person}{Oier Mees}, \bibinfo{person}{Danny Driess}, \bibinfo{person}{Karl Pertsch}, {and} \bibinfo{person}{Sergey Levine}.} \bibinfo{year}{2025}\natexlab{}.
+\newblock \bibinfo{title}{Training Strategies for Efficient Embodied Reasoning}.
+\newblock
+\newblock
+\showeprint[arxiv]{2505.08243}~[cs.RO]
+\urldef\tempurl%
+\url{https://arxiv.org/abs/2505.08243}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Chen, Kiami, Gupta, and Kumar}{Chen et~al\mbox{.}}{2023}]%
+        {genaug}
+\bibfield{author}{\bibinfo{person}{Zoey Chen}, \bibinfo{person}{Sho Kiami}, \bibinfo{person}{Abhishek Gupta}, {and} \bibinfo{person}{Vikash Kumar}.} \bibinfo{year}{2023}\natexlab{}.
+\newblock \bibinfo{title}{GenAug: Retargeting behaviors to unseen situations via Generative Augmentation}.
+\newblock
+\newblock
+\showeprint[arxiv]{2302.06671}~[cs.RO]
+\urldef\tempurl%
+\url{https://arxiv.org/abs/2302.06671}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Cherepanov, Kachaev, Kovalev, and Panov}{Cherepanov et~al\mbox{.}}{2025a}]%
+        {mikasa}
+\bibfield{author}{\bibinfo{person}{Egor Cherepanov}, \bibinfo{person}{Nikita Kachaev}, \bibinfo{person}{Alexey~K. Kovalev}, {and} \bibinfo{person}{Aleksandr~I. Panov}.} \bibinfo{year}{2025}\natexlab{a}.
+\newblock \bibinfo{title}{Memory, Benchmark \& Robots: A Benchmark for Solving Complex Tasks with Reinforcement Learning}.
+\newblock
+\newblock
+\showeprint[arxiv]{2502.10550}~[cs.LG]
+\urldef\tempurl%
+\url{https://arxiv.org/abs/2502.10550}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Cherepanov, Kovalev, and Panov}{Cherepanov et~al\mbox{.}}{2025b}]%
+        {cherepanov2025elmurexternallayermemory}
+\bibfield{author}{\bibinfo{person}{Egor Cherepanov}, \bibinfo{person}{Alexey~K. Kovalev}, {and} \bibinfo{person}{Aleksandr~I. Panov}.} \bibinfo{year}{2025}\natexlab{b}.
+\newblock \bibinfo{title}{ELMUR: External Layer Memory with Update/Rewrite for Long-Horizon RL}.
+\newblock
+\newblock
+\showeprint[arxiv]{2510.07151}~[cs.LG]
+\urldef\tempurl%
+\url{https://arxiv.org/abs/2510.07151}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Ding, Gao, Dong, He, Wang, Kot, and Gong}{Ding et~al\mbox{.}}{2024}]%
+        {Ding2024LOBG}
+\bibfield{author}{\bibinfo{person}{Chenhao Ding}, \bibinfo{person}{Xinyuan Gao}, \bibinfo{person}{Songlin Dong}, \bibinfo{person}{Yuhang He}, \bibinfo{person}{Qiang Wang}, \bibinfo{person}{Alex Kot}, {and} \bibinfo{person}{Yihong Gong}.} \bibinfo{year}{2024}\natexlab{}.
+\newblock \showarticletitle{LOBG: Less Overfitting for Better Generalization in Vision-Language Models}.
+\newblock \bibinfo{journal}{\emph{arXiv preprint}} (\bibinfo{year}{2024}).
+\newblock
+\showeprint{2410.10247}
+\urldef\tempurl%
+\url{https://arxiv.org/abs/2410.10247}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Driess, Springenberg, Ichter, Yu, Li-Bell, Pertsch, Ren, Walke, Vuong, Shi, and Levine}{Driess et~al\mbox{.}}{2025}]%
+        {ki}
+\bibfield{author}{\bibinfo{person}{Danny Driess}, \bibinfo{person}{Jost~Tobias Springenberg}, \bibinfo{person}{Brian Ichter}, \bibinfo{person}{Lili Yu}, \bibinfo{person}{Adrian Li-Bell}, \bibinfo{person}{Karl Pertsch}, \bibinfo{person}{Allen~Z. Ren}, \bibinfo{person}{Homer Walke}, \bibinfo{person}{Quan Vuong}, \bibinfo{person}{Lucy~Xiaoyang Shi}, {and} \bibinfo{person}{Sergey Levine}.} \bibinfo{year}{2025}\natexlab{}.
+\newblock \bibinfo{title}{Knowledge Insulating Vision-Language-Action Models: Train Fast, Run Fast, Generalize Better}.
+\newblock
+\newblock
+\showeprint[arxiv]{2505.23705}~[cs.LG]
+\urldef\tempurl%
+\url{https://arxiv.org/abs/2505.23705}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Driess, Xia, Sajjadi, Lynch, Chowdhery, Ichter, Wahid, Tompson, Vuong, Yu, Huang, Chebotar, Sermanet, Duckworth, Levine, Vanhoucke, Hausman, Toussaint, Greff, Zeng, Mordatch, and Florence}{Driess et~al\mbox{.}}{2023}]%
+        {palme}
+\bibfield{author}{\bibinfo{person}{Danny Driess}, \bibinfo{person}{Fei Xia}, \bibinfo{person}{Mehdi S.~M. Sajjadi}, \bibinfo{person}{Corey Lynch}, \bibinfo{person}{Aakanksha Chowdhery}, \bibinfo{person}{Brian Ichter}, \bibinfo{person}{Ayzaan Wahid}, \bibinfo{person}{Jonathan Tompson}, \bibinfo{person}{Quan Vuong}, \bibinfo{person}{Tianhe Yu}, \bibinfo{person}{Wenlong Huang}, \bibinfo{person}{Yevgen Chebotar}, \bibinfo{person}{Pierre Sermanet}, \bibinfo{person}{Daniel Duckworth}, \bibinfo{person}{Sergey Levine}, \bibinfo{person}{Vincent Vanhoucke}, \bibinfo{person}{Karol Hausman}, \bibinfo{person}{Marc Toussaint}, \bibinfo{person}{Klaus Greff}, \bibinfo{person}{Andy Zeng}, \bibinfo{person}{Igor Mordatch}, {and} \bibinfo{person}{Pete Florence}.} \bibinfo{year}{2023}\natexlab{}.
+\newblock \bibinfo{title}{PaLM-E: An Embodied Multimodal Language Model}.
+\newblock
+\newblock
+\showeprint[arxiv]{2303.03378}~[cs.LG]
+\urldef\tempurl%
+\url{https://arxiv.org/abs/2303.03378}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Fan, Tong, Zhu, Sinha, Liu, Chen, Rabbat, Ballas, LeCun, Bar, and Xie}{Fan et~al\mbox{.}}{2025}]%
+        {fan2025scalinglanguagefreevisualrepresentation}
+\bibfield{author}{\bibinfo{person}{David Fan}, \bibinfo{person}{Shengbang Tong}, \bibinfo{person}{Jiachen Zhu}, \bibinfo{person}{Koustuv Sinha}, \bibinfo{person}{Zhuang Liu}, \bibinfo{person}{Xinlei Chen}, \bibinfo{person}{Michael Rabbat}, \bibinfo{person}{Nicolas Ballas}, \bibinfo{person}{Yann LeCun}, \bibinfo{person}{Amir Bar}, {and} \bibinfo{person}{Saining Xie}.} \bibinfo{year}{2025}\natexlab{}.
+\newblock \bibinfo{title}{Scaling Language-Free Visual Representation Learning}.
+\newblock
+\newblock
+\showeprint[arxiv]{2504.01017}~[cs.CV]
+\urldef\tempurl%
+\url{https://arxiv.org/abs/2504.01017}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Guo, Zhang, Chen, Ji, Wang, Hu, and Chen}{Guo et~al\mbox{.}}{2025}]%
+        {motion_planner}
+\bibfield{author}{\bibinfo{person}{Yanjiang Guo}, \bibinfo{person}{Jianke Zhang}, \bibinfo{person}{Xiaoyu Chen}, \bibinfo{person}{Xiang Ji}, \bibinfo{person}{Yen-Jen Wang}, \bibinfo{person}{Yucheng Hu}, {and} \bibinfo{person}{Jianyu Chen}.} \bibinfo{year}{2025}\natexlab{}.
+\newblock \bibinfo{title}{Improving Vision-Language-Action Model with Online Reinforcement Learning}.
+\newblock
+\newblock
+\showeprint[arxiv]{2501.16664}~[cs.RO]
+\urldef\tempurl%
+\url{https://arxiv.org/abs/2501.16664}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Heinrich, Ranzinger, Hongxu, Yin, Lu, Kautz, Tao, Catanzaro, and Molchanov}{Heinrich et~al\mbox{.}}{2025}]%
+        {radio}
+\bibfield{author}{\bibinfo{person}{Greg Heinrich}, \bibinfo{person}{Mike Ranzinger}, \bibinfo{person}{Hongxu}, \bibinfo{person}{Yin}, \bibinfo{person}{Yao Lu}, \bibinfo{person}{Jan Kautz}, \bibinfo{person}{Andrew Tao}, \bibinfo{person}{Bryan Catanzaro}, {and} \bibinfo{person}{Pavlo Molchanov}.} \bibinfo{year}{2025}\natexlab{}.
+\newblock \bibinfo{title}{RADIOv2.5: Improved Baselines for Agglomerative Vision Foundation Models}.
+\newblock
+\newblock
+\showeprint[arxiv]{2412.07679}~[cs.CV]
+\urldef\tempurl%
+\url{https://arxiv.org/abs/2412.07679}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Hu, Shen, Wallis, Allen-Zhu, Li, Wang, Wang, and Chen}{Hu et~al\mbox{.}}{2021}]%
+        {lora}
+\bibfield{author}{\bibinfo{person}{Edward~J. Hu}, \bibinfo{person}{Yelong Shen}, \bibinfo{person}{Phillip Wallis}, \bibinfo{person}{Zeyuan Allen-Zhu}, \bibinfo{person}{Yuanzhi Li}, \bibinfo{person}{Shean Wang}, \bibinfo{person}{Lu Wang}, {and} \bibinfo{person}{Weizhu Chen}.} \bibinfo{year}{2021}\natexlab{}.
+\newblock \bibinfo{title}{LoRA: Low-Rank Adaptation of Large Language Models}.
+\newblock
+\newblock
+\showeprint[arxiv]{2106.09685}~[cs.CL]
+\urldef\tempurl%
+\url{https://arxiv.org/abs/2106.09685}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Huang, Wu, Xie, and Han}{Huang et~al\mbox{.}}{2025}]%
+        {huang2025mllmsneed3dawarerepresentation}
+\bibfield{author}{\bibinfo{person}{Xiaohu Huang}, \bibinfo{person}{Jingjing Wu}, \bibinfo{person}{Qunyi Xie}, {and} \bibinfo{person}{Kai Han}.} \bibinfo{year}{2025}\natexlab{}.
+\newblock \bibinfo{title}{MLLMs Need 3D-Aware Representation Supervision for Scene Understanding}.
+\newblock
+\newblock
+\showeprint[arxiv]{2506.01946}~[cs.CV]
+\urldef\tempurl%
+\url{https://arxiv.org/abs/2506.01946}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Huh, Cheung, Wang, and Isola}{Huh et~al\mbox{.}}{2024}]%
+        {platonicrepresentationhypothesis}
+\bibfield{author}{\bibinfo{person}{Minyoung Huh}, \bibinfo{person}{Brian Cheung}, \bibinfo{person}{Tongzhou Wang}, {and} \bibinfo{person}{Phillip Isola}.} \bibinfo{year}{2024}\natexlab{}.
+\newblock \bibinfo{title}{The Platonic Representation Hypothesis}.
+\newblock
+\newblock
+\showeprint[arxiv]{2405.07987}~[cs.LG]
+\urldef\tempurl%
+\url{https://arxiv.org/abs/2405.07987}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Jain, Yang, Shi, Gao, and Yang}{Jain et~al\mbox{.}}{2025}]%
+        {jain2025elevatingvisualperceptionmultimodal}
+\bibfield{author}{\bibinfo{person}{Jitesh Jain}, \bibinfo{person}{Zhengyuan Yang}, \bibinfo{person}{Humphrey Shi}, \bibinfo{person}{Jianfeng Gao}, {and} \bibinfo{person}{Jianwei Yang}.} \bibinfo{year}{2025}\natexlab{}.
+\newblock \bibinfo{title}{Elevating Visual Perception in Multimodal LLMs with Visual Embedding Distillation}.
+\newblock
+\newblock
+\showeprint[arxiv]{2412.09585}~[cs.CV]
+\urldef\tempurl%
+\url{https://arxiv.org/abs/2412.09585}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Kang, Kim, Kim, and Hwang}{Kang et~al\mbox{.}}{2025}]%
+        {kang2025toldvisualattentionsink}
+\bibfield{author}{\bibinfo{person}{Seil Kang}, \bibinfo{person}{Jinyeong Kim}, \bibinfo{person}{Junhyeok Kim}, {and} \bibinfo{person}{Seong~Jae Hwang}.} \bibinfo{year}{2025}\natexlab{}.
+\newblock \bibinfo{title}{See What You Are Told: Visual Attention Sink in Large Multimodal Models}.
+\newblock
+\newblock
+\showeprint[arxiv]{2503.03321}~[cs.CV]
+\urldef\tempurl%
+\url{https://arxiv.org/abs/2503.03321}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Karamcheti, Nair, Balakrishna, Liang, Kollar, and Sadigh}{Karamcheti et~al\mbox{.}}{2024}]%
+        {prismaticds}
+\bibfield{author}{\bibinfo{person}{Siddharth Karamcheti}, \bibinfo{person}{Suraj Nair}, \bibinfo{person}{Ashwin Balakrishna}, \bibinfo{person}{Percy Liang}, \bibinfo{person}{Thomas Kollar}, {and} \bibinfo{person}{Dorsa Sadigh}.} \bibinfo{year}{2024}\natexlab{}.
+\newblock \bibinfo{title}{Prismatic VLMs: Investigating the Design Space of Visually-Conditioned Language Models}.
+\newblock
+\newblock
+\showeprint[arxiv]{2402.07865}~[cs.CV]
+\urldef\tempurl%
+\url{https://arxiv.org/abs/2402.07865}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Kim, Pertsch, Karamcheti, Xiao, Balakrishna, Nair, Rafailov, Foster, Lam, Sanketi, Vuong, Kollar, Burchfiel, Tedrake, Sadigh, Levine, Liang, and Finn}{Kim et~al\mbox{.}}{2024}]%
+        {openvla}
+\bibfield{author}{\bibinfo{person}{Moo~Jin Kim}, \bibinfo{person}{Karl Pertsch}, \bibinfo{person}{Siddharth Karamcheti}, \bibinfo{person}{Ted Xiao}, \bibinfo{person}{Ashwin Balakrishna}, \bibinfo{person}{Suraj Nair}, \bibinfo{person}{Rafael Rafailov}, \bibinfo{person}{Ethan Foster}, \bibinfo{person}{Grace Lam}, \bibinfo{person}{Pannag Sanketi}, \bibinfo{person}{Quan Vuong}, \bibinfo{person}{Thomas Kollar}, \bibinfo{person}{Benjamin Burchfiel}, \bibinfo{person}{Russ Tedrake}, \bibinfo{person}{Dorsa Sadigh}, \bibinfo{person}{Sergey Levine}, \bibinfo{person}{Percy Liang}, {and} \bibinfo{person}{Chelsea Finn}.} \bibinfo{year}{2024}\natexlab{}.
+\newblock \bibinfo{title}{OpenVLA: An Open-Source Vision-Language-Action Model}.
+\newblock
+\newblock
+\showeprint[arxiv]{2406.09246}~[cs.RO]
+\urldef\tempurl%
+\url{https://arxiv.org/abs/2406.09246}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Lee, Duan, Fang, Deng, Liu, Li, Fang, Zhang, Wang, Lee, Han, Pumacay, Wu, Hendrix, Farley, VanderBilt, Farhadi, Fox, and Krishna}{Lee et~al\mbox{.}}{2025}]%
+        {moactact}
+\bibfield{author}{\bibinfo{person}{Jason Lee}, \bibinfo{person}{Jiafei Duan}, \bibinfo{person}{Haoquan Fang}, \bibinfo{person}{Yuquan Deng}, \bibinfo{person}{Shuo Liu}, \bibinfo{person}{Boyang Li}, \bibinfo{person}{Bohan Fang}, \bibinfo{person}{Jieyu Zhang}, \bibinfo{person}{Yi~Ru Wang}, \bibinfo{person}{Sangho Lee}, \bibinfo{person}{Winson Han}, \bibinfo{person}{Wilbert Pumacay}, \bibinfo{person}{Angelica Wu}, \bibinfo{person}{Rose Hendrix}, \bibinfo{person}{Karen Farley}, \bibinfo{person}{Eli VanderBilt}, \bibinfo{person}{Ali Farhadi}, \bibinfo{person}{Dieter Fox}, {and} \bibinfo{person}{Ranjay Krishna}.} \bibinfo{year}{2025}\natexlab{}.
+\newblock \bibinfo{title}{MolmoAct: Action Reasoning Models that can Reason in Space}.
+\newblock
+\newblock
+\showeprint[arxiv]{2508.07917}~[cs.RO]
+\urldef\tempurl%
+\url{https://arxiv.org/abs/2508.07917}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Li, Hsu, Gu, Pertsch, Mees, Walke, Fu, Lunawat, Sieh, Kirmani, Levine, Wu, Finn, Su, Vuong, and Xiao}{Li et~al\mbox{.}}{2024}]%
+        {simpler}
+\bibfield{author}{\bibinfo{person}{Xuanlin Li}, \bibinfo{person}{Kyle Hsu}, \bibinfo{person}{Jiayuan Gu}, \bibinfo{person}{Karl Pertsch}, \bibinfo{person}{Oier Mees}, \bibinfo{person}{Homer~Rich Walke}, \bibinfo{person}{Chuyuan Fu}, \bibinfo{person}{Ishikaa Lunawat}, \bibinfo{person}{Isabel Sieh}, \bibinfo{person}{Sean Kirmani}, \bibinfo{person}{Sergey Levine}, \bibinfo{person}{Jiajun Wu}, \bibinfo{person}{Chelsea Finn}, \bibinfo{person}{Hao Su}, \bibinfo{person}{Quan Vuong}, {and} \bibinfo{person}{Ted Xiao}.} \bibinfo{year}{2024}\natexlab{}.
+\newblock \bibinfo{title}{Evaluating Real-World Robot Manipulation Policies in Simulation}.
+\newblock
+\newblock
+\showeprint[arxiv]{2405.05941}~[cs.RO]
+\urldef\tempurl%
+\url{https://arxiv.org/abs/2405.05941}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Lin, Nai, Hu, You, Zhao, and Gao}{Lin et~al\mbox{.}}{2025b}]%
+        {onetwovla}
+\bibfield{author}{\bibinfo{person}{Fanqi Lin}, \bibinfo{person}{Ruiqian Nai}, \bibinfo{person}{Yingdong Hu}, \bibinfo{person}{Jiacheng You}, \bibinfo{person}{Junming Zhao}, {and} \bibinfo{person}{Yang Gao}.} \bibinfo{year}{2025}\natexlab{b}.
+\newblock \bibinfo{title}{OneTwoVLA: A Unified Vision-Language-Action Model with Adaptive Reasoning}.
+\newblock
+\newblock
+\showeprint[arxiv]{2505.11917}~[cs.RO]
+\urldef\tempurl%
+\url{https://arxiv.org/abs/2505.11917}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Lin, Maire, Belongie, Hays, Perona, Ramanan, Doll{\'a}r, and Zitnick}{Lin et~al\mbox{.}}{2014}]%
+        {lin2014microsoft}
+\bibfield{author}{\bibinfo{person}{Tsung-Yi Lin}, \bibinfo{person}{Michael Maire}, \bibinfo{person}{Serge Belongie}, \bibinfo{person}{James Hays}, \bibinfo{person}{Pietro Perona}, \bibinfo{person}{Deva Ramanan}, \bibinfo{person}{Piotr Doll{\'a}r}, {and} \bibinfo{person}{C~Lawrence Zitnick}.} \bibinfo{year}{2014}\natexlab{}.
+\newblock \showarticletitle{Microsoft coco: Common objects in context}. In \bibinfo{booktitle}{\emph{European conference on computer vision}}. Springer, \bibinfo{pages}{740--755}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Lin, Lin, Lin, and Ji}{Lin et~al\mbox{.}}{2025a}]%
+        {lin2025boostingmultimodallargelanguage}
+\bibfield{author}{\bibinfo{person}{Zhihang Lin}, \bibinfo{person}{Mingbao Lin}, \bibinfo{person}{Luxi Lin}, {and} \bibinfo{person}{Rongrong Ji}.} \bibinfo{year}{2025}\natexlab{a}.
+\newblock \bibinfo{title}{Boosting Multimodal Large Language Models with Visual Tokens Withdrawal for Rapid Inference}.
+\newblock
+\newblock
+\showeprint[arxiv]{2405.05803}~[cs.CV]
+\urldef\tempurl%
+\url{https://arxiv.org/abs/2405.05803}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Liu, Zhu, Gao, Feng, Liu, Zhu, and Stone}{Liu et~al\mbox{.}}{2023}]%
+        {libero}
+\bibfield{author}{\bibinfo{person}{Bo Liu}, \bibinfo{person}{Yifeng Zhu}, \bibinfo{person}{Chongkai Gao}, \bibinfo{person}{Yihao Feng}, \bibinfo{person}{Qiang Liu}, \bibinfo{person}{Yuke Zhu}, {and} \bibinfo{person}{Peter Stone}.} \bibinfo{year}{2023}\natexlab{}.
+\newblock \bibinfo{title}{LIBERO: Benchmarking Knowledge Transfer for Lifelong Robot Learning}.
+\newblock
+\newblock
+\showeprint[arxiv]{2306.03310}~[cs.AI]
+\urldef\tempurl%
+\url{https://arxiv.org/abs/2306.03310}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Liu, Gao, Wei, Chen, Liao, Wu, Yu, and Wang}{Liu et~al\mbox{.}}{2025}]%
+        {liu2025rl4vla}
+\bibfield{author}{\bibinfo{person}{Jijia Liu}, \bibinfo{person}{Feng Gao}, \bibinfo{person}{Bingwen Wei}, \bibinfo{person}{Xinlei Chen}, \bibinfo{person}{Qingmin Liao}, \bibinfo{person}{Yi Wu}, \bibinfo{person}{Chao Yu}, {and} \bibinfo{person}{Yu Wang}.} \bibinfo{year}{2025}\natexlab{}.
+\newblock \bibinfo{title}{What Can RL Bring to VLA Generalization? An Empirical Study}.
+\newblock
+\newblock
+\showeprint[arxiv]{2505.19789}~[cs.LG]
+\urldef\tempurl%
+\url{https://arxiv.org/abs/2505.19789}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Lu, Li, Xia, Hu, Zhao, Ma, Wei, and et~al.}{Lu et~al\mbox{.}}{2025}]%
+        {Ovis2.5}
+\bibfield{author}{\bibinfo{person}{Shiyin Lu}, \bibinfo{person}{Yang Li}, \bibinfo{person}{Yu Xia}, \bibinfo{person}{Yuwei Hu}, \bibinfo{person}{Shanshan Zhao}, \bibinfo{person}{Yanqing Ma}, \bibinfo{person}{Zhichao Wei}, {and} \bibinfo{person}{et al.}} \bibinfo{year}{2025}\natexlab{}.
+\newblock \bibinfo{title}{Ovis2.5 Technical Report}.
+\newblock
+\newblock
+\showeprint[arxiv]{2508.11737}~[cs.CV]
+\urldef\tempurl%
+\url{https://arxiv.org/abs/2508.11737}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Maniparambil, Akshulakov, Djilali, Narayan, Seddik, Mangalam, and O'Connor}{Maniparambil et~al\mbox{.}}{2024}]%
+        {visionlanguageencodersrepresent}
+\bibfield{author}{\bibinfo{person}{Mayug Maniparambil}, \bibinfo{person}{Raiymbek Akshulakov}, \bibinfo{person}{Yasser Abdelaziz~Dahou Djilali}, \bibinfo{person}{Sanath Narayan}, \bibinfo{person}{Mohamed El~Amine Seddik}, \bibinfo{person}{Karttikeya Mangalam}, {and} \bibinfo{person}{Noel~E. O'Connor}.} \bibinfo{year}{2024}\natexlab{}.
+\newblock \bibinfo{title}{Do Vision and Language Encoders Represent the World Similarly?}
+\newblock
+\newblock
+\showeprint[arxiv]{2401.05224}~[cs.CV]
+\urldef\tempurl%
+\url{https://arxiv.org/abs/2401.05224}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Mees, Hermann, Rosete-Beas, and Burgard}{Mees et~al\mbox{.}}{2022}]%
+        {calvin}
+\bibfield{author}{\bibinfo{person}{Oier Mees}, \bibinfo{person}{Lukas Hermann}, \bibinfo{person}{Erick Rosete-Beas}, {and} \bibinfo{person}{Wolfram Burgard}.} \bibinfo{year}{2022}\natexlab{}.
+\newblock \bibinfo{title}{CALVIN: A Benchmark for Language-Conditioned Policy Learning for Long-Horizon Robot Manipulation Tasks}.
+\newblock
+\newblock
+\showeprint[arxiv]{2112.03227}~[cs.RO]
+\urldef\tempurl%
+\url{https://arxiv.org/abs/2112.03227}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{NVIDIA, :, Azzolini, Bai, Brandon, Cao, Chattopadhyay, Chen, Chu, Cui, Diamond, Ding, Feng, Ferroni, Govindaraju, Gu, Gururani, Hanafi, Hao, Huffman, Jin, Johnson, Khan, Kurian, Lantz, Lee, Li, Li, Liao, Lin, Lin, Liu, Lu, Luo, Mathau, Ni, Pavao, Ping, Romero, Smelyanskiy, Song, Tchapmi, Wang, Wang, Wang, Wei, Xu, Xu, Yang, Yang, Yang, Zhang, Zeng, and Zhang}{NVIDIA et~al\mbox{.}}{2025a}]%
+        {cosmos_reason}
+\bibfield{author}{\bibinfo{person}{NVIDIA}, \bibinfo{person}{:}, \bibinfo{person}{Alisson Azzolini}, \bibinfo{person}{Junjie Bai}, \bibinfo{person}{Hannah Brandon}, \bibinfo{person}{Jiaxin Cao}, \bibinfo{person}{Prithvijit Chattopadhyay}, \bibinfo{person}{Huayu Chen}, \bibinfo{person}{Jinju Chu}, \bibinfo{person}{Yin Cui}, \bibinfo{person}{Jenna Diamond}, \bibinfo{person}{Yifan Ding}, \bibinfo{person}{Liang Feng}, \bibinfo{person}{Francesco Ferroni}, \bibinfo{person}{Rama Govindaraju}, \bibinfo{person}{Jinwei Gu}, \bibinfo{person}{Siddharth Gururani}, \bibinfo{person}{Imad~El Hanafi}, \bibinfo{person}{Zekun Hao}, \bibinfo{person}{Jacob Huffman}, \bibinfo{person}{Jingyi Jin}, \bibinfo{person}{Brendan Johnson}, \bibinfo{person}{Rizwan Khan}, \bibinfo{person}{George Kurian}, \bibinfo{person}{Elena Lantz}, \bibinfo{person}{Nayeon Lee}, \bibinfo{person}{Zhaoshuo Li}, \bibinfo{person}{Xuan Li}, \bibinfo{person}{Maosheng Liao}, \bibinfo{person}{Tsung-Yi Lin}, \bibinfo{person}{Yen-Chen Lin}, \bibinfo{person}{Ming-Yu
+  Liu}, \bibinfo{person}{Xiangyu Lu}, \bibinfo{person}{Alice Luo}, \bibinfo{person}{Andrew Mathau}, \bibinfo{person}{Yun Ni}, \bibinfo{person}{Lindsey Pavao}, \bibinfo{person}{Wei Ping}, \bibinfo{person}{David~W. Romero}, \bibinfo{person}{Misha Smelyanskiy}, \bibinfo{person}{Shuran Song}, \bibinfo{person}{Lyne Tchapmi}, \bibinfo{person}{Andrew~Z. Wang}, \bibinfo{person}{Boxin Wang}, \bibinfo{person}{Haoxiang Wang}, \bibinfo{person}{Fangyin Wei}, \bibinfo{person}{Jiashu Xu}, \bibinfo{person}{Yao Xu}, \bibinfo{person}{Dinghao Yang}, \bibinfo{person}{Xiaodong Yang}, \bibinfo{person}{Zhuolin Yang}, \bibinfo{person}{Jingxu Zhang}, \bibinfo{person}{Xiaohui Zeng}, {and} \bibinfo{person}{Zhe Zhang}.} \bibinfo{year}{2025}\natexlab{a}.
+\newblock \bibinfo{title}{Cosmos-Reason1: From Physical Common Sense To Embodied Reasoning}.
+\newblock
+\newblock
+\showeprint[arxiv]{2503.15558}~[cs.AI]
+\urldef\tempurl%
+\url{https://arxiv.org/abs/2503.15558}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{NVIDIA, :, Bjorck, Castañeda, Cherniadev, Da, Ding, Fan, Fang, Fox, Hu, Huang, Jang, Jiang, Kautz, Kundalia, Lao, Li, Lin, Lin, Liu, Llontop, Magne, Mandlekar, Narayan, Nasiriany, Reed, Tan, Wang, Wang, Wang, Wang, Xiang, Xie, Xu, Xu, Ye, Yu, Zhang, Zhang, Zhao, Zheng, and Zhu}{NVIDIA et~al\mbox{.}}{2025b}]%
+        {groot}
+\bibfield{author}{\bibinfo{person}{NVIDIA}, \bibinfo{person}{:}, \bibinfo{person}{Johan Bjorck}, \bibinfo{person}{Fernando Castañeda}, \bibinfo{person}{Nikita Cherniadev}, \bibinfo{person}{Xingye Da}, \bibinfo{person}{Runyu Ding}, \bibinfo{person}{Linxi~"Jim" Fan}, \bibinfo{person}{Yu Fang}, \bibinfo{person}{Dieter Fox}, \bibinfo{person}{Fengyuan Hu}, \bibinfo{person}{Spencer Huang}, \bibinfo{person}{Joel Jang}, \bibinfo{person}{Zhenyu Jiang}, \bibinfo{person}{Jan Kautz}, \bibinfo{person}{Kaushil Kundalia}, \bibinfo{person}{Lawrence Lao}, \bibinfo{person}{Zhiqi Li}, \bibinfo{person}{Zongyu Lin}, \bibinfo{person}{Kevin Lin}, \bibinfo{person}{Guilin Liu}, \bibinfo{person}{Edith Llontop}, \bibinfo{person}{Loic Magne}, \bibinfo{person}{Ajay Mandlekar}, \bibinfo{person}{Avnish Narayan}, \bibinfo{person}{Soroush Nasiriany}, \bibinfo{person}{Scott Reed}, \bibinfo{person}{You~Liang Tan}, \bibinfo{person}{Guanzhi Wang}, \bibinfo{person}{Zu Wang}, \bibinfo{person}{Jing Wang}, \bibinfo{person}{Qi Wang},
+  \bibinfo{person}{Jiannan Xiang}, \bibinfo{person}{Yuqi Xie}, \bibinfo{person}{Yinzhen Xu}, \bibinfo{person}{Zhenjia Xu}, \bibinfo{person}{Seonghyeon Ye}, \bibinfo{person}{Zhiding Yu}, \bibinfo{person}{Ao Zhang}, \bibinfo{person}{Hao Zhang}, \bibinfo{person}{Yizhou Zhao}, \bibinfo{person}{Ruijie Zheng}, {and} \bibinfo{person}{Yuke Zhu}.} \bibinfo{year}{2025}\natexlab{b}.
+\newblock \bibinfo{title}{GR00T N1: An Open Foundation Model for Generalist Humanoid Robots}.
+\newblock
+\newblock
+\showeprint[arxiv]{2503.14734}~[cs.RO]
+\urldef\tempurl%
+\url{https://arxiv.org/abs/2503.14734}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Oquab, Darcet, Moutakanni, Vo, Szafraniec, Khalidov, Fernandez, Haziza, Massa, El-Nouby, Assran, Ballas, Galuba, Howes, Huang, Li, Misra, Rabbat, Sharma, Synnaeve, Xu, Jegou, Mairal, Labatut, Joulin, and Bojanowski}{Oquab et~al\mbox{.}}{2024}]%
+        {dinov2}
+\bibfield{author}{\bibinfo{person}{Maxime Oquab}, \bibinfo{person}{Timothée Darcet}, \bibinfo{person}{Théo Moutakanni}, \bibinfo{person}{Huy Vo}, \bibinfo{person}{Marc Szafraniec}, \bibinfo{person}{Vasil Khalidov}, \bibinfo{person}{Pierre Fernandez}, \bibinfo{person}{Daniel Haziza}, \bibinfo{person}{Francisco Massa}, \bibinfo{person}{Alaaeldin El-Nouby}, \bibinfo{person}{Mahmoud Assran}, \bibinfo{person}{Nicolas Ballas}, \bibinfo{person}{Wojciech Galuba}, \bibinfo{person}{Russell Howes}, \bibinfo{person}{Po-Yao Huang}, \bibinfo{person}{Shang-Wen Li}, \bibinfo{person}{Ishan Misra}, \bibinfo{person}{Michael Rabbat}, \bibinfo{person}{Vasu Sharma}, \bibinfo{person}{Gabriel Synnaeve}, \bibinfo{person}{Hu Xu}, \bibinfo{person}{Hervé Jegou}, \bibinfo{person}{Julien Mairal}, \bibinfo{person}{Patrick Labatut}, \bibinfo{person}{Armand Joulin}, {and} \bibinfo{person}{Piotr Bojanowski}.} \bibinfo{year}{2024}\natexlab{}.
+\newblock \bibinfo{title}{DINOv2: Learning Robust Visual Features without Supervision}.
+\newblock
+\newblock
+\showeprint[arxiv]{2304.07193}~[cs.CV]
+\urldef\tempurl%
+\url{https://arxiv.org/abs/2304.07193}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Pugacheva, Moskalenko, Shepelev, Kuznetsov, Shakhuro, and Tutubalina}{Pugacheva et~al\mbox{.}}{2025}]%
+        {pugacheva2025bringapplesofaimpact}
+\bibfield{author}{\bibinfo{person}{Daria Pugacheva}, \bibinfo{person}{Andrey Moskalenko}, \bibinfo{person}{Denis Shepelev}, \bibinfo{person}{Andrey Kuznetsov}, \bibinfo{person}{Vlad Shakhuro}, {and} \bibinfo{person}{Elena Tutubalina}.} \bibinfo{year}{2025}\natexlab{}.
+\newblock \bibinfo{title}{Bring the Apple, Not the Sofa: Impact of Irrelevant Context in Embodied AI Commands on VLA Models}.
+\newblock
+\newblock
+\showeprint[arxiv]{2510.07067}~[cs.RO]
+\urldef\tempurl%
+\url{https://arxiv.org/abs/2510.07067}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Shang, Schmeckpeper, May, Minniti, Kelestemur, Watkins, and Herlant}{Shang et~al\mbox{.}}{2024}]%
+        {theia}
+\bibfield{author}{\bibinfo{person}{Jinghuan Shang}, \bibinfo{person}{Karl Schmeckpeper}, \bibinfo{person}{Brandon~B. May}, \bibinfo{person}{Maria~Vittoria Minniti}, \bibinfo{person}{Tarik Kelestemur}, \bibinfo{person}{David Watkins}, {and} \bibinfo{person}{Laura Herlant}.} \bibinfo{year}{2024}\natexlab{}.
+\newblock \bibinfo{title}{Theia: Distilling Diverse Vision Foundation Models for Robot Learning}.
+\newblock
+\newblock
+\showeprint[arxiv]{2407.20179}~[cs.RO]
+\urldef\tempurl%
+\url{https://arxiv.org/abs/2407.20179}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Staroverov, Gorodetsky, Krishtopik, Izmesteva, Yudin, Kovalev, and Panov}{Staroverov et~al\mbox{.}}{2023}]%
+        {staroverov2023fine}
+\bibfield{author}{\bibinfo{person}{Aleksei Staroverov}, \bibinfo{person}{Andrey~S Gorodetsky}, \bibinfo{person}{Andrei~S Krishtopik}, \bibinfo{person}{Uliana~A Izmesteva}, \bibinfo{person}{Dmitry~A Yudin}, \bibinfo{person}{Alexey~K Kovalev}, {and} \bibinfo{person}{Aleksandr~I Panov}.} \bibinfo{year}{2023}\natexlab{}.
+\newblock \showarticletitle{Fine-tuning multimodal transformer models for generating actions in virtual and real environments}.
+\newblock \bibinfo{journal}{\emph{Ieee Access}}  \bibinfo{volume}{11} (\bibinfo{year}{2023}), \bibinfo{pages}{130548--130559}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{Tao, Xiang, Shukla, Qin, Hinrichsen, Yuan, Bao, Lin, Liu, kai Chan, Gao, Li, Mu, Xiao, Gurha, Rajesh, Choi, Chen, Huang, Calandra, Chen, Luo, and Su}{Tao et~al\mbox{.}}{2025}]%
+        {maniskill}
+\bibfield{author}{\bibinfo{person}{Stone Tao}, \bibinfo{person}{Fanbo Xiang}, \bibinfo{person}{Arth Shukla}, \bibinfo{person}{Yuzhe Qin}, \bibinfo{person}{Xander Hinrichsen}, \bibinfo{person}{Xiaodi Yuan}, \bibinfo{person}{Chen Bao}, \bibinfo{person}{Xinsong Lin}, \bibinfo{person}{Yulin Liu}, \bibinfo{person}{Tse kai Chan}, \bibinfo{person}{Yuan Gao}, \bibinfo{person}{Xuanlin Li}, \bibinfo{person}{Tongzhou Mu}, \bibinfo{person}{Nan Xiao}, \bibinfo{person}{Arnav Gurha}, \bibinfo{person}{Viswesh~Nagaswamy Rajesh}, \bibinfo{person}{Yong~Woo Choi}, \bibinfo{person}{Yen-Ru Chen}, \bibinfo{person}{Zhiao Huang}, \bibinfo{person}{Roberto Calandra}, \bibinfo{person}{Rui Chen}, \bibinfo{person}{Shan Luo}, {and} \bibinfo{person}{Hao Su}.} \bibinfo{year}{2025}\natexlab{}.
+\newblock \bibinfo{title}{ManiSkill3: GPU Parallelized Robotics Simulation and Rendering for Generalizable Embodied AI}.
+\newblock
+\newblock
+\showeprint[arxiv]{2410.00425}~[cs.RO]
+\urldef\tempurl%
+\url{https://arxiv.org/abs/2410.00425}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Team, Ghosh, Walke, Pertsch, Black, Mees, Dasari, Hejna, Kreiman, Xu, Luo, Tan, Chen, Sanketi, Vuong, Xiao, Sadigh, Finn, and Levine}{Team et~al\mbox{.}}{2024}]%
+        {octo}
+\bibfield{author}{\bibinfo{person}{Octo~Model Team}, \bibinfo{person}{Dibya Ghosh}, \bibinfo{person}{Homer Walke}, \bibinfo{person}{Karl Pertsch}, \bibinfo{person}{Kevin Black}, \bibinfo{person}{Oier Mees}, \bibinfo{person}{Sudeep Dasari}, \bibinfo{person}{Joey Hejna}, \bibinfo{person}{Tobias Kreiman}, \bibinfo{person}{Charles Xu}, \bibinfo{person}{Jianlan Luo}, \bibinfo{person}{You~Liang Tan}, \bibinfo{person}{Lawrence~Yunliang Chen}, \bibinfo{person}{Pannag Sanketi}, \bibinfo{person}{Quan Vuong}, \bibinfo{person}{Ted Xiao}, \bibinfo{person}{Dorsa Sadigh}, \bibinfo{person}{Chelsea Finn}, {and} \bibinfo{person}{Sergey Levine}.} \bibinfo{year}{2024}\natexlab{}.
+\newblock \bibinfo{title}{Octo: An Open-Source Generalist Robot Policy}.
+\newblock
+\newblock
+\showeprint[arxiv]{2405.12213}~[cs.RO]
+\urldef\tempurl%
+\url{https://arxiv.org/abs/2405.12213}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Tian, Chen, Ganguli, and Isola}{Tian et~al\mbox{.}}{2020}]%
+        {tian2020goodviews}
+\bibfield{author}{\bibinfo{person}{Yonglong Tian}, \bibinfo{person}{Xinlei Chen}, \bibinfo{person}{Surya Ganguli}, {and} \bibinfo{person}{Phillip Isola}.} \bibinfo{year}{2020}\natexlab{}.
+\newblock \showarticletitle{What makes for good views for contrastive learning?}. In \bibinfo{booktitle}{\emph{International Conference on Machine Learning (ICML)}}. \bibinfo{pages}{10242--10252}.
+\newblock
+
+
+\bibitem[\protect\citeauthoryear{van~der Maaten and Hinton}{van~der Maaten and Hinton}{2008a}]%
+        {vandermaaten08a}
+\bibfield{author}{\bibinfo{person}{Laurens van~der Maaten} {and} \bibinfo{person}{Geoffrey Hinton}.} \bibinfo{year}{2008}\natexlab{a}.
+\newblock \showarticletitle{Visualizing Data using t-SNE}.
+\newblock \bibinfo{journal}{\emph{Journal of Machine Learning Research}}  \bibinfo{volume}{9} (\bibinfo{year}{2008}), \bibinfo{pages}{2579--2605}.
+\newblock
+\urldef\tempurl%
+\url{https://www.jmlr.org/papers/v9/vandermaaten08a.html}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{van~der Maaten and Hinton}{van~der Maaten and Hinton}{2008b}]%
+        {JMLR:v9:vandermaaten08a}
+\bibfield{author}{\bibinfo{person}{Laurens van~der Maaten} {and} \bibinfo{person}{Geoffrey Hinton}.} \bibinfo{year}{2008}\natexlab{b}.
+\newblock \showarticletitle{Visualizing Data using t-SNE}.
+\newblock \bibinfo{journal}{\emph{Journal of Machine Learning Research}} \bibinfo{volume}{9}, \bibinfo{number}{86} (\bibinfo{year}{2008}), \bibinfo{pages}{2579--2605}.
+\newblock
+\urldef\tempurl%
+\url{http://jmlr.org/papers/v9/vandermaaten08a.html}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Wang, Gao, Gu, Pu, Cui, Wei, and et~al.}{Wang et~al\mbox{.}}{2025b}]%
+        {InternVL3.5}
+\bibfield{author}{\bibinfo{person}{Weiyun Wang}, \bibinfo{person}{Zhangwei Gao}, \bibinfo{person}{Lixin Gu}, \bibinfo{person}{Hengjun Pu}, \bibinfo{person}{Long Cui}, \bibinfo{person}{Xingguang Wei}, {and} \bibinfo{person}{et al.}} \bibinfo{year}{2025}\natexlab{b}.
+\newblock \bibinfo{title}{InternVL3.5: Advancing Open-Source Multimodal Models in Versatility, Reasoning, and Efficiency}.
+\newblock
+\newblock
+\showeprint[arxiv]{2508.18265}~[cs.CV]
+\urldef\tempurl%
+\url{https://arxiv.org/abs/2508.18265}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Wang, Ding, Li, Cui, Ge, Tong, Song, Zhao, Zhao, Hou, Huang, Tang, Wang, Zhang, Liu, and Wang}{Wang et~al\mbox{.}}{2025a}]%
+        {wang2025vlaadaptereffectiveparadigmtinyscale}
+\bibfield{author}{\bibinfo{person}{Yihao Wang}, \bibinfo{person}{Pengxiang Ding}, \bibinfo{person}{Lingxiao Li}, \bibinfo{person}{Can Cui}, \bibinfo{person}{Zirui Ge}, \bibinfo{person}{Xinyang Tong}, \bibinfo{person}{Wenxuan Song}, \bibinfo{person}{Han Zhao}, \bibinfo{person}{Wei Zhao}, \bibinfo{person}{Pengxu Hou}, \bibinfo{person}{Siteng Huang}, \bibinfo{person}{Yifan Tang}, \bibinfo{person}{Wenhui Wang}, \bibinfo{person}{Ru Zhang}, \bibinfo{person}{Jianyi Liu}, {and} \bibinfo{person}{Donglin Wang}.} \bibinfo{year}{2025}\natexlab{a}.
+\newblock \bibinfo{title}{VLA-Adapter: An Effective Paradigm for Tiny-Scale Vision-Language-Action Model}.
+\newblock
+\newblock
+\showeprint[arxiv]{2509.09372}~[cs.RO]
+\urldef\tempurl%
+\url{https://arxiv.org/abs/2509.09372}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Wilcoxon}{Wilcoxon}{1945}]%
+        {wilcoxon1945individual}
+\bibfield{author}{\bibinfo{person}{Frank Wilcoxon}.} \bibinfo{year}{1945}\natexlab{}.
+\newblock \showarticletitle{Individual Comparisons by Ranking Methods}.
+\newblock \bibinfo{journal}{\emph{Biometrics Bulletin}} \bibinfo{volume}{1}, \bibinfo{number}{6} (\bibinfo{year}{1945}), \bibinfo{pages}{80--83}.
+\newblock
+\urldef\tempurl%
+\url{https://doi.org/10.2307/3001968}
+\showDOI{\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Wu, Wu, He, Guo, Ye, Duan, and Bian}{Wu et~al\mbox{.}}{2025}]%
+        {wu2025geometryforcingmarryingvideo}
+\bibfield{author}{\bibinfo{person}{Haoyu Wu}, \bibinfo{person}{Diankun Wu}, \bibinfo{person}{Tianyu He}, \bibinfo{person}{Junliang Guo}, \bibinfo{person}{Yang Ye}, \bibinfo{person}{Yueqi Duan}, {and} \bibinfo{person}{Jiang Bian}.} \bibinfo{year}{2025}\natexlab{}.
+\newblock \bibinfo{title}{Geometry Forcing: Marrying Video Diffusion and 3D Representation for Consistent World Modeling}.
+\newblock
+\newblock
+\showeprint[arxiv]{2507.07982}~[cs.CV]
+\urldef\tempurl%
+\url{https://arxiv.org/abs/2507.07982}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Yang, Tan, Wu, Zheng, Peng, Liang, Gu, Cai, Ye, Jang, Deng, Liden, and Gao}{Yang et~al\mbox{.}}{2025}]%
+        {magma}
+\bibfield{author}{\bibinfo{person}{Jianwei Yang}, \bibinfo{person}{Reuben Tan}, \bibinfo{person}{Qianhui Wu}, \bibinfo{person}{Ruijie Zheng}, \bibinfo{person}{Baolin Peng}, \bibinfo{person}{Yongyuan Liang}, \bibinfo{person}{Yu Gu}, \bibinfo{person}{Mu Cai}, \bibinfo{person}{Seonghyeon Ye}, \bibinfo{person}{Joel Jang}, \bibinfo{person}{Yuquan Deng}, \bibinfo{person}{Lars Liden}, {and} \bibinfo{person}{Jianfeng Gao}.} \bibinfo{year}{2025}\natexlab{}.
+\newblock \bibinfo{title}{Magma: A Foundation Model for Multimodal AI Agents}.
+\newblock
+\newblock
+\showeprint[arxiv]{2502.13130}~[cs.CV]
+\urldef\tempurl%
+\url{https://arxiv.org/abs/2502.13130}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Yu, Kwak, Jang, Jeong, Huang, Shin, and Xie}{Yu et~al\mbox{.}}{2025}]%
+        {repa}
+\bibfield{author}{\bibinfo{person}{Sihyun Yu}, \bibinfo{person}{Sangkyung Kwak}, \bibinfo{person}{Huiwon Jang}, \bibinfo{person}{Jongheon Jeong}, \bibinfo{person}{Jonathan Huang}, \bibinfo{person}{Jinwoo Shin}, {and} \bibinfo{person}{Saining Xie}.} \bibinfo{year}{2025}\natexlab{}.
+\newblock \showarticletitle{Representation Alignment for Generation: Training Diffusion Transformers Is Easier Than You Think}. In \bibinfo{booktitle}{\emph{The Thirteenth International Conference on Learning Representations}}.
+\newblock
+\urldef\tempurl%
+\url{https://openreview.net/forum?id=DJSZGGZYVi}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Zang, Goh, Susskind, and Huang}{Zang et~al\mbox{.}}{2024}]%
+        {Zang2024Overcoming}
+\bibfield{author}{\bibinfo{person}{Yuhang Zang}, \bibinfo{person}{Hanlin Goh}, \bibinfo{person}{Josh Susskind}, {and} \bibinfo{person}{Chen Huang}.} \bibinfo{year}{2024}\natexlab{}.
+\newblock \showarticletitle{Overcoming the Pitfalls of Vision-Language Model Finetuning for OOD Generalization}.
+\newblock \bibinfo{journal}{\emph{arXiv preprint}} (\bibinfo{year}{2024}).
+\newblock
+\showeprint{2401.15914}
+\urldef\tempurl%
+\url{https://arxiv.org/abs/2401.15914}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Zhai, Mustafa, Kolesnikov, and Beyer}{Zhai et~al\mbox{.}}{2023}]%
+        {siglip}
+\bibfield{author}{\bibinfo{person}{Xiaohua Zhai}, \bibinfo{person}{Basil Mustafa}, \bibinfo{person}{Alexander Kolesnikov}, {and} \bibinfo{person}{Lucas Beyer}.} \bibinfo{year}{2023}\natexlab{}.
+\newblock \bibinfo{title}{Sigmoid Loss for Language Image Pre-Training}.
+\newblock
+\newblock
+\showeprint[arxiv]{2303.15343}~[cs.CV]
+\urldef\tempurl%
+\url{https://arxiv.org/abs/2303.15343}
+\showURL{%
+\tempurl}
+
+
+\bibitem[\protect\citeauthoryear{Zhang, Huang, Xu, Huang, Zhi, Ren, Xu, and Zhang}{Zhang et~al\mbox{.}}{2025}]%
+        {zhang2025mllms}
+\bibfield{author}{\bibinfo{person}{Wanyue Zhang}, \bibinfo{person}{Yibin Huang}, \bibinfo{person}{Yangbin Xu}, \bibinfo{person}{JingJing Huang}, \bibinfo{person}{Helu Zhi}, \bibinfo{person}{Shuo Ren}, \bibinfo{person}{Wang Xu}, {and} \bibinfo{person}{Jiajun Zhang}.} \bibinfo{year}{2025}\natexlab{}.
+\newblock \showarticletitle{Why do mllms struggle with spatial understanding? a systematic analysis from data to architecture}.
+\newblock \bibinfo{journal}{\emph{arXiv preprint arXiv:2509.02359}} (\bibinfo{year}{2025}).
+\newblock
+
+
+\end{thebibliography}

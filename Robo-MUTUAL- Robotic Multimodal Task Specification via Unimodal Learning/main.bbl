@@ -1,0 +1,210 @@
+\begin{thebibliography}{10}
+
+\bibitem{shah2023mutex}
+R.~Shah, R.~Mart{\'\i}n-Mart{\'\i}n, and Y.~Zhu, ``Mutex: Learning unified policies from multimodal task specifications,'' in {\em 7th Annual Conference on Robot Learning}, 2023.
+
+\bibitem{reuss2024multimodal}
+M.~Reuss, {\"O}.~E. Ya{\u{g}}murlu, F.~Wenzel, and R.~Lioutikov, ``Multimodal diffusion transformer: Learning versatile behavior from multimodal goals,'' in {\em First Workshop on Vision-Language Models for Navigation and Manipulation at ICRA 2024}, 2024.
+
+\bibitem{octo_2023}
+{Octo Model Team}, D.~Ghosh, H.~Walke, K.~Pertsch, K.~Black, O.~Mees, S.~Dasari, J.~Hejna, C.~Xu, J.~Luo, T.~Kreiman, Y.~Tan, L.~Y. Chen, P.~Sanketi, Q.~Vuong, T.~Xiao, D.~Sadigh, C.~Finn, and S.~Levine, ``Octo: An open-source generalist robot policy,'' in {\em Proceedings of Robotics: Science and Systems}, (Delft, Netherlands), 2024.
+
+\bibitem{jiang2023vima}
+Y.~Jiang, A.~Gupta, Z.~Zhang, G.~Wang, Y.~Dou, Y.~Chen, L.~Fei-Fei, A.~Anandkumar, Y.~Zhu, and L.~Fan, ``Vima: General robot manipulation with multimodal prompts,'' in {\em Fortieth International Conference on Machine Learning}, 2023.
+
+\bibitem{driess2023palme}
+D.~Driess, F.~Xia, M.~S.~M. Sajjadi, C.~Lynch, A.~Chowdhery, B.~Ichter, A.~Wahid, J.~Tompson, Q.~Vuong, T.~Yu, W.~Huang, Y.~Chebotar, P.~Sermanet, D.~Duckworth, S.~Levine, V.~Vanhoucke, K.~Hausman, M.~Toussaint, K.~Greff, A.~Zeng, I.~Mordatch, and P.~Florence, ``Palm-e: An embodied multimodal language model,'' in {\em arXiv preprint arXiv:2303.03378}, 2023.
+
+\bibitem{myers2023goal}
+V.~Myers, A.~W. He, K.~Fang, H.~R. Walke, P.~Hansen-Estruch, C.-A. Cheng, M.~Jalobeanu, A.~Kolobov, A.~Dragan, and S.~Levine, ``Goal representations for instruction following: A semi-supervised language interface to control,'' in {\em Conference on Robot Learning}, pp.~3894--3908, PMLR, 2023.
+
+\bibitem{yu2023using}
+A.~Yu and R.~Mooney, ``Using both demonstrations and language instructions to efficiently learn robotic tasks,'' in {\em The Eleventh International Conference on Learning Representations}, 2023.
+
+\bibitem{nguyen2021practical}
+A.~T. Nguyen, L.~E. Richards, G.~Y. Kebe, E.~Raff, K.~Darvish, F.~Ferraro, and C.~Matuszek, ``Practical cross-modal manifold alignment for robotic grounded language learning,'' in {\em Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition}, pp.~1613--1622, 2021.
+
+\bibitem{xiao2022dial}
+T.~Xiao, H.~Chan, P.~Sermanet, A.~Wahid, A.~Brohan, K.~Hausman, S.~Levine, and J.~Tompson, ``Robotic skill acquistion via instruction augmentation with vision-language models,'' in {\em Proceedings of Robotics: Science and Systems}, 2023.
+
+\bibitem{clip}
+A.~Radford, J.~W. Kim, C.~Hallacy, A.~Ramesh, G.~Goh, S.~Agarwal, G.~Sastry, A.~Askell, P.~Mishkin, J.~Clark, {\em et~al.}, ``Learning transferable visual models from natural language supervision,'' in {\em International conference on machine learning}, pp.~8748--8763, PMLR, 2021.
+
+\bibitem{li2024decisionnce}
+J.~Li, J.~Zheng, Y.~Zheng, L.~Mao, X.~Hu, S.~Cheng, H.~Niu, J.~Liu, Y.~Liu, J.~Liu, {\em et~al.}, ``Decisionnce: Embodied multimodal representations via implicit preference learning,'' in {\em Forty-first International Conference on Machine Learning}.
+
+\bibitem{zhang2024connect}
+Y.~Zhang, E.~Sui, and S.~Yeung-Levy, ``Connect, collapse, corrupt: Learning cross-modal tasks with uni-modal data,'' {\em arXiv preprint arXiv:2401.08567}, 2024.
+
+\bibitem{liang2022mind}
+V.~W. Liang, Y.~Zhang, Y.~Kwon, S.~Yeung, and J.~Y. Zou, ``Mind the gap: Understanding the modality gap in multi-modal contrastive representation learning,'' {\em Advances in Neural Information Processing Systems}, vol.~35, pp.~17612--17625, 2022.
+
+\bibitem{huh2024platonic}
+M.~Huh, B.~Cheung, T.~Wang, and P.~Isola, ``The platonic representation hypothesis,'' {\em arXiv preprint arXiv:2405.07987}, 2024.
+
+\bibitem{li2023decap}
+W.~Li, L.~Zhu, L.~Wen, and Y.~Yang, ``Decap: Decoding clip latents for zero-shot captioning via text-only training,'' {\em arXiv preprint arXiv:2303.03032}, 2023.
+
+\bibitem{goyal2017something}
+R.~Goyal, S.~Ebrahimi~Kahou, V.~Michalski, J.~Materzynska, S.~Westphal, H.~Kim, V.~Haenel, I.~Fruend, P.~Yianilos, M.~Mueller-Freitag, {\em et~al.}, ``The" something something" video database for learning and evaluating visual common sense,'' in {\em Proceedings of the IEEE international conference on computer vision}, pp.~5842--5850, 2017.
+
+\bibitem{damen2018epick}
+D.~Damen, H.~Doughty, G.~M. Farinella, S.~Fidler, A.~Furnari, E.~Kazakos, D.~Moltisanti, J.~Munro, T.~Perrett, W.~Price, {\em et~al.}, ``Scaling egocentric vision: The epic-kitchens dataset,'' in {\em Proceedings of the European conference on computer vision (ECCV)}, pp.~720--736, 2018.
+
+\bibitem{grauman2022ego4d}
+K.~Grauman, A.~Westbury, E.~Byrne, Z.~Chavis, A.~Furnari, R.~Girdhar, J.~Hamburger, H.~Jiang, M.~Liu, X.~Liu, {\em et~al.}, ``Ego4d: Around the world in 3,000 hours of egocentric video,'' in {\em Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition}, pp.~18995--19012, 2022.
+
+\bibitem{ma2023liv}
+Y.~J. Ma, V.~Kumar, A.~Zhang, O.~Bastani, and D.~Jayaraman, ``Liv: Language-image representations and rewards for robotic control,'' in {\em International Conference on Machine Learning}, pp.~23301--23320, PMLR, 2023.
+
+\bibitem{nair2022r3m}
+S.~Nair, A.~Rajeswaran, V.~Kumar, C.~Finn, and A.~Gupta, ``R3m: A universal visual representation for robot manipulation,'' {\em arXiv preprint arXiv:2203.12601}, 2022.
+
+\bibitem{karamcheti2023voltron}
+S.~Karamcheti, S.~Nair, A.~S. Chen, T.~Kollar, C.~Finn, D.~Sadigh, and P.~Liang, ``Language-driven representation learning for robotics,'' {\em arXiv preprint arXiv:2302.12766}, 2023.
+
+\bibitem{padalkar2023open}
+A.~Padalkar, A.~Pooley, A.~Jain, A.~Bewley, A.~Herzog, A.~Irpan, A.~Khazatsky, A.~Rai, A.~Singh, A.~Brohan, {\em et~al.}, ``Open x-embodiment: Robotic learning datasets and rt-x models,'' {\em arXiv preprint arXiv:2310.08864}, 2023.
+
+\bibitem{khazatsky2024droid}
+A.~Khazatsky, K.~Pertsch, S.~Nair, A.~Balakrishna, S.~Dasari, S.~Karamcheti, S.~Nasiriany, M.~K. Srirama, L.~Y. Chen, K.~Ellis, {\em et~al.}, ``Droid: A large-scale in-the-wild robot manipulation dataset,'' {\em arXiv preprint arXiv:2403.12945}, 2024.
+
+\bibitem{liu2024libero}
+B.~Liu, Y.~Zhu, C.~Gao, Y.~Feng, Q.~Liu, Y.~Zhu, and P.~Stone, ``Libero: Benchmarking knowledge transfer for lifelong robot learning,'' {\em Advances in Neural Information Processing Systems}, vol.~36, 2024.
+
+\bibitem{brohan2022rt1}
+A.~Brohan, N.~Brown, J.~Carbajal, Y.~Chebotar, J.~Dabis, C.~Finn, K.~Gopalakrishnan, K.~Hausman, A.~Herzog, J.~Hsu, {\em et~al.}, ``Rt-1: Robotics transformer for real-world control at scale,'' {\em arXiv preprint arXiv:2212.06817}, 2022.
+
+\bibitem{brohan2023rt2}
+A.~Brohan, N.~Brown, J.~Carbajal, Y.~Chebotar, X.~Chen, K.~Choromanski, T.~Ding, D.~Driess, A.~Dubey, C.~Finn, {\em et~al.}, ``Rt-2: Vision-language-action models transfer web knowledge to robotic control,'' {\em arXiv preprint arXiv:2307.15818}, 2023.
+
+\bibitem{kim2024openvla}
+M.~J. Kim, K.~Pertsch, S.~Karamcheti, T.~Xiao, A.~Balakrishna, S.~Nair, R.~Rafailov, E.~Foster, G.~Lam, P.~Sanketi, {\em et~al.}, ``Openvla: An open-source vision-language-action model,'' {\em arXiv preprint arXiv:2406.09246}, 2024.
+
+\bibitem{xiao2022robotic}
+T.~Xiao, H.~Chan, P.~Sermanet, A.~Wahid, A.~Brohan, K.~Hausman, S.~Levine, and J.~Tompson, ``Robotic skill acquisition via instruction augmentation with vision-language models,'' {\em arXiv preprint arXiv:2211.11736}, 2022.
+
+\bibitem{belkhale2024rt}
+S.~Belkhale, T.~Ding, T.~Xiao, P.~Sermanet, Q.~Vuong, J.~Tompson, Y.~Chebotar, D.~Dwibedi, and D.~Sadigh, ``Rt-h: Action hierarchies using language,'' {\em arXiv preprint arXiv:2403.01823}, 2024.
+
+\bibitem{shi2024yell}
+L.~X. Shi, Z.~Hu, T.~Z. Zhao, A.~Sharma, K.~Pertsch, J.~Luo, S.~Levine, and C.~Finn, ``Yell at your robot: Improving on-the-fly from language corrections,'' {\em arXiv preprint arXiv:2403.12910}, 2024.
+
+\bibitem{ma2023vip}
+Y.~J. Ma, S.~Sodhani, D.~Jayaraman, O.~Bastani, V.~Kumar, and A.~Zhang, ``{VIP}: Towards universal visual reward and representation via value-implicit pre-training,'' in {\em The Eleventh International Conference on Learning Representations}, 2023.
+
+\bibitem{nasiriany2019planning}
+S.~Nasiriany, V.~Pong, S.~Lin, and S.~Levine, ``Planning with goal-conditioned policies,'' {\em Advances in neural information processing systems}, vol.~32, 2019.
+
+\bibitem{cui2022can}
+Y.~Cui, S.~Niekum, A.~Gupta, V.~Kumar, and A.~Rajeswaran, ``Can foundation models perform zero-shot task specification for robot manipulation?,'' in {\em Learning for dynamics and control conference}, pp.~893--905, PMLR, 2022.
+
+\bibitem{cui2023from}
+Z.~J. Cui, Y.~Wang, N.~M.~M. Shafiullah, and L.~Pinto, ``From play to policy: Conditional behavior generation from uncurated robot data,'' in {\em The Eleventh International Conference on Learning Representations}, 2023.
+
+\bibitem{yu2018one}
+T.~Yu, C.~Finn, S.~Dasari, A.~Xie, T.~Zhang, P.~Abbeel, and S.~Levine, ``One-shot imitation from observing humans via domain-adaptive meta-learning,'' {\em Robotics: Science and Systems XIV}, 2018.
+
+\bibitem{bonardi2020learning}
+A.~Bonardi, S.~James, and A.~J. Davison, ``Learning one-shot imitation from humans without humans,'' {\em IEEE Robotics and Automation Letters}, vol.~5, no.~2, pp.~3533--3539, 2020.
+
+\bibitem{james2018task}
+S.~James, M.~Bloesch, and A.~J. Davison, ``Task-embedded control networks for few-shot imitation learning,'' in {\em Conference on robot learning}, pp.~783--795, PMLR, 2018.
+
+\bibitem{lynch2020language}
+C.~Lynch and P.~Sermanet, ``Language conditioned imitation learning over unstructured data,'' {\em arXiv preprint arXiv:2005.07648}, 2020.
+
+\bibitem{mees2022matters}
+O.~Mees, L.~Hermann, and W.~Burgard, ``What matters in language conditioned robotic imitation learning over unstructured data,'' {\em IEEE Robotics and Automation Letters}, vol.~7, no.~4, pp.~11205--11212, 2022.
+
+\bibitem{jang2022bc}
+E.~Jang, A.~Irpan, M.~Khansari, D.~Kappler, F.~Ebert, C.~Lynch, S.~Levine, and C.~Finn, ``Bc-z: Zero-shot task generalization with robotic imitation learning,'' in {\em Conference on Robot Learning}, pp.~991--1002, PMLR, 2022.
+
+\bibitem{li2022blip}
+J.~Li, D.~Li, C.~Xiong, and S.~Hoi, ``Blip: Bootstrapping language-image pre-training for unified vision-language understanding and generation,'' in {\em International conference on machine learning}, pp.~12888--12900, PMLR, 2022.
+
+\bibitem{li2023blip}
+J.~Li, D.~Li, S.~Savarese, and S.~Hoi, ``Blip-2: Bootstrapping language-image pre-training with frozen image encoders and large language models,'' in {\em International conference on machine learning}, pp.~19730--19742, PMLR, 2023.
+
+\bibitem{mokady2021clipcap}
+R.~Mokady, A.~Hertz, and A.~H. Bermano, ``Clipcap: Clip prefix for image captioning,'' {\em arXiv preprint arXiv:2111.09734}, 2021.
+
+\bibitem{hessel2021clipscore}
+J.~Hessel, A.~Holtzman, M.~Forbes, R.~L. Bras, and Y.~Choi, ``Clipscore: A reference-free evaluation metric for image captioning,'' {\em arXiv preprint arXiv:2104.08718}, 2021.
+
+\bibitem{ventura2024learning}
+L.~Ventura, C.~Schmid, and G.~Varol, ``Learning text-to-video retrieval from image captioning,'' {\em arXiv preprint arXiv:2404.17498}, 2024.
+
+\bibitem{lafite}
+Y.~Zhou, R.~Zhang, C.~Chen, C.~Li, C.~Tensmeyer, T.~Yu, J.~Gu, J.~Xu, and T.~Sun, ``Towards language-free training for text-to-image generation,'' in {\em 2022 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)}, pp.~17886--17896, 2022.
+
+\bibitem{khandelwal2022simple}
+A.~Khandelwal, L.~Weihs, R.~Mottaghi, and A.~Kembhavi, ``Simple but effective: Clip embeddings for embodied ai,'' in {\em Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition}, pp.~14829--14838, 2022.
+
+\bibitem{nair2022lorel}
+S.~Nair, E.~Mitchell, K.~Chen, S.~Savarese, C.~Finn, {\em et~al.}, ``Learning language-conditioned robot behavior from offline data and crowd-sourced annotation,'' in {\em Conference on Robot Learning}, pp.~1303--1315, PMLR, 2022.
+
+\bibitem{walke2023bridgedata}
+H.~Walke, K.~Black, A.~Lee, M.~J. Kim, M.~Du, C.~Zheng, T.~Zhao, P.~Hansen-Estruch, Q.~Vuong, A.~He, V.~Myers, K.~Fang, C.~Finn, and S.~Levine, ``Bridgedata v2: A dataset for robot learning at scale,'' in {\em Conference on Robot Learning (CoRL)}, 2023.
+
+\bibitem{zhao2024eye}
+B.~Zhao, Y.~Li, Z.~Fan, Z.~Wu, J.~Shu, X.~Yang, Y.~Yang, X.~Wang, B.~Li, X.~Wang, {\em et~al.}, ``Eye-brain connections revealed by multimodal retinal and brain imaging genetics,'' {\em Nature Communications}, vol.~15, no.~1, p.~6064, 2024.
+
+\bibitem{denervaud2020multisensory}
+S.~Denervaud, E.~Gentaz, P.~J. Matusz, and M.~M. Murray, ``Multisensory gains in simple detection predict global cognition in schoolchildren,'' {\em Scientific reports}, vol.~10, no.~1, p.~1394, 2020.
+
+\bibitem{burr2012multisensory}
+D.~Burr and M.~Gori, ``Multisensory integration develops late in humans,'' 2012.
+
+\bibitem{nukrai2022capdec}
+D.~Nukrai, R.~Mokady, and A.~Globerson, ``Text-only training for image captioning using noise-injected clip,'' {\em arXiv preprint arXiv:2211.00575}, 2022.
+
+\bibitem{schrodi2024two}
+S.~Schrodi, D.~T. Hoffmann, M.~Argus, V.~Fischer, and T.~Brox, ``Two effects, one trigger: On the modality gap, object bias, and information imbalance in contrastive vision-language representation learning,'' in {\em ICLR 2024 Workshop on Mathematical and Empirical Understanding of Foundation Models}, 2024.
+
+\bibitem{nachum2019dualdice}
+O.~Nachum, Y.~Chow, B.~Dai, and L.~Li, ``Dualdice: Behavior-agnostic estimation of discounted stationary distribution corrections,'' {\em Advances in neural information processing systems}, vol.~32, 2019.
+
+\bibitem{li2023mind}
+J.~Li, X.~Hu, H.~Xu, J.~Liu, X.~Zhan, Q.-S. Jia, and Y.-Q. Zhang, ``Mind the gap: Offline policy optimization for imperfect rewards,'' in {\em The Eleventh International Conference on Learning Representations}, 2023.
+
+\bibitem{van2008visualizing}
+L.~Van~der Maaten and G.~Hinton, ``Visualizing data using t-sne.,'' {\em Journal of machine learning research}, vol.~9, no.~11, 2008.
+
+\bibitem{jing2022understanding}
+L.~Jing, P.~Vincent, Y.~LeCun, and Y.~Tian, ``Understanding dimensional collapse in contrastive self-supervised learning,'' in {\em International Conference on Learning Representations}, 2022.
+
+\bibitem{zhang2023diagnosing}
+Y.~Zhang, J.~Z. HaoChen, S.-C. Huang, K.-C. Wang, J.~Zou, and S.~Yeung, ``Diagnosing and rectifying vision models using language,'' in {\em International Conference on Learning Representations (ICLR)}, 2023.
+
+\bibitem{liu2024arcsin}
+Y.~Liu, X.~Yu, G.~Zhang, C.~Bergeles, P.~Dasgupta, A.~Granados, and S.~Ourselin, ``Arcsin: Adaptive ranged cosine similarity injected noise for language-driven visual tasks,'' {\em arXiv preprint arXiv:2402.17298}, 2024.
+
+\bibitem{He_2016_CVPR}
+K.~He, X.~Zhang, S.~Ren, and J.~Sun, ``Deep residual learning for image recognition,'' in {\em Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR)}, June 2016.
+
+\bibitem{perez2018film}
+E.~Perez, F.~Strub, H.~De~Vries, V.~Dumoulin, and A.~Courville, ``Film: Visual reasoning with a general conditioning layer,'' in {\em Proceedings of the AAAI conference on artificial intelligence}, vol.~32, 2018.
+
+\bibitem{hansen2023idql}
+P.~Hansen-Estruch, I.~Kostrikov, M.~Janner, J.~G. Kuba, and S.~Levine, ``Idql: Implicit q-learning as an actor-critic method with diffusion policies,'' {\em arXiv preprint arXiv:2304.10573}, 2023.
+
+\bibitem{ho2020denoising}
+J.~Ho, A.~Jain, and P.~Abbeel, ``Denoising diffusion probabilistic models,'' {\em Advances in neural information processing systems}, vol.~33, pp.~6840--6851, 2020.
+
+\bibitem{chi2023diffusion}
+C.~Chi, S.~Feng, Y.~Du, Z.~Xu, E.~Cousineau, B.~Burchfiel, and S.~Song, ``Diffusion policy: Visuomotor policy learning via action diffusion,'' {\em arXiv preprint arXiv:2303.04137}, 2023.
+
+\bibitem{zheng2024safe}
+Y.~Zheng, J.~Li, D.~Yu, Y.~Yang, S.~E. Li, X.~Zhan, and J.~Liu, ``Safe offline reinforcement learning with feasibility-guided diffusion model,'' {\em arXiv preprint arXiv:2401.10700}, 2024.
+
+\bibitem{zhao2023learning}
+T.~Z. Zhao, V.~Kumar, S.~Levine, and C.~Finn, ``Learning fine-grained bimanual manipulation with low-cost hardware,'' {\em arXiv preprint arXiv:2304.13705}, 2023.
+
+\bibitem{blank2024scaling}
+N.~Blank, M.~Reuss, F.~Wenzel, O.~Mees, and R.~Lioutikov, ``Scaling robot policy learning via zero-shot labeling with foundation models,'' in {\em 2nd Workshop on Mobile Manipulation and Embodied Intelligence at ICRA 2024}, 2024.
+
+\bibitem{dong2022survey}
+Q.~Dong, L.~Li, D.~Dai, C.~Zheng, Z.~Wu, B.~Chang, X.~Sun, J.~Xu, and Z.~Sui, ``A survey on in-context learning,'' {\em arXiv preprint arXiv:2301.00234}, 2022.
+
+\end{thebibliography}

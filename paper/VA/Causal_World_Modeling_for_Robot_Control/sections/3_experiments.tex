@@ -1,0 +1,353 @@
+\section{Experiments}\label{sec:exp}
+
+\subsection{Dataset Curation and Preprocessing}
+
+We curate a large-scale training corpus by aggregating existing public robot manipulation datasets.
+All datasets undergo preprocessing to ensure consistency in data format and annotation quality, and are split into 90\% training and 10\% validation per dataset to monitor training dynamics.
+
+\paragraph{Unified Action Representation.}
+To achieve cross-embodiment generalization, we define a universal action interface to adapt to different datasets.
+We use a dual-arm representation where each robotic arm is characterized by both end-effector pose (EEF) and joint angles.
+The end-effector pose consists of XYZ coordinates and a rotation quaternion (7 dimensions).
+For joint angles, we support a maximum of 7 degrees of freedom for single-arm embodiments; if a robot has fewer than 7 joint dimensions, we pad the missing dimensions with zeros to maintain a unified 7-dimensional representation.
+Each arm also has one gripper action dimension.
+Therefore, the total action dimensionality for dual-arm systems is: $7_{\text{EEF}} + 7_{\text{joints}} + 1_{\text{gripper}}$ per arm, resulting in $(7 + 7 + 1) \times 2 = 30$ dimensions.
+
+
+
+\paragraph{Training Data Composition.}
+We aggregate data from six sources spanning diverse embodiments, environments, and task categories:
+\begin{itemize}[leftmargin=*, itemsep=2pt, topsep=2pt]
+    \item \textbf{Agibot}~\cite{agibot}: Large-scale dataset with diverse manipulation tasks from mobile manipulators.%
+    \item \textbf{RoboMind}~\cite{robomind}: Multi-embodiment manipulation demonstrations.%
+    \item \textbf{InternData-A1}~\cite{interndata}: Large-scale simulation dataset for sim-to-real transfer.%
+    \item \textbf{OXE}~\cite{oxe}: Multi-embodiment dataset; we use the OpenVLA subset.%
+    \item \textbf{UMI Data}~\cite{umi,mvumi,vitamin,fastumi,datascalinglaws,maniwav}: Human demonstration dataset collected via universal manipulation interface\footnote{\url{https://umi-data.github.io/}}, excluding DexUMI. %
+    \item \textbf{RoboCOIN}~\cite{robocoin}: Cross-embodiment bimanual robotics data.%
+\end{itemize}
+In total, our training corpus comprises approximately \textbf{16K} hours of robot manipulation data across diverse tasks and environments, including internally collected demonstrations.
+
+
+
+
+
+\subsection{Implementation \& Training Details}
+
+\paragraph{Implementation Details.}
+We use Wan2.2-5B as the backbone for the video stream, with hidden dimension $d_v = 3072$ and 30 transformer layers.
+The action stream shares the same depth but uses a reduced hidden dimension $d_a = 768$ ($4\times$ smaller), resulting in approximately 350M additional parameters and a total model size of 5.3B parameters.
+Both streams employ RoPE positional encoding and are connected via the MoT architecture described in \S\ref{sec:architecture}.
+We adopt the Wan2.2 causal VAE for tokenization with a $4\times 16\times 16$ (temporal $\times$ height $\times$ width) compression ratio, combined with a patchify operation that further reduces spatial dimensions by 2. The encoded views are concatenated along the width dimension, resulting in a total of $N = 192$ spatial tokens per frame.
+The action encoder $\phi$ and decoder are implemented as single-layer MLPs with hidden dimension 256.
+We normalize actions using per-dimension quantile normalization statistics computed from the training set.
+Task instructions are encoded using a frozen T5 text encoder~\cite{raffel2020exploring} and injected via cross-attention.
+During training, chunk size $K$ is randomly sampled from $[1, 4]$.
+
+For inference, we use Euler solver with 3 steps for video tokens (integrating to $s = 0.6$) and 10 steps for action tokens (integrating to $s = 1.0$).
+Video CFG scale is set to 5.0, while action CFG scale is set to 1.0.
+During training, noise augmentation is applied with probability $p = 0.5$ and $s_{\text{aug}} \sim \text{Uniform}[0.5, 1.0]$.
+Following LLM practices, we pack multiple episodes into long sequences (up to 10K tokens) with attention masks.
+
+\paragraph{Pre-Training Details.}
+We pretrain \method on the curated dataset for 1.4T tokens.
+We use the AdamW optimizer with peak learning rate $1 \times 10^{-4}$, weight decay 0.01, and cosine annealing schedule with linear warmup.
+Training is conducted in bfloat16 mixed precision with gradient clipping at 2.0.
+We apply classifier-free guidance with text dropout rate 0.1.
+The loss weight $\lambda$ for inverse dynamics is set to 1.
+The dataset is sampled uniformly across all sources to ensure balanced learning.
+We monitor convergence using flow matching loss on the validation set.
+We use uniform SNR sampler for video model.
+For both video and action model, we use a uniform SNR sampler.
+
+
+
+
+
+
+\paragraph{Post-Training Details.}
+While the pretrained model exhibits zero-shot generalization to seen embodiments, adapting to novel robot platforms requires a small amount of task-specific data.
+We find that post-training with as few as 50 demonstrations is sufficient for effective deployment.
+We use a reduced learning rate of $1 \times 10^{-5}$ and train for 3K steps, which yields robust performance.
+Alternatively, a higher learning rate of $1 \times 10^{-4}$ with 1K steps also produces reasonable results, though slightly inferior, offering a faster adaptation option when computational resources are limited.
+
+
+
+
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.85\textwidth]{figures/realworld_deployment.pdf}
+    \caption{\textbf{Real-world deployment results.} 
+ We evaluate \method on six manipulation tasks across three categories: long-horizon tasks (Make Breakfast, Pick Screws), precision tasks (Insert Tubes, Unpack Delivery), and deformable \& articulated object manipulation (Fold Clothes, Fold Pants). Our method achieves state-of-the-art performance on both metrics.}
+    \label{fig:realworld}
+\end{figure}
+
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{figures/demo_fig.pdf}
+    \caption{\textbf{Detailed task progressions and key execution steps of the six real-world tasks.} Each task involves a sequence of manipulation primitives, with scoring criteria detailed in Tables \ref{tab:realworld_detailed_make_breakfast} through \ref{tab:realworld_detailed_fold_clothes}.}
+    \label{fig:demo_fig}
+\end{figure}
+
+
+\subsection{Main Results}
+
+\subsubsection{Real-world Deployment}
+\paragraph{Experimental Setup.} To validate the real-world effectiveness of \method, we deploy our model on a physical robot platform and evaluate across six diverse manipulation tasks spanning three challenging categories.
+(1) \textbf{\textit{Long-horizon Tasks:}} We evaluate on \textit{Make Breakfast} and \textit{Unpack Delivery}, which require sequential multi-step reasoning and sustained task execution over extended time horizons.
+(2) \textbf{\textit{Precision Tasks:}} We test on \textit{Insert Tubes} and \textit{Pick Screws}, demanding accurate positioning and fine-grained motor control for successful completion.
+(3) \textbf{\textit{Deformable Objects:}} We include \textit{Fold Clothes} and \textit{Fold Pants}, which involve manipulating non-rigid materials that present unique control challenges.
+The detailed task procedures are summarized in \cref{fig:demo_fig}. 
+These tasks are only collected with \textbf{50 real-world demos} for model training.
+ We finetune the model for 500 steps with a learning rate of $1 \times 10^{-4}$ and a sequence length of 150,000. 
+
+
+
+
+\paragraph{Results.}  As shown in \cref{fig:realworld}, \method consistently achieves state-of-the-art performance across all six tasks and both evaluation metrics (success rate and progress score), substantially outperforming strong baseline $\pi_{0.5}$.
+
+We highlight several key observations that validate our design choices:
+(1) The superior performance on \textit{long-horizon tasks} demonstrates that our video-action world model possesses strong temporal memory capabilities. By jointly modeling video and action sequences, the model effectively maintains task context over extended horizons, enabling coherent multi-step reasoning without losing track of intermediate goals.
+(2) The strong results on \textit{precision tasks} validate the effectiveness of our unified latent space design. By aligning video and action representations within a shared embedding space, our model achieves tighter coupling between visual perception and motor control, resulting in more accurate and fine-grained action predictions.
+(3) The robust performance on \textit{deformable objects} highlights the value of video generation as implicit guidance. The generated video futures provide rich predictive signals about object dynamics and state transitions, which inform the action model to produce more physically plausible manipulation trajectories for challenging non-rigid materials.
+
+These results collectively demonstrate that our video-action world model effectively transfers to real-world deployment, exhibiting robust performance across diverse manipulation scenarios.
+
+
+
+\begin{table}[b]
+\centering
+\caption{\raggedright \textbf{Evaluation on RoboTwin 2.0 Simulation (Easy vs Hard, 50 tasks)}. RoboTwin 2.0 is a challenging bimanual manipulation benchmark requiring coordinated dual-arm control. Easy uses fixed initial configurations while Hard involves randomized object poses and scene layouts. $^{*}$ Results for X-VLA are adopted from Motus~\citep{motus}. Improvements in parentheses indicate gains over the second-best method (underlined).}
+\label{tab:robotwin}
+\vspace{-5pt}
+\small
+\begin{tabular}{l *{5}{cc}}
+\toprule
+& \multicolumn{2}{c}{X-VLA$^{*}$~\citep{xvla}}
+& \multicolumn{2}{c}{$\pi_0$~\citep{pi0}}
+& \multicolumn{2}{c}{$\pi_{0.5}$~\citep{pi2025pi05}}
+& \multicolumn{2}{c}{Motus~\citep{motus}}
+& \multicolumn{2}{c}{\method (Ours)} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(lr){6-7}\cmidrule(lr){8-9}\cmidrule(lr){10-11}
+\textbf{Metric} 
+& Easy & Hard
+& Easy & Hard
+& Easy & Hard
+& Easy & Hard
+& Easy & Hard \\
+\midrule
+$\text{Average}_{\text{ Horizon = 1}}$ & 81.6 & 82.5 & 66.5 & 61.6 & 85.1 & 80.2 & \underline{91.0} & \underline{90.6} & \textbf{94.18} {\scriptsize (+3.2)} & \textbf{93.56} {\scriptsize (+3.0)} \\
+$\text{Average}_{\text{ Horizon = 2}}$ & 59.3 & 55.9 & 66.1 & 54.7 & 79.3 & 73.0 & \underline{85.2} & \underline{80.9} & \textbf{90.35} {\scriptsize (+5.2)} & \textbf{86.95} {\scriptsize (+6.1)} \\
+$\text{Average}_{\text{ Horizon = 3}}$ & 61.2 & 66.0 & 61.6 & 50.2 & 78.6 & 67.4 & \underline{85.0} & \underline{84.2} & \textbf{93.22} {\scriptsize (+8.2)} & \textbf{93.28} {\scriptsize (+9.1)} \\
+\midrule
+$\text{Average}_{\text{ 50 Tasks}}$   & 72.9 & 72.8 & 65.9 & 58.4 & 82.7 & 76.8 & \underline{88.7} & \underline{87.0} & \textbf{92.93} {\scriptsize (+4.2)} & \textbf{91.55} {\scriptsize (+4.6)} \\
+\bottomrule
+\end{tabular}
+\label{tab:avg-clean-aug}
+\end{table}
+
+\subsubsection{Simulation Evaluation}
+\paragraph{Experimental Setup.} We evaluate \method on two widely-used simulation benchmarks: RoboTwin 2.0~\cite{robotwin} and LIBERO~\cite{libero}, covering diverse manipulation tasks across different robot embodiments.
+
+(1) In RoboTwin 2.0, we adopt a multi-task training setup~\cite{motus} where all models are trained on 2,500 demonstrations collected in clean scenes (50 per task) plus 25,000 demonstrations from heavily randomized scenes (500 per task). We downsample the original 50 Hz video to 12.5 Hz while maintaining the action frequency at 50Hz. The model is trained for 50K steps with a learning rate of $1\times10^{-5}$.
+To facilitate a clearer comparison of performance, we categorize the 50 RoboTwin tasks according to their horizons (e.g., \textit{Place Dual Shoes} has two steps, and \textit{Stack Blocks Three} has three steps). The detailed horizons are listed in~\cref{tab:robotwin_full}.
+
+
+(2) In LIBERO, we train our model on four LIBERO suites: LIBERO-Spatial, LIBERO-Object, LIBERO-Goal, and LIBERO-Long. Each suite contains 10 tasks with 50 demonstrations per task (500 total). Following OpenVLA~\cite{kim2024}, we filter unsuccessful demonstrations before training. The model is finetuned for 4K steps with a learning rate of $1 \times 10^{-5}$ and a sequence length of $1 \times 10^{5}$.  Specifically, we report the average success rate over three random seeds, with each seed comprising 500 evaluation trials (totally $3 \times 500 = 1500$) for every task suite.
+
+\paragraph{Results}
+RoboTwin 2.0 is a challenging bimanual manipulation benchmark featuring over 50 tasks that require coordinated dual-arm control.
+Unlike single-arm benchmarks, RoboTwin tasks demand precise synchronization between two manipulators, making it significantly more difficult for policy learning.
+We evaluate under both \textit{Easy} (fixed initial configurations) and \textit{Hard} (varied object poses and scene layouts) settings.
+As shown in \cref{tab:avg-clean-aug}, \method achieves an average success rate of 92.9\% (Easy) and 91.6\% (Hard), substantially outperforming prior methods including $\pi_0$, $\pi_{0.5}$, X-VLA, and Motus.
+Notably, the improvement becomes more pronounced for longer-horizon tasks: at Horizon = 3, our method achieves gains of +8.2\% (Easy) and +9.1\% (Hard) over the second-best approach.
+This suggests that our autoregressive mechanism effectively maintains long-range temporal memory, enabling more robust performance as task complexity increases.
+
+We further evaluate on LIBERO benchmark (\cref{tab:main_results}).
+On LIBERO, we obtain an average success rate of 98.5\%, with particularly strong performance on LIBERO-Long (98.5\%).
+These results establish new state-of-the-art performance in average success rates among foundational VLAs, demonstrating the effectiveness of our video-action world model for generalist robot control.
+
+
+
+
+
+
+\begin{table}[t]
+\centering
+\caption{\raggedright \textbf{Evaluation on LIBERO benchmarks}. LIBERO tests manipulation across four task suites: Spatial, Object, Goal, and Long-horizon. Our method achieves new state-of-the-art on LIBERO-Object (99.6\%), LIBERO-Long (98.5\%), LIBERO-Spatial (98.5\%), and overall average (98.5\%). Baseline results are adopted from \cite{xvla}.
+}
+\label{tab:main_results}
+\small
+\begin{tabular}{l|ccccc}
+\toprule
+\multirow{2}{*}{\textbf{Methods}} & \multicolumn{5}{c}{\textbf{LIBERO}} \\
+& Spatial & Object & Goal & Long & Avg \\
+\midrule
+Octo \citep{octo2024} & 78.9 & 85.7 & 84.6 & 51.1 & 75.1 \\
+Seer \citep{tian2025} & - & - & - & 87.7 & - \\
+MoDE \citep{reuss2024} & - & - & - & 94.0 & - \\
+SuSIE \citep{black2024b} & - & - & - & 76.3 & - \\
+SpatialVLA \citep{qu2025} & 88.2 & 89.9 & 78.6 & 55.5 & 78.1 \\
+TraceVLA \citep{zheng2024b} & 84.6 & 85.2 & 75.1 & 54.1 & 74.8 \\
+CoT-VLA~\citep{zhao2025cot} & 87.5 & 91.6 & 87.6 & 69.0 & 81.1 \\
+ThinkAct \citep{huang2025} & 88.3 & 91.4 & 87.1 & 70.9 & 84.4 \\
+SmolVLA \citep{shukor2025} & 93.0 & 94.0 & 91.0 & 77.0 & 88.8 \\
+CronusVLA \citep{li2025cronusvla} & 97.3 & 99.6 & 96.9 & 94.0 & 97.0 \\
+FLOWER \citep{reuss2025} & 97.1 & 96.7 & 95.6 & 93.5 & 95.7 \\
+GR00T-N1 \citep{bjorck2025} & 94.4 & 97.6 & 93.0 & 90.6 & 93.9 \\
+$\pi_0$ \citep{pi0} & 96.8 & 98.8 & 95.8 & 85.2 & 94.1 \\
+$\pi_0$+FAST \citep{pertsch2025} & 96.4 & 96.8 & 88.6 & 60.2 & 85.5 \\
+OpenVLA \citep{kim2024} & 84.7 & 88.4 & 79.2 & 53.7 & 76.5 \\
+OpenVLA-OFT \citep{kim2025} & 97.6 & 98.4 & \textbf{97.9} & 94.5 & 97.1 \\
+DD-VLA \citep{liang2025} & 97.2 & 98.6 & 97.4 & 92.0 & 96.3 \\
+UniVLA \citep{wang2025a} & 95.4 & 98.8 & 93.6 & 94.0 & 95.4 \\
+X-VLA~\citep{xvla} & 98.2 & 98.6 & 97.8 & 97.6 & 98.1 \\
+\midrule
+ \method (Ours) & {$\mathbf{98.5\pm0.3}$} & {$\mathbf{99.6\pm 0.3 }$} & $97.2\pm 0.2 $& {$\mathbf{98.5\pm 0.5}$} & {$\mathbf{98.5}$} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+
+
+\subsection{Ablation}
+
+
+
+
+\noindent\textbf{Asynchronous v.s. synchronous}.
+We compare our asynchronous video-action generation with a synchronous baseline on RoboTwin tasks.
+As shown in \cref{tab:ablation}, both approaches achieve comparable success rates, but our asynchronous method completes tasks \textbf{2$\times$ faster} by predicting future video and action sequences while executing current actions.
+This validates that asynchronous generation maintains task performance while significantly improving inference efficiency.
+
+\noindent\textbf{Pretrained} \method \textbf{v.s. WAN}.
+To validate the design choices in our video-action architecture, we conduct a controlled ablation study comparing our pretrained \method model with WAN (Wan2.2-5B) as the initialization baseline for fine-tuning on RoboTwin tasks.
+Both models are fine-tuned on the same RoboTwin dataset using identical post-training procedures (50 task-specific demonstrations, learning rate $1 \times 10^{-5}$, 3K steps).
+
+As shown in \cref{tab:ablation}, our pretrained \method model substantially outperforms WAN fine-tuning across both Easy and Hard settings.
+Specifically, \method achieves an average success rate of 92.10\% (Easy) and 91.12\% (Hard), while WAN fine-tuning yields significantly lower performance.
+This performance gap highlights the effectiveness of our joint video-action pretraining strategy, which endows the model with rich visual-motor priors that facilitate fast adaptation to complex bimanual manipulation tasks.
+
+
+\noindent\textbf{Action Network Initialization}.
+Proper initialization of the action stream is critical for training stability and convergence.
+We compare our curated initialization strategy (Section~\ref{sec:architecture}) with naive random initialization.
+
+\begin{table}[t]
+\centering
+\caption{\textbf{Ablation studies on RoboTwin 2.0 (Easy).} We ablate three design choices: world modeling (AR vs. bidirectional), deployment mode (async vs. sync), and pretraining (Ours vs. WAN).}
+\label{tab:ablation}
+\small
+\begin{tabular}{l l c c c c }
+\toprule
+\textbf{Ablation} & \textbf{Setting} & \textbf{Easy}$_{\text{all}}$  & \textbf{Easy}$_{\text{ Horizon = 1}}$  & \textbf{Easy}$_{\text{ Horizon = 2}}$  & \textbf{Easy}$_{\text{ Horizon = 3}}$ \\
+\midrule
+\multirow{1}{*}{Baseline} & \method (Ours) & 92.9 & 94.2 & 90.4 & 93.2  \\
+\midrule
+\multirow{2}{*}{Deployment} & FDM-grounded Async  & 90.4 & 92.5 & 87.7 & 85.6\\
+ & Naive Async & 74.3 & 83.3 & 70.3 & 32.9 \\
+\midrule
+\multirow{1}{*}{Pretrain}  & WAN & 80.6  & 84.9& 76.3 & 67.6\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=0.9\textwidth]{figures/loss_comparison.pdf}
+    \vspace{-5pt}
+    \caption{\textbf{Training dynamic comparison between different action network initialization streategy}: Random initialization leads to unstable optimization (high gradient norms) and slow convergence. Although re-using video network weights stabilizes training, the resulting performance is not optimal. Our approach, which initializes by copying pretrained video weights with proper scaling, proves to be the most effective, ensuring smooth training dynamics and faster convergence.
+    }
+    \label{fig:loss_comparison}
+    \vspace{-10pt}
+\end{figure}
+
+As shown in \cref{fig:loss_comparison}, random initialization from scratch exhibits volatile training dynamics with significantly slower convergence.
+This instability arises because action tokens' output distribution initially diverges dramatically from the video distribution, disrupting the joint attention mechanism in our unified architecture.
+In contrast, our curated initialization strategy---where action network weights are initialized by interpolating pretrained video weights with a scaling factor $\alpha = \sqrt{d_v / d_a}$---produces smooth convergence and substantially lower loss.
+
+
+
+
+
+\subsection{Analysis}
+
+\subsubsection{Sample Efficiency}
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=\textwidth]{figures/few_shot_bar.pdf}
+    \caption{\textbf{Sample efficiency comparison}. \method consistently outperforms $\pi_{0.5}$ across various data regimes on the ``Make Breakfast'' task, demonstrating superior data efficiency in the post-training stage.}
+    \label{fig:few_shot}
+\end{figure}
+
+
+
+We investigate the data efficiency by exploring how \method performs with limited post-training data compared to $\pi_{0.5}$.
+We conduct this evaluation on both real-world and simulation settings: the ``Make Breakfast'' long-horizon task and RoboTwin 2.0 Easy benchmarks, allowing us to assess data efficiency across diverse manipulation scenarios.
+
+As shown in \cref{fig:few_shot}, our method consistently outperforms $\pi_{0.5}$ across all data regimes on both real-world and simulation tasks.
+In the low-data regime (10 demonstrations), \method achieves 15.6\% higher progress score than $\pi_{0.5}$ on the ``Make Breakfast'' task and 10.3\% higher on RoboTwin 2.0 Easy, demonstrating superior sample efficiency.
+These results demonstrate that our method learns more effectively from limited data across diverse manipulation scenarios.
+
+We attribute this superior data efficiency to our video-action world model design.
+The jointly pretrained video generation backbone provides rich visual priors about physical dynamics and object interactions, which serve as implicit regularization during post-training.
+This allows the action model to leverage the world knowledge encoded in the video stream, effectively reducing the sample complexity required for adapting to new tasks.
+In contrast, VLA models like $\pi_{0.5}$ lack explicit modeling of visual dynamics and thus have no structured dynamics priors to guide learning, requiring more demonstrations to learn task-specific behaviors from scratch.
+
+
+\subsubsection{Temporal Memory}
+We design the following tasks that explicitly require maintaining state information across time to evaluate our model's temporal memory capabilities, as shown in Figure \ref{fig:analysis}.
+
+\begin{enumerate}
+    \item \textbf{\textit{Wipe Plate}}---the robot must wipe a plate exactly six times, requiring it to count and remember repeated actions.
+    \item \textbf{\textit{Search Box}}---Two boxes (left and right) are in the scene, with only one containing a block. The robot opens them sequentially from right to left. In data collection, the block is equally likely to be in either box; at test time, it is always in the left box. Without memory, after finding the right box empty, the model has a 50\% chance of re-opening it. With memory, it proceeds to search the left box.
+\end{enumerate}
+
+
+
+
+As shown in \cref{fig:analysis}(a), \method substantially outperforms $\pi_{0.5}$ on both memory tasks.
+We attribute this to the autoregressive nature of our world model: during training, teacher forcing conditions predictions on full history; during inference, KV-cache naturally preserves all historical information for persistent memory.
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=\textwidth]{figures/memory_test.pdf}
+    \vspace{-5pt}
+    \caption{\textbf{Temporal memory evaluation.} Left: Success rates on two memory tasks (Wipe Plate and Search Box). \method significantly outperforms $\pi_{0.5}$ on both tasks, demonstrating superior temporal state tracking ability. Right: Visualization of evaluation environments.}
+    \label{fig:analysis}
+    \vspace{-10pt}
+\end{figure}
+
+\subsubsection{Generalization}
+We evaluate generalization along two axes:
+
+\begin{enumerate}
+    \item \textbf{\textit{Novel Object Generalization}}---trained on pick-and-place with a single object, tested on different objects with varying shapes and textures;
+    \item \textbf{\textit{Spatial Generalization}}---trained with fixed object positions in a localized region(denoted as in-distribution~(ID)), tested on random placements especially in out-of-distribution~(OOD) regions.
+\end{enumerate}
+
+
+
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=\textwidth]{figures/generalization.pdf}
+    \caption{\textbf{Novel object and spatial generalization.} \method successfully generalizes to objects with varying shapes, textures, and positions.}
+    \label{fig:generalization}
+\end{figure}
+
+
+
+
+As shown in \cref{fig:generalization}, our method demonstrates a stronger generalization in both both novel object and the out-of-distribution position. The world model learns transferable visual representations through video prediction, capturing object-agnostic physical priors that transfer to novel scenarios.
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,72 @@
+\begin{table}[htbp]
+\centering
+\caption{\textbf{Evaluation on SimplerEnv-WidowX across various manipulation tasks.}}
+\label{tab:simplerenv_bridge}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{l|cc|cc|cc|cc|c}
+\toprule
+\multirow{2}{*}{\textbf{Model}} 
+& \multicolumn{2}{c|}{\textbf{Put Spoon on Towel}} 
+& \multicolumn{2}{c|}{\textbf{Put Carrot on Plate}} 
+& \multicolumn{2}{c|}{\textbf{Stack Green on Yellow Block}} 
+& \multicolumn{2}{c|}{\textbf{Put Eggplant in Yellow Basket}} 
+& \textbf{Overall} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7} \cmidrule(lr){8-9}
+& \multicolumn{1}{c}{Grasp} & \multicolumn{1}{c|}{Success} 
+& \multicolumn{1}{c}{Grasp} & \multicolumn{1}{c|}{Success} 
+& \multicolumn{1}{c}{Grasp} & \multicolumn{1}{c|}{Success} 
+& \multicolumn{1}{c}{Grasp} & \multicolumn{1}{c|}{Success} 
+& \multicolumn{1}{c}{Success} \\
+\midrule
+RT-1-X~\cite{brohan2023rt}     
+& 16.7\% & 0.0\%   
+& 20.8\% & 4.2\%   
+& 8.3\%  & 0.0\%   
+& 0.0\%  & 0.0\%   
+& 1.1\% \\
+Octo-Base~\cite{octo_2023} 
+& 34.7\% & 12.5\%  
+& 52.8\% & 8.3\%   
+& 31.9\% & 0.0\%   
+& 66.7\% & 43.1\%  
+& 16.0\% \\
+Octo-Small~\cite{octo_2023}
+& 77.8\% & 47.2\%  
+& 27.8\% & 9.7\%   
+& 40.3\% & 4.2\%   
+& 87.5\% & 56.9\%  
+& 29.5\% \\
+OpenVLA~\cite{kim2024openvla}  
+& 4.1\%  & 0.0\%   
+& 33.3\% & 0.0\%   
+& 12.5\% & 0.0\%   
+& 8.3\%  & 4.1\%   
+& 1.0\% \\
+RoboVLMs~\cite{li2024towards}
+& 70.8\% & 45.8\%  
+& 33.3\% & 20.8\%  
+& 54.2\% & 4.2\%  
+& 91.7\% & 79.2%  
+& 37.5\% \\
+SpatialVLA~\cite{qu2025spatialvla} 
+& 20.8\% & 16.7\% 
+& 29.2\% & 25.0\% 
+& 62.5\% & 29.2\% 
+& 100\% & \textbf{100\%} 
+& 42.7\% \\
+% \rowcolor[gray]{0.9} \textbf{\methodname{}} 
+% & \textbf{91.7\%} & \textbf{70.8\%} 
+% & \textbf{66.7\%} & \textbf{58.3\%} 
+% & \textbf{79.2\%} & \textbf{33.3\%} 
+% & 95.8\% & 95.8\%  
+% & \textbf{64.6\%} \\
+\rowcolor[gray]{0.9} \textbf{\methodname{}} 
+& \textbf{83.3\%} & \textbf{83.3\%} 
+& \textbf{74.0\%} & \textbf{66.7\%} 
+& \textbf{95.8\%} & \textbf{33.3\%} 
+& \textbf{100.0\%} & 95.8\%  
+& \textbf{69.8\%} \\
+\bottomrule
+\end{tabular}}
+\vspace{-3mm}
+\end{table}

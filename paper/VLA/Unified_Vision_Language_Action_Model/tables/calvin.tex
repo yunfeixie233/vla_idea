@@ -1,0 +1,32 @@
+\begin{table}[ht]
+    \centering
+    \caption{\textbf{Long-horizon robotic manipulation evaluation on the CALVIN benchmark.}}
+      \resizebox{0.86\textwidth}{!}{
+    \begin{tabular}{l l c c c c c c}
+        \toprule
+        \textbf{Method}  & \textbf{Task} & \multicolumn{5}{c}{\textbf{Tasks Completed in a Row}} & \textbf{Avg. Len $\uparrow$} \\
+        \cmidrule(lr){3-7}
+        &  & 1 & 2 & 3 & 4 & 5 & \\
+        \midrule
+        MCIL~\cite{lynch2020language} & ABCD$\rightarrow$D &0.373 & 0.027 & 0.002 & 0.000 & 0.000 & 0.40\\
+        RT-1~\cite{brohan2022rt}  & ABCD$\rightarrow$D & 0.844 & 0.617 & 0.438 & 0.323 & 0.227 & 2.45 \\
+        Robo-Flamingo~\cite{li2024vision} & ABCD$\rightarrow$D & 0.964 & 0.896 & 0.824 & 0.740 & 0.660 & 4.09 \\
+        GR-1~\cite{wu2023unleashing}  & ABCD$\rightarrow$D & 0.949 & 0.896 & 0.844 & 0.789 & 0.731 & 4.21 \\
+        UP-VLA~\cite{zhang2025up}  & ABCD$\rightarrow$D & 0.962 & 0.921 & 0.879 & 0.842 & 0.812 & 4.42 \\
+        RoboVLMs~\cite{li2024towards} & ABCD$\rightarrow$D & 0.967 & 0.930 & 0.899 & 0.865 & 0.826 & 4.49 \\
+        \rowcolor[gray]{0.9} \textbf{\methodname{}} & ABCD$\rightarrow$D & \textbf{0.985} & \textbf{0.961} & \textbf{0.931} & \textbf{0.899} & \textbf{0.851} & \textbf{4.63}\\
+        \midrule
+        MCIL~\cite{lynch2020language} & ABC$\rightarrow$D &0.304	&0.013&	0.002	&0.000	&0.000&	0.31\\
+        Robo-Flamingo~\cite{li2024vision} & ABC$\rightarrow$D & 0.824 & 0.619 & 0.466 & 0.331 & 0.235 & 2.47 \\
+        SuSIE~\cite{black2023zero}& ABC$\rightarrow$D& 0.870 &0.690 &0.490 &0.380 &0.260 &2.69\\
+        GR-1~\cite{wu2023unleashing}  & ABC$\rightarrow$D & 0.854 & 0.712 &0.596	&0.497	&0.401	&3.06 \\
+        UP-VLA~\cite{zhang2025up}  & ABC$\rightarrow$D & 0.928 &0.865& 0.815& 0.769& 0.699& 4.08 \\
+        RoboVLMs~\cite{li2024towards} & ABC$\rightarrow$D &
+        0.980 &0.936 &0.854& 0.778 &0.704 &4.25 \\
+        Seer-Large~\cite{tian2024predictive} & ABC$\rightarrow$D &0.963 &0.916 &0.861 &0.803 &0.740 & 4.28\\
+         \rowcolor[gray]{0.9} \textbf{\methodname{}}  & ABC$\rightarrow$D & \textbf{0.989} & \textbf{0.948} & \textbf{0.890} & \textbf{0.828} & \textbf{0.751} & \textbf{4.41}\\
+        \bottomrule
+    \end{tabular}}
+        \label{tab:calvin_results}
+\end{table}
+

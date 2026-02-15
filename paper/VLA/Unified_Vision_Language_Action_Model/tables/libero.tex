@@ -1,0 +1,21 @@
+\begin{table}[ht]
+\centering
+\caption{\textbf{Comparison of different methods on the LIBERO benchmark.}}
+\resizebox{0.68\textwidth}{!}{
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Method} & \textbf{SPATIAL} & \textbf{OBJECT} & \textbf{GOAL} & \textbf{LONG} & \textbf{Average} \\
+\midrule
+DP*~\cite{chi2023diffusion}         & 78.3\% & 92.5\% & 68.3\% & 50.5\% & 72.4\% \\
+Octo~\cite{team2024octo}      & 78.9\% & 85.7\% & 84.6\% & 51.1\% & 75.1\% \\
+OpenVLA~\cite{kim2024openvla}& 84.9\% & 88.4\% & 79.2\% & 53.7\% & 76.5\% \\
+SpatialVLA~\cite{qu2025spatialvla} & 88.2\% & 89.9\% & 78.6\% & 55.5\% & 78.1\% \\
+CoT-VLA~\cite{zhao2025cot} & 87.5\% & 91.6\% & 87.6\% & 69.0\% & 81.1\%\\
+$\pi_0$-FAST~\cite{pertsch2025fast} &\textbf{96.4\%}	& 96.8\%&	88.6\%&	60.2\%&	85.5\% \\
+% \rowcolor[gray]{0.9} \textbf{\methodname{}} &\textbf{96.6\%} & \textbf{99.4\%} & \textbf{91.6\%} & \textbf{89.2\%} & \textbf{94.2\%}\\
+\rowcolor[gray]{0.9} \textbf{\methodname{}} &95.4\% & \textbf{98.8\%} & \textbf{93.6\%} & \textbf{94.0\%} & \textbf{95.5\%}\\
+\bottomrule
+\end{tabular}}
+\label{tab:libero}
+\vspace{-3mm}
+\end{table}

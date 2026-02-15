@@ -1,0 +1,30 @@
+\section{Related Work}
+
+
+\looseness=-1
+\textbf{Adaptation Techniques for Diffusion Models.} Although many large-scale pretrained text-to-video models~\citep{ho2022video, guo2023animatediff, ramesh2022hierarchical, xing2023dynamicrafter, villegas2022phenaki, singer2022make, khachatryan2023text2video} have demonstrated strong capabilities of synthesizing high-quality videos following the given prompts, it is often desirable to perform adaptation for specialized tasks, such as customizing video generation to specific subjects or styles.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.9\linewidth]{figures/applying_adaptation_new.png}
+    \vspace{-5pt}
+    \caption{\textbf{Downstream Task Evaluation.} We identify downstream robotic task performance as a way to achieve standardized, quantitative comparisons across adaptation techniques.  We evaluate how adapted video models can enable text-conditioned generalization via two approaches: \textbf{visual planning} and \textbf{policy supervision}.  For visual planning, the adapted video model synthesizes a text-conditioned video plan into the future, which is then converted into actions to follow through a separately trained inverse dynamics model.  In policy supervision, the adapted video model is used in a discriminative manner to evaluate frames achieved by the policy; these are converted into text-conditioned rewards, which the policy is optimized to maximize.}
+    \label{fig:enter-label}
+    \vspace{-20pt}
+\end{figure}
+
+DreamBooth~\citep{ruiz2023dreambooth} finetunes text-to-image diffusion models to connect a unique identifier to a subject of interest, using a few images of that specific subject. The subject will be implanted into the output space of the diffusion model after finetuning, enabling novel view synthesis with the subject via prompting with its corresponding identifier. %
+In DreamVideo~\citep{wei2024dreamvideo}, this idea is extended to facilitate novel video generation with respect to a particular subject of interest. It learns subject customization for a pretrained video diffusion model through a few provided static images, which is achieved by combining textual inversion with finetuning an identity adapter.  %
+
+
+
+
+
+Prior work on large-to-small adaptation of video models, through composing predicted scores, has demonstrated successful transfer of artistic styles while maintaining powerful text-conditioning behavior~\citep{yang2023probabilistic}.  In this work, we evaluate this approach to explore the degree to which in-domain environment dynamics and notions of expert behaviors similarly generalize through adaptation with large-scale pretrained video models, conditioned flexibly on natural language.  Furthermore, we propose and evaluate a novel probabilistic adaptation technique, which performs score composition in an inverted manner from that presented in~\citep{yang2023probabilistic}.%
+
+Prior adaptation works mostly seek improvements over visual quality and its related metrics, such as FID~\citep{heusel2017gans} and FVD~\citep{thomas2018fvd}.  Here, we focus on a new application domain to evaluate adaptation: robotic task performance.  We study how the text-conditioning capabilities of large-scale pretrained video generative models can be combined with environment-specific information to deliver further improvements on text-conditioned task generalization.
+
+
+\textbf{Video Models for Decision Making.}  A large body of recent work has explored how video models may be used for decision making~\citep{yang2024video, mccarthy2024towards}.  One line of work explores how video generative models can provide rewards, particularly through a pixel interface~\citep{sermanet2016unsupervised, ma2022vip}.  In VIPER~\citep{escontrela2024video}, a video model is trained on expert demonstrations that solve the task of interest; it is then utilized to provide dense rewards to supervise downstream policies by evaluating the likelihood of achieved frames during interaction.  Similarly, expert demonstrations are also used in Diffusion-Reward~\citep{huang2023diffusion}, but a diffusion model is trained instead.  Rewards are once again provided through achieved frames, but through a novel cross-entropy computation.  In Video-TADPoLe~\citep{luo2024text}, a large-scale pretrained video diffusion model is used to provide text-conditioned rewards through achieved environment-rendered frames.  In this work, we also seek to use video generative models as supervisors for policy learning, but we treat it as a method to evaluate the efficacy of different techniques for adapting large-scale pretrained video models to in-domain data.
+
+A separate line of work utilizes video models as pixel-based planners~\citep{ko2024avdc, du2024learning, du2024video, ajaj2023hip, wen2023any, liang2024dreamitate, yang2023learning, zhou2024robodreamer, wang2024language, zhou2024minedreamer}. In such works, the video model can be directly used to generate a visual plan to solve a task, which can be converted into actions using an inverse dynamics model~\citep{du2024learning} or through dense 3D correspondences~\citep{ko2024avdc}. Alternatively, the video model can also be used as a visual dynamics model as part of a more complex planning routine~\citep{ajaj2023hip, du2024video}, to form more complex, long horizon video plans. We utilize video models as visual planners for robotic tasks to understand the quality of different adaptation techniques in integrating in-domain data into large-scale pretrained text-to-video models. 

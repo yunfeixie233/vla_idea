@@ -1,0 +1,40 @@
+\begin{table*}[htbp]
+    \centering
+    \caption{\textbf{Ablation study on the visual prediction and historical context in policy learning.}}
+    \begin{subtable}[t]{0.52\linewidth}
+        \centering
+        \caption{\textbf{Effectiveness of visual prediction.}}
+        \resizebox{\linewidth}{!}{%
+        \begin{tabular}{cccc}
+            \toprule
+            \textbf{Post-train} & \textbf{Visual prediction} & \textbf{CALVIN} & \textbf{LIBERO} \\
+            \midrule
+            \checkmark & & 4.61 & 94.2\\
+            \rowcolor[gray]{0.9} & \checkmark & 4.42 & 88.7 \\
+             & & 1.46 & 48.5 \\
+            \bottomrule
+        \end{tabular}
+        }
+        \label{tab:calvin_abl_visual}
+    \end{subtable}
+    \hfill
+    \begin{subtable}[t]{0.46\linewidth}
+        \centering
+        \caption{\textbf{Effectiveness of history context.}}
+        \resizebox{\linewidth}{!}{%
+        \begin{tabular}{ccc}
+        \toprule
+        \multicolumn{2}{c}{\textbf{Observations}} & \textbf{Avg. Len $\uparrow$} \\
+        \cmidrule(lr){1-2}
+        \textbf{History Window} & \textbf{Current + History} & \\
+        \midrule
+        0 & 1 + 0 & 4.26 \\
+        \rowcolor[gray]{0.9}10 & 1 + 1 & 4.61 \\
+        10 & 1 + 2 & 4.43 \\
+        20 & 1 + 2 & 4.47 \\
+        \bottomrule
+\end{tabular}
+        }
+        \label{tab:calvin_abl_history}
+    \end{subtable}
+\end{table*}

@@ -1,0 +1,50 @@
+\section{Introduction}
+ 
+\label{sec:intro}
+
+ Building robotic policies today is hard: it often requires collecting \textit{specific} data for each robot, task, and environment, and the learned policies do not generalize beyond these specific settings. A historical lesson that has revolutionized machine learning is that pre-training \cite{kaplan2020scaling,henighan2020scaling,hoffmann2022training} on large-scale, high-quality, and diverse data can bring \textit{general} models that usually outperform specific models. Recent progress in open-source large-scale data collection \cite{open_x_embodiment_rt_x_2023,khazatsky2024droid} has made this path possible, but the heterogeneity (such as varying robot hardware and different environments) present in large-scale robotic data has posed a significant challenge. A central question for the field now is how to leverage the heterogeneous robot data to pre-train robotic foundation models \cite{bommasani2021opportunities}. 
+
+
+Foundation models from natural language processing \cite{radford2019language,openai2023gpt4} and computer vision \cite{kirillov2023segment} have shown a paradigm to achieve general-purpose task-agnostic models through pre-training on massive amounts and diversity of data. In addition to the benefits from more data, training with diverse tasks also enforces the representation to be more generalized. These foundation models can achieve high task success rates for various tasks, are more robust to outliers, and are flexible for adapting to new tasks. These approaches map input signals from distinct domains and tasks into a high-dimensional representation space, and exhibit consistent scaling behaviors \cite{kaplan2020scaling,hoffmann2022training}. After that, minimal fine-tuning is required to transfer the representation for downstream tasks to achieve good performance. 
+
+\begin{figure}[h]
+\centering
+ 
+\hspace{-1em} %
+\begin{minipage}{0.5\linewidth}{
+\includegraphics[width=0.95\linewidth]{figures/align_figure.pdf}	
+}\end{minipage}
+\hfill
+\begin{minipage}{0.5\linewidth}{
+\caption{The \textbf{Heterogeneous Pre-training} concept. It maps different embodiments, each with its own
+\mbox{\textit{proprioception}} and \mbox{\textit{vision}} sensors, onto a \textit{shared} latent space by embodiment-specific tokenizers (``stems").
+This \textit{aligns} the heterogeneous data from different embodiments into a joint representation space.
+This allows us to train a shared Transformer trunk on the union of all heterogeneous datasets.
+The pre-trained Transformer can be transferred to a new embodiment, with a small, new tokenizer learned at transferring time.
+}
+\label{fig:concept}
+}\end{minipage}
+ 
+\end{figure}
+
+
+The heterogeneity in robotics presents a distinct challenge: different robots are physically different embodiments\footnote{Embodiment can be defined differently according to the context of robotics and AI. In this work, we consider robots equipped with a distinct set of sensors and actuators with the associated observation and action space to be a unique embodiment.} of hardware acting in different environments. 
+Each embodiment can have a distinct \mbox{\textit{proprioception}}, including different degrees of freedom, end-effectors, motion controllers, and workspace configurations built for a specific application. Another common heterogeneity in robotics is \textit{vision} heterogeneity. Robots are often equipped with different camera sensors mounted at different places (e.g. wrist and/or third-person) and the visual appearance of each robot varies dramatically due to environments and tasks. Both proprioception and vision information are crucial for complex, contact-rich, long-horizon behaviors in robotics. Poor learning of such information can lead to overfitting behaviors such as repeating motions for a particular scene and task or even trajectory.
+
+
+In this work, we propose to address this issue by aligning the proprioception and vision information from different embodiments to a shared ``language'' of policies through \textit{heterogenous pre-training} (Figure \ref{fig:concept}). With such a shared representation, a new embodiment only requires minimal data and training to ``translate'' its specific setup to the shared ``languages''. In other words, we want to pre-train task-agnostic and embodiment-agnostic foundational models that can map raw sensor signals from individual embodiments into a shared latent space. Previous works have made significant progress in pre-training only the vision part of the policy on human videos \cite{vc2023,nair2022r3m,karamcheti2023language,radosavovic2023real} and pre-training the full policy \cite{brohan2022rt,open_x_embodiment_rt_x_2023,octo_2023} with a unified model and dataset format (e.g. using languages \cite{brohan2023rt}). Additionally, they assume no proprioception in pre-training and add it post hoc in transfer learning.
+
+
+
+We introduce Heterogeneous Pre-trained Transformers (\methodname{}),  a family of architecture designed to scalably learn from data across heterogeneous embodiments. \methodname{} modularizes a general policy network architecture (Figure \ref{fig:framework}) and pre-trains the \textit{policy representation} of a latent transformer with supervised learning. Inspired by learning from multimodal data {\cite{alayrac2022flamingo,tay2021omninet,girdhar2023imagebind,jaegle2021perceiver}}, we use \textit{embodiment-specific} tokenizers, dubbed ``stem'', to align various sensor inputs such as camera views and proprioception inputs. The ``trunk'' is \textit{shared} and pre-trained across datasets and is transferred when adapting to new embodiments and tasks that are unknown during the pre-training times. Moreover, we use task-specific action decoders, dubbed ``head'', to produce the action outputs.  Crucially, after ``tokenizing each embodiment'', \methodname{} operates on a shared space of a short sequence of  \textit{latent tokens}. This hierarchy is motivated by how humans handle feedback loops between specific motor responses and perceived stimuli at the level of the spinal cord's neural circuitry \cite{seminara2023hierarchical}.
+
+
+
+We extensively investigated the scaling behaviors and various designs of policy pre-training to the extent of more than 50 individual data sources (2 times more than  \cite{octo_2023}) and model size of over 1 billion parameters. Analogous to the scaling laws  \cite{henighan2020scaling,hoffmann2022training}, we found that to some extent, HPT scales with the dataset quantity and diversity as well as the model and training compute.
+
+
+In addition, heterogeneity can occur in different embodiment domains, such as real robot hardware, simulation domains, and human videos. We incorporate many available embodied datasets in different embodiments such as real robots \cite{open_x_embodiment_rt_x_2023,khazatsky2024droid,frodobots2024frodobots2k}, simulation \cite{wang2023fleet,yu2020meta,robomimic2021,gong2023arnold,wuthrich2020trifinger,wang2022goal} and internet human videos \cite{Damen2018EPICKITCHENS} in the pre-training process and demonstrate the generality of our framework including embodiments beyond expensive real-world on-robot teleoperations.
+
+
+
+Through transfer learning  experiments across multiple simulation benchmarks  \cite{yu2020meta,robomimic2021,wang2023fleet} and real-world dexterous tasks, we compare with several baselines and the from-scratch counterparts. Overall, based on the pre-training objectives, \methodname{} can scale with the model, data, compute, and the heterogeneity of the robotic datasets across real robots, simulations, and human videos. These pre-training procedures and models can simplify building reliable robotic policies for new embodiments and new tasks in terms of data requirements and generalized performance. As an attempt to scale heterogeneous pre-training, our code and weights are open-sourced, and we hope that HPT can shed some light on learning robot representations from heterogeneous embodiments and tasks. 

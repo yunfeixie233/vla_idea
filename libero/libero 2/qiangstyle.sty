@@ -1,0 +1,178 @@
+\ProvidesPackage{qiangstyle}
+
+
+%\usepackage{mdframed, xcolor}
+%\usepackage{framed, color}
+\usepackage{color}
+%\usepackage[comma,authoryear]{natbib}
+\usepackage{natbib}
+\usepackage{bm}
+%\usepackage[round]{natbib}
+\usepackage{amsmath, amsthm,  amsfonts, amssymb}%
+%\usepackage{times}		%% native times roman fonts
+%\usepackage{parskip}		%% blank lines between paragraphs, no indent
+%\usepackage[pdftex]{graphicx}	%% include graphics, preferrably pdf
+%\usepackage[raggedright]{sidecap}
+%\usepackage{wrapfig} 
+\usepackage{hyperref}	%% many PDF options can be set here
+%\usepackage[pdftex, citecolor=blue]{hyperref}	%% many PDF options can be set here
+%\usepackage[colorlinks,citecolor=blue,lin  kcolor=blue]{hyperref}  % hyperlink  \url \href{}{}  \hyperref[]{}
+% \usepackage[colorlinks]{hyperref}
+%\usepackage{subfigure}
+%\usepackage{graphicx, comment}
+%\usepackage{color}
+%\usepackage{url}
+%\pdfadjustspacing=1		%% force LaTeX-like character spacing
+
+\usepackage{tcolorbox}	%% many PDF options can be set here
+
+
+%\usepackage[inner, left]{showlabels}
+
+
+%\usepackage{MnSymbol}
+\newcommand{\eqcolon}{\mathrel{\rotatebox[units=360]{180}{\ensuremath{\coloneq}}}}
+
+%%%%%%%%%%%%%%% EXACT 1in MARGINS %%
+%\setlength{\textwidth}{6.5in}     %%
+%\setlength{\oddsidemargin}{0in}   %%
+%\setlength{\evensidemargin}{0in}  %%
+%\setlength{\textheight}{8.5in}    %%
+%\setlength{\topmargin}{0in}       %%
+%\setlength{\headheight}{0in}      %%
+%\setlength{\headsep}{0in}         %%
+%\setlength{\footskip}{.5in}       %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{algorithm}
+\usepackage{algorithmic}
+
+\usepackage{amsthm}   
+\newtheorem{thm}{Theorem}[section]
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{lem}[thm]{Lemma} 
+\newtheorem{mydef}[thm]{Definition} 
+\newtheorem{ass}[thm]{Assumption} 
+\newtheorem{exa}[thm]{Example} 
+\newtheorem{pro}[thm]{Proposition}    % Setting theorem environment 
+% fix the spacing problem of theorem
+\begingroup
+    \makeatletter
+    \@for\theoremstyle:=definition,remark,plain\do{%
+        \expandafter\g@addto@macro\csname th@\theoremstyle\endcsname{%
+            \addtolength\thm@preskip\parskip
+            }%
+        }
+\endgroup
+
+
+%%%%%%%%%%%%%  COMMON  %%%%%%%%%%%%
+\newcommand{\myf}[2]{\frac{\displaystyle #1}{\displaystyle #2}}
+ \newcommand{\myp}[2]{\frac{\displaystyle \partial #1}{\displaystyle \partial  #2}}
+ \newcommand{\myb}[1]{\mbox{\boldmath$#1$}}
+ \newcommand{\eqnref}[1]{Eqn.~\eqref{#1}}
+\newcommand{\figref}[1]{Fig.~\ref{#1}}
+\newcommand{\Qiang}[1]{\textcolor{red}{#1}\\}
+\newcommand{\qiang}[1]{\textcolor{red}{#1}}
+\newcommand{\Todo}[1]{\textcolor{red}{TODO: #1}\\}
+\newcommand{\todo}[1]{\textcolor{gray}{TODO: #1}}
+\newcommand{\red}[1]{\textcolor{red}{#1}}
+\newcommand{\med}[1]{\textcolor{magenta}{#1}}
+\newcommand{\blue}[1]{\textcolor{blue}{#1}}
+\newcommand{\gray}[1]{\textcolor{gray}{#1}}
+\newcommand{\green}[1]{\textcolor{green}{#1}}
+\newcommand{\myempty}[1]{}
+
+\newcommand{\ant}[1]{~~~~~~~\text{\med{//#1}}}
+
+\newcommand{\X}{\mathcal{X}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\V}{\mathbf}
+\newcommand{\M}{\mathbb{M}}
+\newcommand{\HH}{\mathcal{H}}
+\renewcommand{\H}{\mathcal{H}}
+\newcommand{\B}{\mathcal{B}}
+\newcommand{\D}{\mathcal{D}}
+\newcommand{\Z}{\mathcal{Z}}
+\newcommand{\C}{\mathcal{C}}
+\newcommand{\R}{\mathbb{R}}
+
+\newcommand{\A}{\mathbb{A}}
+
+\renewcommand{\S}{\mathbb{S}}
+
+\newcommand{\vx}{\boldsymbol{x}}
+\newcommand{\vv}[1]{\boldsymbol{#1}}
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\neib}[1]{\partial{#1}}
+\newcommand{\normal}{\mathcal{N}}
+\newcommand{\var}{\mathrm{var}}
+\newcommand{\cov}{\mathrm{cov}}
+\newcommand{\KL}{\mathrm{KL}}
+
+\newcommand{\Remark}{\paragraph{Remark}}
+\newcommand{\remark}{\paragraph{Remark}}
+
+
+\newcommand{\trace}{\mathrm{trace}}
+\newcommand{\diag}{\mathrm{diag}}
+
+
+\newcommand{\la}{\langle}
+\newcommand{\ra}{\rangle}
+
+%%%%%%%%%%%%%% Big O notation %%%%%%%%%%%%%%
+\newcommand{\op}{o_p}
+\newcommand{\Op}{O_p}
+
+\newcommand{\od}{o}
+\newcommand{\Od}{O}
+
+\newcommand{\stein}{{\mathcal A}}
+
+
+\newcommand{\ind}{\mathbb{I}}
+\newcommand{\sign}{\mathrm{sign}}
+
+\newcommand{\prob}{\mathrm{Pr}}
+
+\newcommand{\score}{{\vv s}}
+
+
+\newcommand{\cd}{\mid}
+
+
+\renewcommand{\k}{{\mathcal K}}
+
+\newcommand{\kp}{{\mathcal K_p}}
+\newcommand{\kpp}{{\mathcal K_{p+}}}
+
+\newcommand{\Kmatrix}{\vv{K}}
+
+
+
+ \def\bb#1\ee{\begin{align*}#1\end{align*}}
+
+ \def\bba#1\eea{\begin{align}#1\end{align}}
+ \def\bbb#1\eee{\begin{align}#1\end{align}}
+ 
+ \newcommand{\set}[1]{\mathcal{#1}}
+ 
+ \newcommand{\funcset}[1]{\mathcal{#1}}
+ 
+  \newcommand{\opt}[1]{\mathcal{#1}}
+
+  \newcommand{\dd}{\nabla}
+
+\renewcommand{\tt}{^\top}
+
+\newcommand{\x}{\theta}
+
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+
+
+\newcommand{\qq}[1]{\red{\scriptsize [QL:~#1]}}

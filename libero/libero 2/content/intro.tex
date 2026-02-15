@@ -1,0 +1,32 @@
+\mysection{Introduction}
+A longstanding goal in machine learning is to develop a generalist agent that can perform a wide range of tasks. While multitask learning~\citep{caruana1997multitask} is one approach, it is computationally demanding and not adaptable to ongoing changes. Lifelong learning~\citep{thrun1995lifelong}, however, offers a practical solution by amortizing the learning process over the agent's lifespan. Its goal is to leverage prior knowledge to facilitate learning new tasks (forward transfer) and use the newly acquired knowledge to enhance performance on prior tasks (backward transfer).
+
+\begin{figure*}[ht!]
+    \centering
+    \includegraphics[width=\textwidth]{figures/libero_fig1.pdf}
+    \caption{
+    \textbf{Top}: \lb{} has four procedurally-generated task suites: \liberospatial{}, \liberoobject{}, and \liberogoal{} have 10 tasks each and require transferring knowledge about spatial relationships, objects, and task goals; \liberohundred{} has 100 tasks and requires the transfer of entangled knowledge.
+    % \lb{} has four procedurally-generated task suites (\textbf{top}): \liberospatial{}, \liberoobject{}, \liberogoal{}, \liberohundred{}. The first three task suites induce distribution shifts along specific axes. For instance, all the tasks in \liberospatial{} include the same objects and the same task goal, but they require agents to identify the target object in different locations.
+    % % tasks in \liberospatial{} have the same types of objects involved and the same underlying task goal but require the agent to reason about different spatial locations of the objects. %More details are in Section~\ref{sec:libero-suite}.
+    % \liberohundred{} induces a distribution shift along all three axes.
+    \textbf{Bottom}: we investigate five key research topics in \lldm{} on \lb{}.
+    % With these four suites, we systematically investigate the five key research topics in \lldm{} (\textbf{bottom}).
+    }
+    \label{fig:libero-overview}
+\end{figure*}
+
+
+The main body of the lifelong learning literature has focused on how agents transfer \emph{declarative} knowledge in visual or language tasks, which pertains to \emph{declarative knowledge} about entities and concepts~\citep{biesialska2020continual, mai2022online}. Yet it is understudied how agents transfer knowledge in decision-making tasks, which involves a mixture of both \emph{declarative} and \emph{procedural} knowledge (knowledge about how to \emph{do} something). Consider a scenario where a robot, initially trained to retrieve juice from a fridge, fails after learning new tasks. This could be due to forgetting the juice or fridge's location (declarative knowledge) or how to open the fridge or grasp the juice (procedural knowledge). So far, we lack methods to systematically and quantitatively analyze this complex knowledge transfer.
+
+% This paper recognizes this research gap, and the community needs a testbed to systematically study lifelong learning in decision-making (\lldm{}). An ideal testbed for \lldm{} should allow agents to continually learn and adapt to an ever-growing number of decision-making tasks, where diverse and complex concepts and actions are shared across tasks. To this end, we introduce a new simulation benchmark, LIfelong learning BEchmark on RObot manipulation tasks, \lb{}, for a systematic study of knowledge transfer in \lldm{}. \lb{} offers a procedural generation pipeline that unlocks never-ending task creation, and it is based on manipulation tasks that involve various visual concepts (declarative knowledge) and interactions (procedural knowledge) that are shared across tasks.
+To bridge this research gap, this paper introduces a new simulation benchmark, LIfelong learning BEchmark on RObot manipulation tasks, \lb{}, to facilitate the systematic study of lifelong learning in decision making (\lldm{}). An ideal \lldm{} testbed should enable continuous learning across an expanding set of diverse tasks that share concepts and actions. \lb{} supports this through a procedural generation pipeline for endless task creation, based on robot manipulation tasks with shared visual concepts (declarative knowledge) and interactions (procedural knowledge).
+
+For benchmarking purpose, \lb{} generates 130 language-conditioned robot manipulation tasks inspired by human activities~\citep{grauman2022ego4d} and, grouped into four suites. The four task suites are designed to examine distribution shifts in the object types, the spatial arrangement of objects, the task goals, or the mixture of the previous three (top row of Figure~~\ref{fig:libero-overview}). \lb{} is scalable, extendable, and designed explicitly for studying lifelong learning in robot manipulation. To support efficient learning, we provide high-quality, human-teleoperated demonstration data for all 130 tasks. 
+
+We present an initial study using \lb{} to investigate five major research topics in \lldm{} (Figure~\ref{fig:libero-overview}): \textbf{1)} knowledge transfer with different types of distribution shift; \textbf{2)} neural architecture design;  \textbf{3)}  lifelong learning algorithm design; \textbf{4)} robustness of the learner to task ordering; and \textbf{5)} how to leverage pre-trained models in \lldm{} (bottom row of Figure~\ref{fig:libero-overview}). We perform extensive experiments across different policy architectures and different lifelong learning algorithms. Based on our experiments, we make several insightful or even \textbf{unexpected} observations:
+\begin{enumerate}
+    \item Policy architecture design is as crucial as lifelong learning algorithms. The transformer architecture is better at abstracting temporal information than a recurrent neural network. Vision transformers work well on tasks with rich visual information (e.g., a variety of objects). Convolution networks work well when tasks primarily need procedural knowledge.
+    \item While the lifelong learning algorithms we evaluated are effective at preventing forgetting, they generally perform \emph{worse} than sequential finetuning in terms of forward transfer.
+    \item Our experiment shows that using pretrained language embeddings of semantically-rich task descriptions yields performance \emph{no better} than using those of the task IDs.
+    \item Basic supervised pretraining on a large-scale offline dataset can have a \emph{negative} impact on the learner's downstream performance in \lldm{}.
+\end{enumerate}

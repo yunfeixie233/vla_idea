@@ -1,0 +1,18 @@
+
+ 
+
+
+
+\section{Conclusion} 
+\label{sec:conclusion}
+There is room for improvement for many aspects including the dataset curation and pre-training objectives. Specifically, the embodiment splits in our balanced dataset mixture are rather simple. Moreover, careful data filtering to ensure the data quality is under-explored in this work. Also, this work has focused on supervised learning as the pre-training objective and the data size in tokens and training compute sizes in FLOPs only reach a moderate scale of LLM training to ensure full convergence. Although the model architecture and training procedure are modular and independent of embodiment setups, heterogeneous pre-training can converge slowly. For evaluation, both the simulation and real-world evaluation tasks are restricted to short-horizon manipulation tasks with a fixed embodiment, which might limit the benefits of using a higher-capacity model. Furthermore, the learned policies still do not offer very high reliability on the tested tasks (typically below 90\%). See Appendix \S \ref{appendix:failure} for some failure modes.
+ 
+ 
+
+Given the recent surge of scaled data, robot learning is still limited by its
+generality because of the heterogeneity, including different embodiments, tasks, and environments where the robots are operated. To handle the heterogeneity common in robotics, we propose \methodname{}, a modular architecture and framework to embrace this heterogeneity through pre-training.  We explore and scale HPT with heterogeneous datasets to over 50 available datasets. The learned representation can be transferred and improve performance in both simulation and the real world, and it shows correlations with pre-training performance. The code\footnote{\href{https://github.com/liruiw/HPT}{https://github.com/liruiw/HPT} and
+\href{https://github.com/liruiw/lerobot}{https://github.com/liruiw/lerobot}} is open-source for future research. We hope this perspective will inspire future work in handling the \textit{heterogeneous nature} of robotic data for robotic foundation models. 
+
+
+
+

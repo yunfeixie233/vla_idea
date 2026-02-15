@@ -1,0 +1,50 @@
+\begin{table*}[htbp]
+\centering
+\caption{\textbf{Post-training enables data-efficient and training-efficient downstream policy learning.}}
+\label{tab:post_efficiency}
+\begin{subtable}[t]{0.48\textwidth}
+\centering
+\caption{\textbf{Data efficiency comparison.}}
+\resizebox{\linewidth}{!}{%
+\begin{tabular}{lcc}
+\toprule
+\textbf{Method} & \textbf{Data} & \textbf{CALVIN} \\
+\midrule
+RT-1~\cite{brohan2022rt} & 10\% & 0.34\\
+MT-R3M~\cite{nair2022r3m} & 10\% & 0.61\\
+HULC~\cite{mees2022matters}  & 10\% & 1.11\\
+GR-1~\cite{wu2023unleashing} & 10\% & 2.00\\
+RoboVLMS~\cite{li2024towards} & 10\% & 2.52\\
+\midrule
+\textbf{\methodname{}} (w/o post-train) & 10\% & 0.15 \\
+\rowcolor[gray]{0.9}\textbf{\methodname{}} & 10\% & \textbf{3.19} \\
+\bottomrule
+\end{tabular}
+}
+\label{tab:data_efficiency}
+\end{subtable}
+\hfill
+\begin{subtable}[t]{0.48\textwidth}
+\centering
+\caption{\textbf{Training efficiency comparison.}}
+\resizebox{\linewidth}{!}{
+\begin{tabular}{lccc}
+\toprule
+\multicolumn{4}{c}{\textbf{Fast convergence (CALVIN)}} \\
+Training Iters & 2k & 4k & 8k  \\
+\midrule
+w/o post-train & 0.37 & 0.82 & 1.46  \\
+\rowcolor[gray]{0.9}w/ post-train    &4.21 & 4.56 & 4.61    \\
+\midrule
+\multicolumn{4}{c}{\textbf{Fast adaptation (SimplerEnv-Bridge)}} \\
+Method & Batch size & Iters & Success \\
+\midrule
+RoboVLMs~\cite{li2024towards} & 128   &50k & 37.5 \\
+\rowcolor[gray]{0.9}\textbf{\methodname{}  }    & 128 &12k& 64.6 \\
+\bottomrule
+\end{tabular}
+}
+\label{tab:train_efficiency}
+\end{subtable}
+\vspace{-5mm}
+\end{table*}

@@ -1,0 +1,29 @@
+\mysection{Background}
+This section introduces the problem formulation and defines key terms used throughout the paper.
+
+\mysubsection{Markov Decision Process for Robot Learning}
+A robot learning problem can be formulated as a finite-horizon Markov Decision Process:
+$
+\mathcal{M} = (\mathcal{S}, \mathcal{A}, \mathcal{T}, H, ~{\color{purple}{\mu_0, R}}).
+$
+Here, $\mathcal{S}$ and $\mathcal{A}$ are the state and action spaces of the robot. $\mu_0$ is the initial state distribution, $R: \mathcal{S}\times \mathcal{A} \rightarrow \mathbb{R}$ is the reward function, and $\mathcal{T}: \mathcal{S} \times \mathcal{A} \rightarrow \mathcal{S}$ is the transition function. In this work, we assume a sparse-reward setting and replace $R$ with a goal predicate $g: \mathcal{S} \rightarrow \{0, 1\}$. The robot's objective is to learn a policy $\pi$ that maximizes the expected return:
+$
+\max_\pi J(\pi) = \mathbb{E}_{s_t, a_t \sim \pi, \mu_0} [\sum_{t=1}^{H} g(s_t)].
+$
+
+\mysubsection{Lifelong Robot Learning Problem}
+In a \emph{lifelong robot learning problem}, a robot sequentially learns over $K$ tasks $\{T^1, \dots, T^K\}$ with a single policy $\pi$. We assume $\pi$ is conditioned on the task, i.e., $\pi(\cdot \mid s; T)$. For each task, $T^k \equiv (\mu_0^k, g^k)$ is defined by the initial state distribution $\mu_0^k$ and the goal predicate $g^k$.\footnote{Throughout the paper, a superscript/subscript is used to index the task/time step.} We assume $\mathcal{S}, \mathcal{A}, \mathcal{T}, H$ are the same for all tasks. Up to the $k$-th task $T^k$, the robot aims to optimize
+\begin{equation}
+    \max_\pi~ J_{\text{LRL}}(\pi) = \frac{1}{k}\sum_{p=1}^k \bigg[ \mathop{\mathbb{E}}\limits_{s^p_t, a^p_t \sim \pi(\cdot;T^p),~ \mu_0^p} \bigg[\sum_{t=1}^L g^p(s_t^p) \bigg] \bigg].
+    \label{eq:LRL}
+\end{equation}
+An important feature of the lifelong setting is that the agent loses access to the previous $k-1$ tasks when it learns on task $T^k$.
+
+\myparagraph{Lifelong Imitation Learning} Due to the challenge of sparse-reward reinforcement learning,
+ we consider a practical alternative setting where a user would provide a small demonstration dataset for each task in the sequence. Denote $D^k = \{ \tau^k_i \}_{i=1}^N$ as $N$ demonstrations for task $T^k$. Each $\tau^k_i = (o_0, a_0, o_1, a_1, \dots, o_{l^k})$ where $l^k \leq H$. Here, $o_t$ is the robot's sensory input, including the perceptual observation and the information about the robot's joints and gripper. In practice, the observation $o_t$ is often non-Markovian. Therefore, following works in partially observable MDPs~\citep{hausknecht2015deep}, we represent $s_t$ by the aggregated history of observations, i.e. $s_t \equiv o_{\leq t} \triangleq (o_0, o_1, \dots, o_t) $.
+This results in the \emph{lifelong imitation learning problem} with the same objective as in Eq.~\eqref{eq:LRL}. But during training, we perform behavioral cloning~\citep{bain1995framework} with the following surrogate objective function:
+\begin{equation}
+ \min_\pi~ J_{\text{BC}}(\pi) = \frac{1}{k}\sum_{p=1}^k \mathop{\mathbb{E}}\limits_{o_t, a_t \sim D^p} \bigg[ \sum_{t=0}^{l^p} \mathcal{L}\big(\pi(o_{\leq t}; T^p), a^p_t\big)\bigg]\,,
+    \label{eq:bc}
+\end{equation}
+where $\mathcal{L}$ is a supervised learning loss, e.g., the negative log-likelihood loss, and $\pi$ is a Gaussian mixture model. Similarly, we assume $\{D^p: p < k\}$ are not fully available when learning $T^k$.

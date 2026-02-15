@@ -1,0 +1,180 @@
+\mysection{Experiments}
+Experiments are conducted as an initial study for the five research topics mentioned in Section~\ref{sec:research-challenge}. We first introduce the evaluation metric used in experiments, and present analysis of empirical results in \lb{}. The detailed experimental setup is in Appendix~\ref{appendix:exp-setting}. Our experiments focus on addressing the following research questions:
+
+% Specifically, we focus on addressing the following research questions:
+
+\qone{}: How do different architectures/LL algorithms perform under specific distribution shifts?\\
+\qtwo{}: To what extent does neural architecture impact knowledge transfer in \lldm{}, and are there any discernible patterns in the specialized capabilities of each architecture? \\
+\qthree{}: How do existing algorithms from lifelong supervised learning perform on \lldm{} tasks? \\
+\qfour{}: To what extent does language embedding affect knowledge transfer in \lldm{}? \\
+\qfive{}: How robust are different LL algorithms to task ordering in \lldm{}? \\
+\qsix{}: Can supervised pretraining improve downstream lifelong learning performance in \lldm{}?
+
+% The following mysubsections introduce the evaluation metrics and empirical results followed by analyses. The detailed experimental setup is in Appendix~\ref{appendix:exp-setting} and the study on \qfour{} is in Appendix \ref{appendix:addition-ordering}.
+\mysubsection{Evaluation Metrics}
+We report three metrics: FWT (forward transfer)~\citep{diaz2018don}, NBT (negative backward transfer), and AUC (area under the success rate curve). All metrics are computed in terms of success rate, as previous literature has shown that the success rate is a more reliable metric than training loss for manipulation policies~\citep{mandlekar2021matters} (Detailed explanation in Appendix~\ref{appendix:loss-success-rates}). Lower NBT means a policy has better performance in the previously seen tasks, higher FWT means a policy learns faster on a new task, and higher AUC means an overall better performance considering both NBT and FWT. Specifically, denote $c_{i,j,e}$ as the agent's success rate on task $j$ when it learned over $i-1$ previous tasks and has just learned $e$ epochs ($e \in \{0,5,\dots,50\}$) on task $i$. Let $c_{i,i}$ be the best success rate over all evaluated epochs $e$ for the current task $i$ (i.e., $c_{i,i} = \max_e c_{i,i,e}$). Then, we find the earliest epoch $e^*_i$ in which the agent achieves the best performance on task $i$ (i.e., $e^*_i = \argmin_e c_{i,i,e_i} = c_{i,i}$), and assume for all $e \geq e^*_i$, $c_{i,i,e} = c_{i,i}$.\footnote{In practice, it's possible that the agent's performance on task $i$ is not monotonically increasing due to the variance of learning. But we keep the best checkpoint among those saved at epochs $\{e\}$ as if the agent stops learning after $e^*_i$.}
+Given a different task $j \neq i$, we define $c_{i,j} = c_{i,j,e^*_i}$. Then the three metrics are defined:
+% \begin{equation}
+% \vcenter{\hbox{\begin{minipage}{5cm}
+% \centering
+% \includegraphics[width=5cm]{figures/metric.png}
+% \captionof{figure}{$\text{FWT}_k$ measures how fast the agent learns on task $k$. $\text{NBT}_k$ measures how much knowledge about task $k$ the agent retains. $\text{AUC}_k$ summarizes both metrics for task $k$.}
+% \end{minipage}}}
+% \quad~~
+\begin{equation}
+\begin{split}
+&\text{FWT} = \sum_{k\in[K]} \frac{\text{FWT}_k}{K},~~~\text{FWT}_k = \frac{1}{11}\sum_{e \in \{0 \dots 50\}} c_{k,k,e} \\
+&\text{NBT} = \sum_{k\in[K]} \frac{\text{NBT}_k}{K},~~~~\text{NBT}_k =  \frac{1}{K-k} \sum_{\tau = k+1}^K \big(c_{k, k} - c_{\tau, k}\big) \\
+&\text{AUC} = \sum_{k\in[K]} \frac{\text{AUC}_k}{K},~~~\text{AUC}_k =\frac{1}{K-k+1} \big(\text{FWT}_k + \sum_{\tau=k+1}^K c_{\tau, k}\big)\\
+\end{split}
+\end{equation}
+% \end{equation}
+% $\text{FWT} = \sum_{k\in[K]} \frac{\text{FWT}_k}{K},~~~\text{FWT}_k = \frac{1}{11}\sum_{e \in \{0 \dots 50\}} c_{k,k,e}$, 
+% $\text{NBT} = \sum_{k\in[K]} \frac{\text{NBT}_k}{K},~~~~\text{NBT}_k =  \frac{1}{K-k} \sum_{\tau = k+1}^K \big(c_{k, k} - c_{\tau, k}\big)$, and
+% $\text{AUC} = \sum_{k\in[K]} \frac{\text{AUC}_k}{K},~~~\text{AUC}_k =\frac{1}{K-k+1} \big(\text{FWT}_k + \sum_{\tau=k+1}^K c_{\tau, k}\big)$.
+A visualization of these metrics is provided in Figure~\ref{fig:metrics}. 
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.75\textwidth]{figures/metric.png}
+    \caption{Metrics for \lldm{}.}
+    \label{fig:metrics}
+\end{figure}
+
+\mysubsection{Experimental Results}
+\label{experiment}
+We present empirical results to address the research questions. Please refer to Appendix~\ref{appendix:additional-result} for the full results across all algorithms, policy architectures, and task suites.
+
+\myparagraph{Study on the Policy's Neural Architectures (\qone{}, \qtwo{}) } Table~\ref{tab:architecture} reports the agent's lifelong learning performance using the three different neural architectures on the four task suites. Results are reported when \er{} and \packnet{} are used as they demonstrate the best lifelong learning performance across all task suites.
+\begin{table}[!ht]
+    \centering
+    \resizebox{\textwidth}{!}{%
+    \begin{tabular}{ l  c c c c c c}
+    \toprule 
+    \multirow{ 2}{*}{Policy Arch.} & \multicolumn{3}{c}{\er{}} & \multicolumn{3}{c}{\packnet{}} \\
+    \cmidrule(lr){2-4} \cmidrule(lr){5-7}
+    & FWT($\uparrow$) & NBT($\downarrow$) & AUC($\uparrow$) & FWT($\uparrow$) & NBT($\downarrow$) & AUC($\uparrow$) \\
+    \midrule
+    & \multicolumn{6}{c}{\liberolong{}} \\
+    \cmidrule(lr){2-7}
+\bcrnn                    &  0.16 \fs {   0.02 } &  \textbf{0.16}  \fs {   0.02 } &  0.08  \fs {  0.01 } &  0.13 \fs {   0.00 } &  0.21  \fs {   0.01 } &  0.03  \fs {  0.00 }\\
+\bct                      &  \textbf{0.48} \fs {   0.02 } &  0.32  \fs {   0.04 } &  \textcolor{purple}{\textbf{0.32}}  \fs {  0.01 } &  0.22 \fs {   0.01 } &   \textcolor{purple}{\textbf{0.08}}  \fs {   0.01 } &  0.25  \fs {  0.00 }\\
+\bcvilt                   &  0.38 \fs {   0.05 } &  0.29  \fs {   0.06 } &  0.25  \fs {  0.02 } &   \textcolor{purple}{\textbf{0.36}} \fs {   0.01 } &  0.14  \fs {   0.01 } &   \textcolor{purple}{\textbf{0.34}}  \fs {  0.01 }\\
+    \midrule 
+        & \multicolumn{6}{c}{\liberospatial{}} \\
+    \cmidrule(lr){2-7}
+\bcrnn                    &  0.40 \fs {   0.02 } &  0.29  \fs {   0.02 } &  0.29  \fs {  0.01 } &  0.27 \fs {   0.03 } &  0.38  \fs {   0.03 } &  0.06  \fs {  0.01 }\\
+\bct                      &  \textbf{0.65} \fs {   0.03 } &  \textbf{0.27}  \fs {   0.03 } &  \textbf{0.56}  \fs {  0.01 } &  0.55 \fs {   0.01 } &  \textbf{0.07}  \fs {   0.02 } &  \textbf{0.63}  \fs {  0.00 }\\
+\bcvilt                   &  0.63 \fs {   0.01 } &  0.29  \fs {   0.02 } &  0.50  \fs {  0.02 } &  \textbf{0.57} \fs {   0.04 } &  0.15  \fs {   0.00 } &  0.59  \fs {  0.03 }\\
+    \midrule 
+        & \multicolumn{6}{c}{\liberoobject{}} \\
+    \cmidrule(lr){2-7}
+\bcrnn                    &  0.30 \fs {   0.01 } &  \textbf{0.27}  \fs {   0.05 } &  0.17  \fs {  0.05 } &  0.29 \fs {   0.02 } &  0.35  \fs {   0.02 } &  0.13  \fs {  0.01 }\\
+\bct                      &  0.67 \fs {   0.07 } &  0.43  \fs {   0.04 } &  0.44  \fs {  0.06 } &  \textbf{0.60} \fs {   0.07 } &  \textbf{0.17}  \fs {   0.05 } &  \textbf{0.60}  \fs {  0.05 }\\
+\bcvilt                   & \textbf{0.70} \fs {   0.02 } &  0.28  \fs {   0.01 } &  \textbf{0.57}  \fs {  0.01 } &  0.58 \fs {   0.03 } &  0.18  \fs {   0.02 } &  0.56  \fs {  0.04 }\\
+    \midrule
+        & \multicolumn{6}{c}{\liberogoal{}} \\
+    \cmidrule(lr){2-7}
+\bcrnn                    &  0.41 \fs {   0.00 } &  0.35  \fs {   0.01 } &  0.26  \fs {  0.01 } &  0.32 \fs {   0.03 } &  0.37  \fs {   0.04 } &  0.11  \fs {  0.01 }\\
+\bct                      &   \textcolor{purple}{\textbf{0.64}} \fs {   0.01 } &  \textbf{0.34}  \fs {   0.02 } &   \textcolor{purple}{\textbf{0.49}}  \fs {  0.02 } &  0.63 \fs {   0.02 } &  \textbf{0.06}  \fs {   0.01 } &  0.75  \fs {  0.01 }\\
+\bcvilt                   &  0.57 \fs {   0.00 } &  0.40  \fs {   0.02 } &  0.38  \fs {  0.01 } &  \textbf{0.69} \fs {   0.02 } &  0.08  \fs {   0.01 } &  \textbf{0.76}  \fs {  0.02 }\\
+\bottomrule
+\end{tabular}
+}
+\vspace{5pt}
+\caption{Performance of the three neural architectures using \er{} and \packnet{} on the four task suites. Results are averaged over three seeds and we report the mean and standard error. The best performance is \textbf{bolded}, and colored in \textcolor{purple}{\textbf{purple}} if the improvement is statistically significant over other neural architectures, when a two-tailed, Student’s
+t-test under equal sample sizes and unequal variance is applied with a $p$-value of 0.05.}
+\label{tab:architecture}
+\end{table}
+
+\textcolor{purple}{\textit{Findings:}} First, we observe that \bct{} and \bcvilt{} work much better than \bcrnn{} on average, indicating that using a transformer on the ``temporal" level could be a better option than using an RNN model. Second, the performance difference among different architectures depends on the underlying lifelong learning algorithm. If \packnet{} (a dynamic architecture approach) is used, we observe no significant performance difference between \bct{} and \bcvilt{} except on the \liberolong{} task suite where \bcvilt{} performs much better than \bct{}. In contrast, if \er{} is used, we observe that \bct{} performs better than \bcvilt{} on all task suites except \liberoobject{}. This potentially indicates that the ViT architecture is better at processing visual information with more object varieties than the ResNet architecture when the network capacity is sufficiently large (See the \mtl{} results in Table~\ref{tab:algorithm} on \liberoobject{} as the supporting evidence). The above findings shed light on how one can improve architecture design for better processing of spatial and temporal information in \lldm{}.
+
+\myparagraph{Study on Lifelong Learning Algorithms (\qone{}, \qthree{})} Table~\ref{tab:algorithm-short} reports the lifelong learning performance of the three lifelong learning algorithms, together with the \seql{} and \mtl{} baselines. All experiments use the same \bct{} architecture as it performs the best across all policy architectures.
+
+
+\begin{table}[ht!]
+    \centering
+    \vspace{5pt}
+    \resizebox{\textwidth}{!}{%
+    \begin{tabular}{ l c c c c c c}
+    \toprule
+    Lifelong Algo. & FWT($\uparrow$) & NBT($\downarrow$) & AUC($\uparrow$) & FWT($\uparrow$) & NBT($\downarrow$) & AUC($\uparrow$) \\
+    \midrule 
+    & \multicolumn{3}{c}{\liberolong{}} & \multicolumn{3}{c}{\liberospatial{}} \\
+    \cmidrule(lr){2-4} \cmidrule(l){5-7} 
+ \seql                &  \textbf{0.54} \fs {   0.01 } &  0.63  \fs {   0.01 } &  0.15  \fs {  0.00 }  & \textbf{0.72} \fs {   0.01 } &  0.81  \fs {   0.01 } &  0.20  \fs {  0.01 } \\                                                                                                                                         
+ \er                  &  0.48 \fs {   0.02 } &  0.32  \fs {   0.04 } &  \textcolor{purple}{\textbf{0.32}}  \fs {  0.01 } &  0.65 \fs {   0.03 } &  0.27  \fs {   0.03 } &  0.56  \fs {  0.01 } \\                                                                                                                                         
+ \ewc                 &  0.13 \fs {   0.02 } &  0.22  \fs {   0.03 } &  0.02  \fs {  0.00 } &  0.23 \fs {   0.01 } &  0.33  \fs {   0.01 } &  0.06  \fs {  0.01 } \\                                                                                                                                         
+ \packnet             &  0.22 \fs {   0.01 } &  \textbf{0.08} \fs {   0.01 } &  0.25  \fs {  0.00 } &  0.55 \fs {   0.01 } &  \textcolor{purple}{\textbf{0.07}}  \fs {   0.02 } &  \textcolor{purple}{\textbf{0.63}}  \fs {  0.00 } \\                                                                                                                                             
+ \mtl                 &                      &                       &  0.48  \fs {  0.01 } &                      &                       &  0.83  \fs {  0.00 } \\
+    \midrule 
+    & \multicolumn{3}{c}{\liberoobject{}} & \multicolumn{3}{c}{\liberogoal{}} \\
+    \cmidrule(lr){2-4} \cmidrule(l){5-7}
+ \seql                &  \textbf{0.78} \fs {   0.04 } &  0.76  \fs {   0.04 } &  0.26  \fs {  0.02 }  &  \textcolor{purple}{\textbf{0.77}} \fs {   0.01 } &  0.82  \fs {   0.01 } &  0.22  \fs {  0.00 } \\
+ \er                  &  0.67 \fs {   0.07 } &  0.43  \fs {   0.04 } &  0.44  \fs {  0.06 }  &  0.64 \fs {   0.01 } &  0.34  \fs {   0.02 } &  0.49  \fs {  0.02 } \\
+ \ewc                 &  0.56 \fs {   0.03 } &  0.69  \fs {   0.02 } &  0.16  \fs {  0.02 }  &  0.32 \fs {   0.02 } &  0.48  \fs {   0.03 } &  0.06  \fs {  0.00 } \\
+ \packnet             &  0.60 \fs {   0.07 } &  \textcolor{purple}{\textbf{0.17}}  \fs {   0.05 } &  \textbf{0.60}  \fs {  0.05 }  &  0.63 \fs {   0.02 } &  \textcolor{purple}{\textbf{0.06}}  \fs {   0.01 } &  \textcolor{purple}{\textbf{0.75}}  \fs {  0.01 } \\
+ \mtl                 &                      &                       &  0.54  \fs {  0.02 }  &                      &                       &  0.80  \fs {  0.01 } \\
+\bottomrule
+    \end{tabular}
+    }
+    \vspace{5pt}
+    \caption{Performance of three lifelong algorithms and the \seql{} and \mtl{} baselines on the four task suites, where the policy is fixed to be \bct{}. Results are averaged over three seeds and we report the mean and standard error. The best performance is \textbf{bolded}, and colored in \textcolor{purple}{\textbf{purple}} if the improvement is statistically significant over other algorithms, when a two-tailed, Student’s
+t-test under equal sample sizes and unequal variance is applied with a $p$-value of 0.05.}
+    \label{tab:algorithm-short}
+\end{table}
+
+\textcolor{purple}{\textit{Findings:}}
+ We observed a series of interesting findings that could potentially benefit future research on algorithm design for \lldm{}: \textbf{1)} \seql{} shows the best FWT over all task suites. This is surprising since it indicates all lifelong learning algorithms we consider actually hurt forward transfer; \textbf{2)} \packnet{} outperforms other lifelong learning algorithms on \liberox{} but is outperformed by \er{} significantly on \liberolong{}, mainly because of low forward transfer. This confirms that the dynamic architecture approach is good at preventing forgetting. But since \packnet{} splits the network into different sub-networks, the essential capacity of the network for learning any individual task is smaller. Therefore, we conjecture that \packnet{} is not rich enough to learn on \liberolong{}; \textbf{3)} \ewc{} works worse than \seql{}, showing that the regularization on the loss term can actually impede the agent's performance on \lldm{} problems (See Appendix~\ref{appendix:loss-success-rates}); and \textbf{4)} \er{}, the rehearsal method, is robust across all task suites.
+
+\myparagraph{Study on Language Embeddings as the Task Identifier (\qfour{})}
+To investigate to what extent language embedding play a role in \lldm{}, we compare the performance of the same lifelong learner using four different pretrained language embeddings. Namely, we choose BERT~\citep{devlin2018bert}, CLIP~\citep{radford2021learning}, GPT-2~\citep{radford2019language} and the Task-ID embedding. Task-ID embeddings are produced by feeding a string such as “Task 5” into a pretrained BERT model.
+  
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{ l c c c c}
+    \toprule
+    Embedding Type & Dimension & FWT($\uparrow$) & NBT($\downarrow$) & AUC($\uparrow$) \\
+    \midrule 
+    BERT    &  768 & 0.48 \fs {   0.02 } &  \textbf{0.32}  \fs {   0.04 } &  0.32  \fs {  0.01 } \\ 
+    CLIP    &  512 &  \textbf{0.52} \fs {   0.00 } &  0.34  \fs {   0.01 } &  \textbf{0.35}  \fs {  0.01 } \\ 
+    GPT-2    &  768 & 0.46 \fs {   0.01 } &  0.34  \fs {   0.02 } &  0.30  \fs {  0.01 } \\
+    Task-ID &  768 & 0.50 \fs {   0.01 } &  0.37  \fs {   0.01 } &  0.33  \fs {  0.01 } \\
+\bottomrule
+    \end{tabular}
+    \vspace{5pt}
+    \caption{Performance of a lifelong learner using four different language embeddings on \liberolong{}, where we fix the policy architecture to \bct{} and the lifelong learning algorithm to \er{}. The Task-ID embeddings are retrieved by feeding ``Task + ID" into a pretrained BERT model. Results are averaged over three seeds and we report the mean and standard error. The best performance is \textbf{bolded}. No statistically significant difference is observed among the different language embeddings.}
+    \label{tab:exp-language}
+\end{table}
+
+
+\textcolor{purple}{\textit{Findings:}} From Table~\ref{tab:exp-language}, 
+% we observe that \emph{no} statistically significant difference exists among the different language embeddings. More interestingly, we find that the Task-ID embedding is equally competitive against other embeddings that are supposed to possess richer semantic meaning about the task. We hypothesize that this result attributes to the fact that the sentence embeddings function as bag-of-words. As a result, language embeddings only help differentiate individual tasks instead of providing rich semantic information. Such a finding requests the community to encode language specifications in a better way to leverage the semantic information in the task descriptions. 
+% As there exists no statistically significant difference, we choose BERT embeddings as the default task embedding.
+we observe \emph{no} statistically significant difference among various language embeddings, including the Task-ID embedding. This, we believe, is due to sentence embeddings functioning as bag-of-words that differentiates different tasks.
+This insight calls for better language encoding to harness the semantic information in task descriptions. Despite the similar performance, we opt for BERT embeddings as our default task embedding.
+
+\myparagraph{Study on task ordering (\qfive{})}
+Figure~\ref{fig:exp-taskorder} shows the result of the study on \qfour{}. For all experiments in this study, we used \bct{} as the neural architecture and evaluated both \er{} and \packnet{}. As the figure illustrates, the performance of both algorithms varies across different task orderings. This finding highlights an important direction for future research: developing algorithms or architectures that are robust to varying task orderings.
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.7\textwidth]{figures/taskorder.png}
+    \caption{Performance of \er{} and \packnet{} using \bct{} on five different task orderings. An error bar shows the performance standard deviation for a fixed ordering.}
+    \label{fig:exp-taskorder} 
+\end{figure}
+
+\textcolor{purple}{\textit{Findings:}} From Figure~\ref{fig:exp-taskorder}, we observe that indeed different task ordering could result in very different performances for the same algorithm. Specifically, such difference is statistically significant for \packnet{}.
+
+
+\myparagraph{Study on How Pretraining Affects Downstream \lldm{} (\qsix{})} Fig~\ref{fig:pretraining} reports the results on \liberolong{} of five combinations of algorithms and policy architectures, when the underlying model is pretrained on the 90 short-horizion tasks in \liberohundred{} or learned from scratch. For pretraining, we apply behavioral cloning on the 90 tasks using the three policy architectures for 50 epochs. We save a checkpoint every 5 epochs of training and then pick the checkpoint for each architecture that has the best performance as the pretrained model for downstream \lldm{}.
+
+\begin{figure*}[h!]
+    \centering
+    \includegraphics[width=\textwidth]{figures/pretrain.png}
+    \caption{Performance of different combinations of algorithms and architectures without pretraining or with pretraining. The multi-task learning performance is also included for reference.}
+    \label{fig:pretraining}
+\end{figure*}
+
+\textcolor{purple}{\textit{Findings:}} We observe that the basic supervised pretraining can \emph{hurt} the model's downstream lifelong learning performance. This, together with the results seen in Table~\ref{tab:algorithm-short} (e.g., naive sequential fine-tuning has better forward transfer than when lifelong learning algorithms are applied), indicates that better pretraining techniques are needed.
+
+\myparagraph{Attention Visualization:} To better understand what type of knowledge the agent forgets during the lifelong learning process, we visualize the agent's attention map on each observed image input. The visualized saliency maps and the discussion can be found in Appendix~\ref{appendix:attention}.

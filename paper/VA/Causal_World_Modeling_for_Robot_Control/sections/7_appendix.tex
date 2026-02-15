@@ -1,0 +1,498 @@
+\appendix
+\renewcommand\thesection{\Alph{section}}
+\renewcommand\thefigure{S\arabic{figure}}
+\renewcommand\thetable{S\arabic{table}}
+\renewcommand\theequation{S\arabic{equation}}
+\setcounter{figure}{0}
+\setcounter{table}{0}
+\setcounter{equation}{0}
+
+
+\section*{Appendix}
+
+\begin{table}[t]
+\centering
+\caption{\raggedright \textit{Evaluation on RoboTwin 2.0 Simulation (Easy vs Hard, 50 tasks)}. RoboTwin 2.0 is a challenging bimanual manipulation benchmark requiring coordinated dual-arm control. Easy uses fixed initial configurations while Hard involves randomized object poses and scene layouts.}
+\label{tab:robotwin_full}
+\vspace{-5pt}
+\small
+\setlength{\tabcolsep}{3pt}
+\resizebox{0.8\textwidth}{!}{%
+\begin{tabular}{l c cc cc cc cc cc}
+\toprule
+\multirow{2}{*}{\textbf{Simulation Task}} & \multirow{2}{*}{\textbf{Horizon}} &
+\multicolumn{2}{c}{\textbf{Ours}} & \multicolumn{2}{c}{$\pi_0$~\cite{pi0}} & \multicolumn{2}{c}{$\pi_{0.5}$~\cite{pi0}} & \multicolumn{2}{c}{X-VLA~\cite{xvla}} & \multicolumn{2}{c}{Motus~\cite{motus}} \\
+\cmidrule(lr){3-4} \cmidrule(lr){5-6} \cmidrule(lr){7-8} \cmidrule(lr){9-10} \cmidrule(lr){11-12}
+ &  & Easy & Hard & Easy & Hard & Easy & Hard & Easy & Hard & Easy & Hard \\
+\midrule
+\textit{Adjust Bottle} & 1 & 90\% & 94\% & 99\% & 95\% & \textbf{100\%} & \textbf{99\%} & \textbf{100\%} & \textbf{99\%} & 89\% & 93\% \\
+\textit{Beat Block Hammer} & 1 & \textbf{96\%} & 98\% & 79\% & 84\% & \textbf{96\%} & 93\% & 92\% & 88\% & 95\% & 88\% \\
+\textit{Blocks Ranking RGB} & 3 & \textbf{99\%} & 98\% & 80\% & 63\% & 92\% & 85\% & 83\% & 83\% & \textbf{99\%} & 97\% \\
+\textit{Blocks Ranking Size} & 3 & \textbf{94\%} & 96\% & 14\% & 5\% & 49\% & 26\% & 67\% & 74\% & 75\% & 63\% \\
+\textit{Click Alarmclock} & 1 & 99\% & \textbf{100\%} & 77\% & 68\% & 98\% & 89\% & 99\% & 99\% & \textbf{100\%} & \textbf{100\%} \\
+\textit{Click Bell} & 1 & \textbf{100\%} & \textbf{100\%} & 71\% & 48\% & \textbf{99\%} & 66\% & \textbf{100\%} & \textbf{100\%} & \textbf{100\%} & \textbf{100\%} \\
+\textit{Dump Bin Bigbin} & 1 & 89\% & 96\% & 88\% & 83\% & 92\% & \textbf{97\%} & 79\% & 77\% & \textbf{95\%} & 91\% \\
+\textit{Grab Roller} & 1 & \textbf{100\%} & \textbf{100\%} & 98\% & 94\% & \textbf{100\%} & \textbf{100\%} & \textbf{100\%} & \textbf{100\%} & \textbf{100\%} & \textbf{100\%} \\
+\textit{Handover Block} & 2 & 99\% & 78\% & 47\% & 31\% & 66\% & 57\% & 73\% & 37\% & 86\% & 73\% \\
+\textit{Handover Mic} & 2 & 94\% & 96\% & \textbf{97\%} & \textbf{97\%} & \textbf{98\%} & \textbf{97\%} & 0\% & 0\% & 78\% & 63\% \\
+\textit{Hanging Mug} & 2 & \textbf{40\%} & 28\% & 14\% & 11\% & 18\% & 17\% & 23\% & 27\% & \textbf{38\%} & \textbf{38\%} \\
+\textit{Lift Pot} & 1 & \textbf{100\%} & 99\% & 80\% & 72\% & 96\% & 85\% & \textbf{99\%} & \textbf{100\%} & 96\% & \textbf{99\%} \\
+\textit{Move Can Pot} & 1 & 94\% & 97\% & \textbf{68\%} & 48\% & 51\% & 55\% & 89\% & 86\% & 34\% & 74\% \\
+\textit{Move Pillbottle Pad} & 1 & \textbf{99\%} & 99\% & 67\% & 46\% & 84\% & 61\% & 73\% & 71\% & 93\% & \textbf{96\%} \\
+\textit{Move Playingcard Away} & 1 & \textbf{100\%} & 99\% & 74\% & 65\% & 96\% & 84\% & 93\% & \textbf{98\%} & \textbf{100\%} & 96\% \\
+\textit{Move Stapler Pad} & 1 & 91\% & 79\% & 41\% & 24\% & 56\% & 42\% & 78\% & 73\% & \textbf{83\%} & \textbf{85\%} \\
+\textit{Open Laptop} & 1 & 92\% & 94\% & 71\% & 81\% & 90\% & 96\% & 93\% & \textbf{100\%} & 95\% & 91\% \\
+\textit{Open Microwave} & 1 & 82\% & 86\% & 4\% & 32\% & 34\% & \textbf{77\%} & \textbf{79\%} & 71\% & \textbf{95\%} & \textbf{91\%} \\
+\textit{Pick Diverse Bottles} & 2 & 89\% & 82\% & 69\% & 31\% & 81\% & 71\% & 58\% & 36\% & 90\% & \textbf{91\%} \\
+\textit{Pick Dual Bottles} & 2 & \textbf{100\%} & 99\% & 59\% & 37\% & 93\% & 63\% & 47\% & 36\% & 96\% & 90\% \\
+\textit{Place A2B Left} & 1 & \textbf{97\%} & 93\% & 43\% & 47\% & 87\% & 82\% & 48\% & 49\% & 82\% & 79\% \\
+\textit{Place A2B Right} & 1 & \textbf{97\%} & 95\% & 39\% & 34\% & 87\% & 84\% & 36\% & 36\% & 90\% & \textbf{87\%} \\
+\textit{Place Bread Basket} & 1 & \textbf{97\%} & 95\% & 62\% & 46\% & 77\% & 64\% & 81\% & 71\% & 91\% & \textbf{94\%} \\
+\textit{Place Bread Skillet} & 2 & 95\% & 90\% & 66\% & 49\% & \textbf{85\%} & 66\% & 77\% & 67\% & 86\% & \textbf{83\%} \\
+\textit{Place Burger Fries} & 2 & 97\% & 95\% & 81\% & 76\% & \textbf{94\%} & 87\% & \textbf{94\%} & \textbf{94\%} & \textbf{98\%} & \textbf{98\%} \\
+\textit{Place Can Basket} & 2 & 81\% & 84\% & 55\% & 46\% & \textbf{62\%} & \textbf{62\%} & 49\% & 52\% & \textbf{81\%} & 76\% \\
+\textit{Place Cans Plasticbox} & 2 & \textbf{100\%} & 99\% & 63\% & 45\% & 94\% & 84\% & \textbf{97\%} & \textbf{98\%} & \textbf{98\%} & 94\% \\
+\textit{Place Container Plate} & 1 & 99\% & 97\% & \textbf{97\%} & 92\% & \textbf{99\%} & 95\% & \textbf{97\%} & 95\% & 98\% & \textbf{99\%} \\
+\textit{Place Dual Shoes} & 2 & 94\% & 89\% & 59\% & 51\% & 75\% & 75\% & 79\% & \textbf{88\%} & 93\% & 87\% \\
+\textit{Place Empty Cup} & 1 & \textbf{100\%} & \textbf{100\%} & 91\% & 85\% & \textbf{100\%} & 99\% & \textbf{100\%} & 98\% & 99\% & 98\% \\
+\textit{Place Fan} & 1 & 99\% & 93\% & 66\% & 71\% & \textbf{87\%} & 85\% & 80\% & 75\% & \textbf{91\%} & 87\% \\
+\textit{Place Mouse Pad} & 1 & 93\% & 96\% & 20\% & 20\% & \textbf{60\%} & 39\% & \textbf{70\%} & \textbf{70\%} & 66\% & 68\% \\
+\textit{Place Object Basket} & 2 & 91\% & 88\% & 67\% & 70\% & 80\% & 76\% & 44\% & 39\% & 81\% & \textbf{87\%} \\
+\textit{Place Object Scale} & 1 & 96\% & 95\% & 57\% & 52\% & \textbf{86\%} & 80\% & 52\% & 74\% & 88\% & 85\% \\
+\textit{Place Object Stand} & 1 & \textbf{99\%} & 96\% & 82\% & 68\% & 91\% & 85\% & 86\% & 88\% & \textbf{98\%} & \textbf{97\%} \\
+\textit{Place Phone Stand} & 1 & \textbf{97\%} & 97\% & 49\% & 53\% & 81\% & 81\% & \textbf{88\%} & 87\% & 87\% & 86\% \\
+\textit{Place Shoe} & 1 & 98\% & 98\% & 76\% & 76\% & 92\% & 93\% & \textbf{96\%} & 95\% & \textbf{99\%} & \textbf{97\%} \\
+\textit{Press Stapler} & 1 & 85\% & 82\% & 44\% & 37\% & 87\% & 83\% & \textbf{92\%} & \textbf{98\%} & 93\% & \textbf{98\%} \\
+\textit{Put Bottles Dustbin} & 3 & 87\% & 91\% & 65\% & 56\% & \textbf{84\%} & 79\% & 74\% & 77\% & 81\% & 79\% \\
+\textit{Put Object Cabinet} & 2 & 85\% & 87\% & 73\% & 60\% & \textbf{80\%} & \textbf{79\%} & 46\% & 48\% & \textbf{88\%} & 71\% \\
+\textit{Rotate QRcode} & 1 & \textbf{96\%} & 91\% & 74\% & 70\% & 89\% & 87\% & 34\% & 33\% & \textbf{89\%} & 73\% \\
+\textit{Scan Object} & 2 & 96\% & 91\% & 55\% & 42\% & 72\% & 65\% & 14\% & 36\% & 67\% & 66\% \\
+\textit{Shake Bottle Horizontally} & 1 & \textbf{100\%} & 99\% & 98\% & 92\% & \textbf{99\%} & \textbf{99\%} & \textbf{100\%} & \textbf{100\%} & \textbf{100\%} & 98\% \\
+\textit{Shake Bottle} & 1 & \textbf{100\%} & 97\% & 94\% & 91\% & \textbf{99\%} & 97\% & \textbf{99\%} & \textbf{100\%} & \textbf{100\%} & \textbf{97\%} \\
+\textit{Stack Blocks Three} & 3 & 99\% & 98\% & 72\% & 52\% & 91\% & 76\% & 6\% & 10\% & 91\% & \textbf{95\%} \\
+\textit{Stack Blocks Two} & 2 & \textbf{100\%} & 98\% & 93\% & 79\% & 97\% & \textbf{100\%} & 92\% & 87\% & \textbf{100\%} & 98\% \\
+\textit{Stack Bowls Three} & 3 & 86\% & 83\% & \textbf{77\%} & 75\% & \textbf{77\%} & 71\% & 76\% & \textbf{86\%} & 79\% & \textbf{87\%} \\
+\textit{Stack Bowls Two} & 2 & 94\% & 98\% & 94\% & 95\% & 95\% & 96\% & 96\% & 93\% & \textbf{98\%} & \textbf{98\%} \\
+\textit{Stamp Seal} & 1 & 96\% & 97\% & 46\% & 33\% & 79\% & 55\% & 76\% & 82\% & 93\% & 92\% \\
+\textit{Turn Switch} & 1 & 44\% & 45\% & 41\% & 42\% & \textbf{62\%} & 54\% & 40\% & 61\% & \textbf{84\%} & \textbf{78\%} \\
+\midrule
+\textbf{Average (\%)} & -- & \textbf{92.93} & \textbf{91.55} & 65.92 & 58.40 & 82.74 & 76.76 & 72.80 & 72.84 & 88.66 & 87.02 \\
+\bottomrule
+\end{tabular}%
+}
+\vspace{-5pt}
+\end{table}
+
+
+
+\section{Real-world Evaluation Details}\label{appendix:real_world_details}
+
+We present detailed evaluation results for all real-world manipulation tasks. Each task is evaluated with 20 trials for both our method and the baseline ($\pi_{0.5}$). To ensure fair comparison, we adopt an alternating evaluation protocol: one trial with $\pi_{0.5}$, followed by one trial with our method, and so on.
+
+For each trial, we record the success status of every intermediate step. If a step requires a retry to succeed, we assign a score of 0.5; if it fails, the score is 0; if it succeeds on the first attempt, the score is 1. A trial is marked as successful only if all steps are completed (i.e., the total score equals the maximum possible score).
+
+We report two metrics:
+\begin{itemize}
+    \item \textbf{Progress Score (PS)}: The average score across all trials divided by the maximum possible score, expressed as a percentage: $\text{PS} = \frac{\text{Average Progress}}{\text{Max Steps}} \times 100\%$.
+    \item \textbf{Success Rate (SR)}: The number of successful trials divided by the total number of trials, expressed as a percentage: $\text{SR} = \frac{\text{\# Successful Trials}}{N} \times 100\%$.
+\end{itemize}
+
+We evaluate on six diverse real-world tasks: \textbf{Make Breakfast} (10 steps: preparing a complete breakfast including toasting bread, pouring water, and plating), \textbf{Pick Screws} (5 steps: picking up paper, pouring screws, and inserting three screws), \textbf{Fold Clothes} (6 steps: folding a shirt including sleeves and smoothing), \textbf{Unpack Delivery} (5 steps: opening a package using a utility knife), \textbf{Insert Tubes} (2 categories: grasping and inserting 3 tubes), and \textbf{Fold Pants} (3 steps: folding pants and placing them). These tasks span long-horizon sequential manipulation, precision control, and deformable object handling. The following tables present per-trial results for each task.
+
+\begin{table}[t]
+\centering
+\caption{Detailed evaluation results for Make Breakfast task (10 steps, max score 10).}
+\label{tab:realworld_detailed_make_breakfast}
+\scriptsize
+\resizebox{\textwidth}{!}{
+\begin{tabular}{l|c|cccccccccc|c}
+\toprule
+\textbf{Trial} & \textbf{Succ.} & \makecell{\textbf{Grasp}\\\textbf{Plate}} & \makecell{\textbf{Grasp}\\\textbf{Bread}} & \makecell{\textbf{Grasp}\\\textbf{Fork}} & \makecell{\textbf{Place}\\\textbf{Bread}} & \makecell{\textbf{Press}\\\textbf{Toaster}} & \makecell{\textbf{Grasp}\\\textbf{Cup}} & \makecell{\textbf{Grasp}\\\textbf{Kettle}} & \textbf{Pour} & \makecell{\textbf{Grasp}\\\textbf{Apple}} & \textbf{Serve} & \textbf{Prog.} \\
+\midrule
+\multicolumn{13}{c}{\textbf{Ours}} \\
+\midrule
+1  & 0 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 0 & 1 & 1 & 9 \\
+2  & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 10 \\
+3  & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 10 \\
+4  & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 10 \\
+5  & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 10 \\
+6  & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 10 \\
+7  & 0 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 0 & 9 \\
+8  & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 0.5 & 1 & 9.5 \\
+9  & 0 & 1 & 1 & 1 & 0 & 1 & 1 & 1 & 1 & 1 & 1 & 9 \\
+10 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 10 \\
+11 & 0 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 0 & 1 & 1 & 9 \\
+12 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 10 \\
+13 & 0 & 1 & 1 & 1 & 0 & 1 & 1 & 1 & 1 & 1 & 1 & 9 \\
+14 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 10 \\
+15 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 10 \\
+16 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 10 \\
+17 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 0.5 & 1 & 9.5 \\
+18 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 10 \\
+19 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 10 \\
+20 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 10 \\
+\midrule
+\textbf{Avg} & \textbf{0.75} & \textbf{1.00} & \textbf{1.00} & \textbf{1.00} & \textbf{0.90} & \textbf{1.00} & \textbf{1.00} & \textbf{1.00} & \textbf{0.90} & \textbf{0.95} & \textbf{0.95} & \textbf{9.70} \\
+\textbf{Progress Score} & \multicolumn{12}{c}{\textbf{97.0\%} (= 9.70/10 $\times$ 100\%)} \\
+\textbf{Success Rate} & \multicolumn{12}{c}{\textbf{75.0\%} (= 15/20 $\times$ 100\%)} \\
+\midrule
+\multicolumn{13}{c}{$\boldsymbol{\pi_{0.5}}$} \\
+\midrule
+1  & 0 & 1 & 1 & 1 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 4 \\
+2  & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 0 & 1 & 1 & 9 \\
+3  & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 0 & 1 & 1 & 9 \\
+4  & 1 & 1 & 1 & 1 & 1 & 0 & 0 & 1 & 1 & 1 & 1 & 8 \\
+5  & 0 & 1 & 1 & 1 & 0 & 1 & 0 & 1 & 1 & 0 & 1 & 7 \\
+6  & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 0 & 1 & 1 & 9 \\
+7  & 1 & 1 & 1 & 0 & 1 & 1 & 1 & 1 & 0 & 1 & 1 & 8 \\
+8  & 0 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 0 & 9 \\
+9  & 0 & 1 & 1 & 0 & 1 & 0 & 1 & 1 & 0 & 0 & 0 & 5 \\
+10 & 0 & 1 & 1 & 1 & 1 & 0 & 0 & 0 & 0 & 0 & 0 & 4 \\
+11 & 1 & 1 & 1 & 1 & 1 & 0 & 0 & 1 & 1 & 1 & 1 & 8 \\
+12 & 1 & 1 & 1 & 1 & 0 & 0 & 0 & 1 & 1 & 1 & 1 & 7 \\
+13 & 1 & 1 & 1 & 0 & 1 & 0 & 0 & 1 & 1 & 1 & 1 & 7 \\
+14 & 1 & 1 & 1 & 1 & 0 & 1 & 0 & 1 & 1 & 1 & 1 & 8 \\
+15 & 1 & 1 & 1 & 1 & 1 & 0 & 0 & 1 & 1 & 1 & 1 & 8 \\
+16 & 1 & 1 & 1 & 1 & 0 & 1 & 0 & 1 & 1 & 1 & 1 & 8 \\
+17 & 1 & 1 & 1 & 1 & 1 & 1 & 0 & 1 & 1 & 1 & 1 & 9 \\
+18 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 0 & 0 & 1 & 1 & 8 \\
+19 & 1 & 1 & 1 & 0 & 1 & 0 & 0 & 1 & 0 & 1 & 1 & 6 \\
+20 & 0 & 1 & 1 & 1 & 0 & 1 & 0 & 0 & 0 & 1 & 0 & 5 \\
+\midrule
+\textbf{Avg} & \textbf{0.70} & \textbf{1.00} & \textbf{1.00} & \textbf{0.80} & \textbf{0.75} & \textbf{0.55} & \textbf{0.35} & \textbf{0.80} & \textbf{0.50} & \textbf{0.80} & \textbf{0.75} & \textbf{7.30} \\
+\textbf{Progress Score} & \multicolumn{12}{c}{\textbf{73.0\%} (= 7.30/10 $\times$ 100\%)} \\
+\textbf{Success Rate} & \multicolumn{12}{c}{\textbf{70.0\%} (= 14/20 $\times$ 100\%)} \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{Detailed evaluation results for Pick Screws task (5 steps, max score 5).}
+\label{tab:realworld_detailed_pick_screws}
+\scriptsize
+\begin{tabular}{l|c|ccccc|c}
+\toprule
+\textbf{Trial} & \textbf{Success} & \textbf{Grab Paper} & \textbf{Pour Screws} & \textbf{Screw 1} & \textbf{Screw 2} & \textbf{Screw 3} & \textbf{Progress} \\
+\midrule
+\multicolumn{8}{c}{\textbf{Ours}} \\
+\midrule
+1  & 1 & 1 & 1 & 0.5 & 0.5 & 1 & 4 \\
+2  & 0 & 1 & 0 & 1 & 1 & 0.5 & 3.5 \\
+3  & 1 & 1 & 1 & 1 & 0.5 & 0.5 & 4 \\
+4  & 1 & 1 & 1 & 1 & 1 & 1 & 5 \\
+5  & 1 & 1 & 1 & 1 & 1 & 0.5 & 4.5 \\
+6  & 1 & 1 & 1 & 0.5 & 1 & 0.5 & 4 \\
+7  & 1 & 1 & 1 & 1 & 1 & 1 & 5 \\
+8  & 1 & 1 & 1 & 1 & 1 & 1 & 5 \\
+9  & 0 & 1 & 0 & 0 & 0 & 0 & 1 \\
+10 & 1 & 1 & 1 & 1 & 1 & 1 & 5 \\
+11 & 1 & 1 & 1 & 1 & 1 & 1 & 5 \\
+12 & 0 & 1 & 0 & 1 & 1 & 1 & 4 \\
+13 & 0 & 1 & 0 & 1 & 1 & 1 & 4 \\
+14 & 1 & 1 & 1 & 1 & 0.5 & 0.5 & 4 \\
+15 & 0 & 1 & 0 & 0 & 0.5 & 1 & 2.5 \\
+16 & 1 & 1 & 1 & 1 & 1 & 1 & 5 \\
+17 & 1 & 1 & 1 & 1 & 1 & 0.5 & 4.5 \\
+18 & 1 & 1 & 1 & 0.5 & 0.5 & 1 & 4 \\
+19 & 0 & 1 & 1 & 0 & 1 & 0.5 & 3.5 \\
+20 & 1 & 1 & 1 & 1 & 1 & 1 & 5 \\
+\midrule
+\textbf{Avg} & \textbf{0.70} & \textbf{1.00} & \textbf{0.75} & \textbf{0.78} & \textbf{0.83} & \textbf{0.78} & \textbf{4.13} \\
+\textbf{Progress Score} & \multicolumn{7}{c}{\textbf{82.5\%} (= 4.13/5 $\times$ 100\%)} \\
+\textbf{Success Rate} & \multicolumn{7}{c}{\textbf{70.0\%} (= 14/20 $\times$ 100\%)} \\
+\midrule
+\multicolumn{8}{c}{$\boldsymbol{\pi_{0.5}}$} \\
+\midrule
+1  & 0 & 1 & 0 & 1 & 1 & 1 & 4 \\
+2  & 0 & 0.5 & 0 & 1 & 1 & 0.5 & 3 \\
+3  & 1 & 1 & 1 & 1 & 1 & 1 & 5 \\
+4  & 0 & 1 & 0 & 1 & 0.5 & 0.5 & 3 \\
+5  & 1 & 1 & 1 & 0.5 & 1 & 0.5 & 4 \\
+6  & 1 & 1 & 1 & 1 & 0.5 & 1 & 4.5 \\
+7  & 1 & 1 & 1 & 1 & 1 & 1 & 5 \\
+8  & 1 & 1 & 1 & 0.5 & 0.5 & 1 & 4 \\
+9  & 0 & 1 & 0 & 0.5 & 0.5 & 0 & 2 \\
+10 & 1 & 1 & 1 & 1 & 1 & 1 & 5 \\
+11 & 1 & 1 & 1 & 0.5 & 1 & 1 & 4.5 \\
+12 & 0 & 1 & 0 & 1 & 1 & 0.5 & 3.5 \\
+13 & 0 & 1 & 1 & 1 & 0 & 0.5 & 3.5 \\
+14 & 1 & 1 & 1 & 0.5 & 1 & 1 & 4.5 \\
+15 & 0 & 1 & 1 & 1 & 1 & 0 & 4 \\
+16 & 1 & 1 & 1 & 1 & 1 & 1 & 5 \\
+17 & 0 & 0 & 0 & 1 & 0.5 & 0.5 & 2 \\
+18 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+19 & 0 & 1 & 0 & 1 & 0.5 & 0.5 & 3 \\
+20 & 1 & 1 & 1 & 1 & 1 & 0.5 & 4.5 \\
+\midrule
+\textbf{Avg} & \textbf{0.50} & \textbf{0.88} & \textbf{0.60} & \textbf{0.83} & \textbf{0.75} & \textbf{0.65} & \textbf{3.70} \\
+\textbf{Progress Score} & \multicolumn{7}{c}{\textbf{74.0\%} (= 3.70/5 $\times$ 100\%)} \\
+\textbf{Success Rate} & \multicolumn{7}{c}{\textbf{50.0\%} (= 10/20 $\times$ 100\%)} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{Detailed evaluation results for Fold Clothes task (6 steps, max score 6).}
+\label{tab:realworld_detailed_fold_clothes}
+\scriptsize
+\begin{tabular}{l|c|cccccc|c}
+\toprule
+\textbf{Trial} & \textbf{Success} & \textbf{Fold Half} & \textbf{Left Sleeve} & \textbf{Right Sleeve} & \textbf{Fold Again} & \textbf{Flatten} & \textbf{Place} & \textbf{Progress} \\
+\midrule
+\multicolumn{9}{c}{\textbf{Ours}} \\
+\midrule
+1  & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 6 \\
+2  & 0 & 1 & 1 & 0 & 0 & 0 & 0 & 2 \\
+3  & 1 & 1 & 1 & 1 & 1 & 0.5 & 0.5 & 5 \\
+4  & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 6 \\
+5  & 0 & 0.5 & 0 & 0 & 0 & 0 & 0 & 0.5 \\
+6  & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+7  & 0 & 0.5 & 0 & 0 & 0 & 0 & 0 & 0.5 \\
+8  & 1 & 1 & 1 & 1 & 1 & 0.5 & 0.5 & 5 \\
+9  & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 6 \\
+10 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 6 \\
+11 & 0 & 0.5 & 0 & 0 & 0 & 0 & 0 & 0.5 \\
+12 & 0 & 0.5 & 0 & 0 & 0 & 0 & 0 & 0.5 \\
+13 & 0 & 0.5 & 0 & 0 & 0 & 0 & 0 & 0.5 \\
+14 & 0 & 1 & 1 & 1 & 1 & 1 & 0 & 5 \\
+15 & 0 & 0.5 & 0 & 0 & 0 & 0 & 0 & 0.5 \\
+16 & 0 & 1 & 1 & 1 & 1 & 0.5 & 0 & 4.5 \\
+17 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+18 & 0 & 1 & 1 & 1 & 0.5 & 0 & 0 & 3.5 \\
+19 & 0 & 0.5 & 0 & 0 & 0 & 0 & 0 & 0.5 \\
+20 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 6 \\
+\midrule
+\textbf{Avg} & \textbf{0.35} & \textbf{0.73} & \textbf{0.55} & \textbf{0.50} & \textbf{0.48} & \textbf{0.38} & \textbf{0.30} & \textbf{2.93} \\
+\textbf{Progress Score} & \multicolumn{8}{c}{\textbf{48.8\%} (= 2.93/6 $\times$ 100\%)} \\
+\textbf{Success Rate} & \multicolumn{8}{c}{\textbf{35.0\%} (= 7/20 $\times$ 100\%)} \\
+\midrule
+\multicolumn{9}{c}{$\boldsymbol{\pi_{0.5}}$} \\
+\midrule
+1  & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 6 \\
+2  & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 6 \\
+3  & 1 & 1 & 1 & 1 & 0.5 & 1 & 0.5 & 5 \\
+4  & 0 & 1 & 1 & 1 & 0.5 & 1 & 0 & 4.5 \\
+5  & 0 & 0.5 & 1 & 1 & 0.5 & 1 & 0 & 4 \\
+6  & 0 & 1 & 1 & 0.5 & 1 & 1 & 0 & 4.5 \\
+7  & 0 & 0.5 & 0 & 0 & 0 & 0 & 0 & 0.5 \\
+8  & 0 & 0.5 & 0 & 0 & 0 & 0 & 0 & 0.5 \\
+9  & 0 & 1 & 1 & 1 & 1 & 1 & 0 & 5 \\
+10 & 0 & 0.5 & 1 & 1 & 0.5 & 0 & 0 & 3 \\
+11 & 0 & 0.5 & 0 & 0 & 0 & 0 & 0 & 0.5 \\
+12 & 0 & 1 & 1 & 1 & 1 & 1 & 0 & 5 \\
+13 & 0 & 1 & 1 & 0.5 & 0 & 0 & 0 & 2.5 \\
+14 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 6 \\
+15 & 1 & 1 & 1 & 1 & 0.5 & 1 & 1 & 5.5 \\
+16 & 0 & 1 & 1 & 1 & 0.5 & 0 & 0 & 3.5 \\
+17 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 6 \\
+18 & 0 & 1 & 1 & 1 & 0.5 & 1 & 0 & 4.5 \\
+19 & 0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\
+20 & 0 & 1 & 1 & 1 & 0 & 0 & 0 & 3 \\
+\midrule
+\textbf{Avg} & \textbf{0.30} & \textbf{0.83} & \textbf{0.80} & \textbf{0.75} & \textbf{0.53} & \textbf{0.60} & \textbf{0.28} & \textbf{3.78} \\
+\textbf{Progress Score} & \multicolumn{8}{c}{\textbf{62.9\%} (= 3.78/6 $\times$ 100\%)} \\
+\textbf{Success Rate} & \multicolumn{8}{c}{\textbf{30.0\%} (= 6/20 $\times$ 100\%)} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{Detailed evaluation results for Unpack Delivery task (5 steps, max score 5).}
+\label{tab:realworld_detailed_unpack_delivery}
+\scriptsize
+\begin{tabular}{l|c|ccccc|c}
+\toprule
+\textbf{Trial} & \textbf{Success} & \textbf{Grab Knife} & \textbf{Push Blade} & \textbf{Handover} & \textbf{Cut Seal} & \textbf{Open Lid} & \textbf{Progress} \\
+\midrule
+\multicolumn{8}{c}{\textbf{Ours}} \\
+\midrule
+1  & 1 & 1 & 1 & 1 & 1 & 1 & 5 \\
+2  & 1 & 1 & 1 & 1 & 1 & 1 & 5 \\
+3  & 1 & 1 & 1 & 1 & 1 & 1 & 5 \\
+4  & 0 & 1 & 0 & 0 & 0 & 0 & 1 \\
+5  & 0 & 1 & 1 & 1 & 0.5 & 0 & 3.5 \\
+6  & 0 & 1 & 1 & 1 & 0 & 0 & 3 \\
+7  & 1 & 1 & 1 & 1 & 1 & 1 & 5 \\
+8  & 0 & 1 & 1 & 1 & 0 & 0 & 3 \\
+9  & 1 & 1 & 1 & 1 & 1 & 1 & 5 \\
+10 & 1 & 1 & 1 & 1 & 1 & 1 & 5 \\
+11 & 1 & 1 & 1 & 1 & 1 & 1 & 5 \\
+12 & 1 & 1 & 1 & 1 & 1 & 1 & 5 \\
+13 & 0 & 1 & 1 & 1 & 0 & 0 & 3 \\
+14 & 1 & 1 & 1 & 1 & 1 & 1 & 5 \\
+15 & 1 & 1 & 1 & 1 & 1 & 1 & 5 \\
+16 & 0 & 1 & 1 & 1 & 0 & 0 & 3 \\
+17 & 1 & 1 & 1 & 1 & 0.5 & 1 & 4.5 \\
+18 & 1 & 1 & 1 & 1 & 1 & 1 & 5 \\
+19 & 0 & 1 & 1 & 1 & 0.5 & 0 & 3.5 \\
+20 & 1 & 1 & 1 & 1 & 1 & 1 & 5 \\
+\midrule
+\textbf{Avg} & \textbf{0.65} & \textbf{1.00} & \textbf{0.95} & \textbf{0.95} & \textbf{0.68} & \textbf{0.65} & \textbf{4.23} \\
+\textbf{Progress Score} & \multicolumn{7}{c}{\textbf{84.5\%} (= 4.23/5 $\times$ 100\%)} \\
+\textbf{Success Rate} & \multicolumn{7}{c}{\textbf{65.0\%} (= 13/20 $\times$ 100\%)} \\
+\midrule
+\multicolumn{8}{c}{$\boldsymbol{\pi_{0.5}}$} \\
+\midrule
+1  & 0 & 1 & 1 & 0.5 & 0.5 & 0 & 3 \\
+2  & 0 & 1 & 1 & 1 & 0 & 0 & 3 \\
+3  & 0 & 1 & 1 & 1 & 0.5 & 0 & 3.5 \\
+4  & 0 & 1 & 1 & 1 & 0.5 & 0 & 3.5 \\
+5  & 0 & 1 & 1 & 1 & 0.5 & 0 & 3.5 \\
+6  & 0 & 1 & 1 & 1 & 0 & 0 & 3 \\
+7  & 0 & 1 & 1 & 1 & 0 & 0 & 3 \\
+8  & 1 & 1 & 1 & 1 & 0.5 & 1 & 4.5 \\
+9  & 0 & 1 & 1 & 1 & 0.5 & 0 & 3.5 \\
+10 & 1 & 1 & 1 & 1 & 1 & 1 & 5 \\
+11 & 0 & 1 & 1 & 1 & 0.5 & 0 & 3.5 \\
+12 & 0 & 1 & 1 & 1 & 0.5 & 0 & 3.5 \\
+13 & 1 & 1 & 1 & 1 & 1 & 1 & 5 \\
+14 & 0 & 1 & 1 & 1 & 0.5 & 0 & 3.5 \\
+15 & 1 & 1 & 1 & 1 & 0.5 & 1 & 4.5 \\
+16 & 0 & 1 & 1 & 1 & 0 & 0 & 3 \\
+17 & 0 & 1 & 1 & 1 & 0 & 0 & 3 \\
+18 & 0 & 1 & 1 & 1 & 0 & 0 & 3 \\
+19 & 0 & 1 & 1 & 1 & 0.5 & 0 & 3.5 \\
+20 & 1 & 1 & 1 & 1 & 1 & 1 & 5 \\
+\midrule
+\textbf{Avg} & \textbf{0.25} & \textbf{1.00} & \textbf{1.00} & \textbf{0.98} & \textbf{0.43} & \textbf{0.25} & \textbf{3.65} \\
+\textbf{Progress Score} & \multicolumn{7}{c}{\textbf{73.0\%} (= 3.65/5 $\times$ 100\%)} \\
+\textbf{Success Rate} & \multicolumn{7}{c}{\textbf{25.0\%} (= 5/20 $\times$ 100\%)} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{Detailed evaluation results for Insert Tubes task (2 categories: Grasp and Insert, max score 6).}
+\label{tab:realworld_detailed_insert_tubes}
+\scriptsize
+\begin{tabular}{l|c|cc|c}
+\toprule
+\textbf{Trial} & \textbf{Success} & \textbf{Grasp (3)} & \textbf{Insert (3)} & \textbf{Progress} \\
+\midrule
+\multicolumn{5}{c}{\textbf{Ours}} \\
+\midrule
+1  & 0 & 3 & 2 & 5 \\
+2  & 1 & 3 & 3 & 6 \\
+3  & 0 & 3 & 2 & 5 \\
+4  & 0 & 2 & 2 & 4 \\
+5  & 1 & 3 & 3 & 6 \\
+6  & 1 & 3 & 3 & 6 \\
+7  & 0 & 3 & 2 & 5 \\
+8  & 1 & 3 & 3 & 6 \\
+9  & 0 & 3 & 2 & 5 \\
+10 & 0 & 3 & 2 & 5 \\
+11 & 1 & 3 & 3 & 6 \\
+12 & 0 & 3 & 2 & 5 \\
+13 & 1 & 3 & 3 & 6 \\
+14 & 0 & 3 & 2 & 5 \\
+15 & 0 & 3 & 1 & 4 \\
+16 & 1 & 3 & 3 & 6 \\
+17 & 0 & 2 & 2 & 4 \\
+18 & 0 & 2 & 2 & 4 \\
+19 & 1 & 3 & 3 & 6 \\
+20 & 0 & 2 & 2 & 4 \\
+\midrule
+\textbf{Avg} & \textbf{0.40} & \textbf{2.80} & \textbf{2.35} & \textbf{5.15} \\
+\textbf{Progress Score} & \multicolumn{4}{c}{\textbf{85.8\%} (= 5.15/6 $\times$ 100\%)} \\
+\textbf{Success Rate} & \multicolumn{4}{c}{\textbf{40.0\%} (= 8/20 $\times$ 100\%)} \\
+\midrule
+\multicolumn{5}{c}{$\boldsymbol{\pi_{0.5}}$} \\
+\midrule
+1  & 0 & 3 & 1 & 4 \\
+2  & 0 & 3 & 1 & 4 \\
+3  & 0 & 3 & 1 & 4 \\
+4  & 0 & 3 & 1 & 4 \\
+5  & 0 & 3 & 1 & 4 \\
+6  & 0 & 3 & 1 & 4 \\
+7  & 0 & 3 & 1 & 4 \\
+8  & 0 & 3 & 2 & 5 \\
+9  & 1 & 3 & 3 & 6 \\
+10 & 1 & 3 & 3 & 6 \\
+11 & 1 & 3 & 3 & 6 \\
+12 & 0 & 2 & 1 & 3 \\
+13 & 0 & 3 & 2 & 5 \\
+14 & 0 & 2 & 2 & 4 \\
+15 & 1 & 3 & 3 & 6 \\
+16 & 1 & 3 & 3 & 6 \\
+17 & 0 & 3 & 2 & 5 \\
+18 & 0 & 2 & 2 & 4 \\
+19 & 1 & 3 & 3 & 6 \\
+20 & 0 & 3 & 2 & 5 \\
+\midrule
+\textbf{Avg} & \textbf{0.30} & \textbf{2.85} & \textbf{1.90} & \textbf{4.75} \\
+\textbf{Progress Score} & \multicolumn{4}{c}{\textbf{79.2\%} (= 4.75/6 $\times$ 100\%)} \\
+\textbf{Success Rate} & \multicolumn{4}{c}{\textbf{30.0\%} (= 6/20 $\times$ 100\%)} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{Detailed evaluation results for Fold Pants task (3 steps, max score 3).}
+\label{tab:realworld_detailed_fold_pants}
+\scriptsize
+\begin{tabular}{l|c|ccc|c}
+\toprule
+\textbf{Trial} & \textbf{Success} & \textbf{Fold 1} & \textbf{Fold 2} & \textbf{Place} & \textbf{Progress} \\
+\midrule
+\multicolumn{6}{c}{\textbf{Ours}} \\
+\midrule
+1  & 1 & 1 & 1 & 1 & 3 \\
+2  & 1 & 1 & 1 & 1 & 3 \\
+3  & 1 & 1 & 1 & 1 & 3 \\
+4  & 0 & 0 & 0 & 0 & 0 \\
+5  & 0 & 1 & 0 & 0 & 1 \\
+6  & 0 & 1 & 0 & 0 & 1 \\
+7  & 1 & 1 & 1 & 1 & 3 \\
+8  & 1 & 1 & 1 & 1 & 3 \\
+9  & 1 & 1 & 1 & 1 & 3 \\
+10 & 1 & 1 & 1 & 1 & 3 \\
+11 & 1 & 1 & 1 & 1 & 3 \\
+12 & 1 & 1 & 1 & 1 & 3 \\
+13 & 1 & 1 & 1 & 1 & 3 \\
+14 & 1 & 1 & 1 & 1 & 3 \\
+15 & 1 & 1 & 1 & 1 & 3 \\
+16 & 1 & 1 & 1 & 1 & 3 \\
+17 & 1 & 1 & 1 & 1 & 3 \\
+18 & 0 & 1 & 0 & 0 & 1 \\
+19 & 0 & 1 & 0 & 0 & 1 \\
+20 & 0 & 0 & 0 & 0 & 0 \\
+\midrule
+\textbf{Avg} & \textbf{0.70} & \textbf{0.90} & \textbf{0.70} & \textbf{0.70} & \textbf{2.30} \\
+\textbf{Progress Score} & \multicolumn{5}{c}{\textbf{76.7\%} (= 2.30/3 $\times$ 100\%)} \\
+\textbf{Success Rate} & \multicolumn{5}{c}{\textbf{70.0\%} (= 14/20 $\times$ 100\%)} \\
+\midrule
+\multicolumn{6}{c}{$\boldsymbol{\pi_{0.5}}$} \\
+\midrule
+1  & 1 & 1 & 1 & 1 & 3 \\
+2  & 1 & 1 & 1 & 1 & 3 \\
+3  & 1 & 1 & 1 & 1 & 3 \\
+4  & 0 & 0 & 0 & 0 & 0 \\
+5  & 0 & 0 & 0 & 0 & 0 \\
+6  & 0 & 0 & 0 & 0 & 0 \\
+7  & 0 & 0 & 0 & 0 & 0 \\
+8  & 0 & 0 & 0 & 0 & 0 \\
+9  & 0 & 0 & 0 & 0 & 0 \\
+10 & 0 & 0 & 0 & 0 & 0 \\
+11 & 1 & 1 & 1 & 1 & 3 \\
+12 & 1 & 1 & 1 & 1 & 3 \\
+13 & 1 & 1 & 1 & 1 & 3 \\
+14 & 0 & 0 & 0 & 0 & 0 \\
+15 & 0 & 0 & 0 & 0 & 0 \\
+16 & 0 & 0 & 0 & 0 & 0 \\
+17 & 0 & 0 & 0 & 0 & 0 \\
+18 & 0 & 0 & 0 & 0 & 0 \\
+19 & 0 & 0 & 0 & 0 & 0 \\
+20 & 0 & 0 & 0 & 0 & 0 \\
+\midrule
+\textbf{Avg} & \textbf{0.30} & \textbf{0.30} & \textbf{0.30} & \textbf{0.30} & \textbf{0.90} \\
+\textbf{Progress Score} & \multicolumn{5}{c}{\textbf{30.0\%} (= 0.90/3 $\times$ 100\%)} \\
+\textbf{Success Rate} & \multicolumn{5}{c}{\textbf{30.0\%} (= 6/20 $\times$ 100\%)} \\
+\bottomrule
+\end{tabular}
+\end{table}

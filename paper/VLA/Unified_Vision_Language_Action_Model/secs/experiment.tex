@@ -1,0 +1,78 @@
+\section{Experiments}
+\subsection{Dataset}
+\paragraph{CALVIN.}
+\emph{CALVIN}~\cite{mees2022calvin} is a simulated benchmark tailored for evaluating long-horizon, language-conditioned robotic manipulation. It comprises four simulated environments (A, B, C, and D), each containing demonstration trajectories collected via human teleoperation. The benchmark encompasses 34 distinct manipulation tasks with a total of 1,000 unique language instructions. Performance is measured by the average number of successfully completed sub-tasks within a sequence. Standard evaluation protocols include the \emph{ABC$\rightarrow$D} and \emph{ABCD$\rightarrow$D} settings, which test a model’s ability to generalize to unseen environments and compositions of long-horizon tasks.
+\vspace{-2mm}
+\paragraph{LIBERO.} 
+The \emph{LIBERO} benchmark~\cite{liu2023libero} is a comprehensive suite for lifelong robotic manipulation, comprising four task suites with 10 tasks and 50 human demonstrations each. These suites are designed to evaluate different generalization abilities: \emph{LIBERO-Spatial} tests spatial reasoning by varying layouts with fixed objects; \emph{LIBERO-Object} assesses object-level generalization with varying objects in a fixed scene; \emph{LIBERO-Goal} targets goal-conditioned behavior by varying task goals; and \emph{LIBERO-Long} (\emph{LIBERO-10}) features long-horizon, compositional tasks with diverse objects, layouts, and goals, challenging temporal and compositional reasoning.
+\vspace{-2mm}
+\paragraph{SimplerEnv.} 
+SimplerEnv~\cite{li2024evaluating} serves as a simulation benchmark designed to evaluate the transferability and generalization capabilities of models trained on real-world video data. It incorporates diverse manipulation setups across both the WidowX and Google Robot platforms, encompassing variations in lighting conditions, object textures, color distributions, and camera viewpoints.
+
+% ----------------------------------------------------------------------------------------------
+\subsection{Implementation Details}
+The model adopts a purely autoregressive Transformer architecture with 8.5 billion parameters, identical to Emu3~\cite{wang2024emu3}. Images are tokenized using a VQ-based image encoder with a spatial compression factor of 8. For action encoding, we use the relative differences between consecutive frames. We first apply 1st and 99th percentile normalization, and then utilize the FAST tokenizer~\cite{pertsch2025fast}, which has a vocabulary size of 1024 and replaces the final 1024 token IDs of the language tokenizer.
+
+\vspace{-2mm}
+\paragraph{Post-training Stage.}
+In the post-training stage, we leverage large-scale robot-centric video datasets to study the effects of various post-training strategies on downstream policy learning. The model is initialized with pre-trained weights from the first stage of Emu3~\cite{wang2024emu3}. We curate a total of 622K videos from existing robotics datasets (details provided in the appendix), and identify the world model as the most effective post-training approach. During training, supervision is applied solely on the vision tokens. The model is trained for 30K steps with a batch size of 64.
+
+\vspace{-2mm}
+\paragraph{Fine-tuning Stage.}
+During fine-tuning, the model is initialized with weights from the post-training stage and trained using a two-frame interleaved vision-action sequence with an action chunk size of 10. A cosine annealing learning rate schedule is applied, starting at \(8 \times 10^{-5}\), and the loss is computed solely over action tokens.
+For the CALVIN benchmark, RGB observations from both third-person (\(200 \times 200\)) and wrist-view (\(80 \times 80\)) cameras are used. Training is conducted on A100 GPUs with a batch size of 192 for 8k steps.
+For the LIBERO benchmark, third-person and wrist-view RGB images (both at \(200 \times 200\)) are used to train a unified model with a batch size of 192 for 8k steps. A single model is evaluated across four task suites.
+For the SimplerEnv benchmark, single-view RGB observations are used with input resized to \(256 \times 256\). Training is conducted on the Bridge-WidowX setup using a batch size of 128 for 20k steps, with an action chunk size of 5.
+
+Additional implementation details on the post-training strategy, real-robot fine-tuning procedures, and autonomous driving experiments are provided in the appendix.
+% ----------------------------------------------------------------------------------------------
+\input{tables/calvin}
+\subsection{Main Results}
+In this section, we evaluate our method on three simulation benchmarks: CALVIN (long-horizon tasks), LIBERO (diverse generalization), and SimplerEnv (real-to-sim manipulation). Our approach consistently achieves state-of-the-art performance across all settings.
+\vspace{-2mm}
+\paragraph{CALVIN Simulation Evaluation.}
+Table~\ref{tab:calvin_results} presents the experimental results in the CALVIN benchmark. Our method achieves the highest performance on both the ABC$\rightarrow$D and ABCD$\rightarrow$D tasks, significantly outperforming previous approaches and demonstrating strong capabilities in multi-task learning and long-horizon planning.
+\vspace{-2mm}
+\paragraph{LIBERO Simulation Evaluation.}
+Following~\cite{zhao2025cot}, we report the average success rate over 500 episodes for each task suite (Spatial, Object, Goal, Long). As shown in Table~\ref{tab:libero}, \methodname{} achieves the best overall performance across all LIBERO benchmark suites, with particularly significant gains on long-horizon tasks—improving the previous state of the art from 69.0\% to 94.0\%. Compared to $\pi_0$~\cite{pertsch2025fast}, our method demonstrates superior performance on long-horizon tasks.
+\input{tables/libero}
+\vspace{-2mm}
+\paragraph{SimplerEnv Simulation Evaluation.}
+Table~\ref{tab:simplerenv_bridge} summarizes the performance across various manipulation policies on the Bridge-WidowX setup. Our approach demonstrates a significant improvement over prior methods, raising the average success rate from 42.7\% to 69.8\%. In particular, it shows marked improvements on previously difficult tasks, including stack block, put carrot and put spoon.
+\input{tables/simplerenv_bridge}
+% \input{tables/simplerenv_google}
+% -----------------------------------------------------------------------
+\subsection{In-Depth Analysis}
+In this section, we provide an in-depth analysis within our unified framework, which may offer key insights for the design of future VLA models.
+We first analyze how post-training enhances downstream policy learning in terms of both performance (Table~\ref{abl:post_train}) and training efficiency (Table~\ref{tab:post_efficiency}), highlighting the potential of world models as a general post-training strategy for robotics.
+We then investigate that even without post-training stage, incorporating visual prediction loss (Table~\ref{tab:calvin_abl_visual}) and historical context (Table~\ref{tab:calvin_abl_history}) still contributes positively to policy learning. 
+\vspace{-2mm}
+\paragraph{Effectiveness of World Model Post-Training.}
+Table~\ref{abl:post_train} investigates the effects of different post-training strategies on downstream policy learning across various simulation benchmarks. The results reveal that, due to inconsistencies in the action space across tasks, action-only learning exhibits low transferability, leading to a negative impact on performance. In contrast, most post-training approaches significantly enhance policy learning, highlighting the crucial role of visual learning in transferability.
+Among these, the world model post-training approach yields the most substantial gains, enhancing both generalization and long-horizon planning capabilities.
+A comparison with text-to-image (T2I) training emphasizes the importance of modeling temporal dynamics in video data, while contrasting with video-only training highlights the essential role of textual guidance in state transitions. Notably, this world model training requires no action annotations, enabling scalable learning from large-scale video data and providing a promising direction for future VLA research.
+\input{tables/ablation_post}
+\vspace{-2mm}
+\paragraph{Data and Training Efficiency.}
+Table~\ref{tab:post_efficiency} shows that post-training substantially enhances downstream policy learning efficiency. On the CALVIN benchmark (Table~\ref{tab:data_efficiency}), our method achieves higher success rates using only 10\% of the fine-tuning data, outperforming prior approaches such as GR-1~\cite{wu2023unleashing} and RoboVLMs~\cite{li2024towards}. In addition, Table~\ref{tab:train_efficiency} highlights improved training efficiency, as the model rapidly converges with fewer fine-tuning iterations. The Simpler-Env results further demonstrate the effectiveness of world-model-based post-training for efficient policy adaptation across diverse robotic setups.
+While similar effects are observed in latent-action methods~\cite{ye2024latent,chen2024moto, gao2025adaworld}, our world model offers a simpler paradigm without latent actions, achieving better transferability.
+\input{tables/ablation_efficiency}
+
+\input{tables/calvin_abl_visual}
+\vspace{-2mm}
+\paragraph{Effectiveness of Visual Prediction.}
+While post-training proves effective, it is also crucial that the model demonstrates strong performance without relying on it. As shown in Table~\ref{tab:calvin_abl_visual}, our findings indicate that, even without post-training, fine-tuning with visual loss supervision—leveraging the autoregressive nature of the model—naturally integrates world model learning into the policy learning process. This approach leads to a significant improvement in the model's performance.
+\vspace{-2mm}
+\paragraph{Effectiveness of History Context.}
+History context—comprising past observations and actions—provides valuable guidance for robot planning. In this section, we investigate the appropriate length of the history window during the fine-tuning stage. As shown in Table~\ref{tab:calvin_abl_history}, our ablation study on the CALVIN benchmark examines the impact of varying history window lengths. Incorporating a history window significantly improves performance (from 4.26 to 4.61). However, extending the window beyond a certain length yields diminishing returns, suggesting that recent observations carry the most predictive value, consistent with the Markov property in sequential planning.
+
+\subsection{Multimodal Capability}
+As illustrated in Figure~\ref{fig:visual_demo}, we qualitatively showcase the model’s ability to interleave multiple modalities—action, language, and vision—within a unified framework. This design enables policy learning for embodied control, spatial reasoning through language output, and future state prediction via visual output, highlighting the model’s capacity for generalizable multimodal understanding.
+\input{figures/visual_demo}
+
+\subsection{Broader Applications}
+\vspace{-1mm}
+\paragraph{End-to-end Learning for Autonomous Driving.}
+To further explore the potential of our method, we perform a preliminary transfer to the autonomous driving domain by finetuning the model on the NAVSIM benchmark. Notably, our method is a pure autoregressive, token-based framework, modeling the driving task as causal sequence prediction over discretized multimodal tokens. Despite using only front-view camera inputs—without relying on BEV representations or multi-sensor fusion—our model achieves powerful performance on the NAVSIM test set. Notably, the current performance is not pretrained on driving videos but is only fine-tuned on downstream policy benchmarks. These results highlight the strong potential of our method for broader real-world applications.
+\input{tables/driving_navsim}
+

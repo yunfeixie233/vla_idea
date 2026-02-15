@@ -1,0 +1,32 @@
+\begin{table}[htbp]
+\centering
+\small
+\caption{\textbf{Post-training datasets}.}
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Dataset}& \textbf{Source} &\textbf{Data Type} & \textbf{Raw Videos} & \textbf{Used Videos} & \textbf{Interval} \\
+\midrule
+RT-1~\cite{brohan2022rt} & Real & Text, Video, Action  & 87212 & 84084& 3  \\
+BridgeV2~\cite{walke2023bridgedata}& Real &Text, Video, Action  & 
+60064 &28083 & 5\\
+DROID~\cite{khazatsky2024droid}& Real &Text, Video, Action  &275997 & 145641& 15\\ 
+Kuka~\cite{kalashnikov2018scalable} & Real &Text, Video, Action  & 580392& 100000& 3\\ 
+TOTO~\cite{zhou2023train} &  Real & Text, Video, Action  &902 &899 & 20\\
+Taco Play~\cite{rosete2023latent} & Real & Text, Video, Action  & 3242&3242 & 5\\
+FMB~\cite{luo2023fmb}& Real & Text, Video, Action  &8611 &7876 & 5 \\
+Berkeley autolab ur5~\cite{BerkeleyUR5Website} &Real &Text, Video, Action  & 896 & 896& 5 \\
+% Robo net \\
+VIOLA~\cite{zhu2023viola} &Real &Text, Video, Action &135 & 135& 15\\
+Cmu Play Fusion~\cite{chen2023playfusion} &Real &Text, Video, Action&576 &576 & 10\\
+Utaustin Mutex~\cite{shah2023mutex} &Real &Text, Video, Action& 1500& 1500& 10\\
+\midrule
+% 1x World Model~\cite{world_model_raw_data} & Real  & Video\\ \midrule
+CALVIN~\cite{mees2022calvin} & Sim & Text, Video, Action  & 22966 & 22966&5 \\
+LIBERO~\cite{liu2023libero} & Sim & Text, Video, Action  & 3386&3386 & 10\\ 
+ManiSkill2~\cite{gu2023maniskill2} & Sim & Text, Video, Action  & 30213 &193273 &10\\
+\midrule
+SSV2~\cite{goyal2017something} & Real &Text, Video & 220847 &220847 & 1\\
+\bottomrule
+\end{tabular}
+\label{tab:dataset_weights}
+\end{table}

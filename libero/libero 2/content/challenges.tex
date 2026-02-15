@@ -1,0 +1,18 @@
+\mysection{Research Topics in \lldm{}}
+\label{sec:research-challenge}
+We outline five major research topics in \lldm{} that motivate the design of \lb{} and our study.
+
+
+\myparagraph{\challengeknowledge{} Transfer of Different Types of Knowledge} 
+In order to accomplish a task such as \emph{put the ketchup next to the plate in the basket}, a robot must understand the concept \emph{ketchup}, the location of the \emph{plate/basket}, and how to \emph{put} the ketchup in the basket. 
+Indeed, robot manipulation tasks in general necessitate different types of knowledge, making it hard to determine the cause of failure. We present four task suites in Section~\ref{sec:libero-suite}: three task suites for studying the transfer of knowledge about spatial relationships, object concepts, and task goals in a disentangled manner, and one suite for studying the transfer of mixed types of knowledge.
+
+\myparagraph{\challengearchitecture{} Neural Architecture Design} 
+An important research question in \lldm{} is how to design effective neural architectures to abstract the multi-modal observations (images, language descriptions, and robot states) and transfer only relevant knowledge when learning new tasks.
+
+\myparagraph{\challengealgorithm{} Lifelong Learning Algorithm Design} Given a policy architecture, it is crucial to determine what learning algorithms to apply for \lldm{}. Specifically, the sequential nature of \lldm{} suggests that even minor forgetting over successive steps can potentially lead to a total failure in execution. As such, we consider the design of lifelong learning algorithms to be an open area of research in \lldm{}.
+
+\myparagraph{\challengeordering{} Robustness to Task Ordering}
+It is well-known that task curriculum influences policy learning \cite{bengio2009curriculum,narvekar2020curriculum}. A robot in the real world, however, often cannot choose which task to encounter first. Therefore, a good lifelong learning algorithm should be robust to different task orderings.
+
+\myparagraph{\challengepretraining{} Usage of Pretrained Models} In practice, robots will be most likely pretrained on large datasets in factories before deployment~\citep{kaelbling2020foundation}. However, it is not well-understood whether or how pretraining could benefit subsequent \lldm{}. 

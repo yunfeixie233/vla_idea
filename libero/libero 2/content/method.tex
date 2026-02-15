@@ -1,0 +1,71 @@
+\mysection{LIBERO}
+This section introduces the components in \lb{}: the procedural generation pipeline that allows the never-ending creation of tasks (Section~\ref{sec:procedural}), the four task suites we generate for benchmarking (Section~\ref{sec:libero-suite}), five algorithms (Section~\ref{sec:algo}), and three neural architectures (Section~\ref{sec:arch}). 
+\begin{figure*}[t!]
+    \centering
+    \includegraphics[width=\textwidth]{figures/libero_fig2.png}
+
+    \caption{\lb{}'s procedural generation pipeline:  Extracting behavioral templates from a large-scale human activity dataset \textbf{(1)}, Ego4D, for generating task instructions \textbf{(2)}; Based on the task description, selecting the scene and generating the PDDL description file \textbf{(3)} that specifies the objects and layouts \textbf{(A)}, the initial object configurations \textbf{(B)}, and the task goal \textbf{(C)}.
+    % This figure highlights the procedural generation pipeline in \lb{}. \textbf{(1)} We extract behavioral templates from a large-scale human activity dataset, Ego4D; \textbf{(2)} We generate language instructions by selecting the objects whose models are available in the simulators; \textbf{(3)} We select a scene (shown on the left) that is appropriate for the language instruction, and programmatically generate a PDDL-based scene description file that specifies: \textbf{(A)} the initial configuration distribution $\mu_{0}$ which includes object categories, placement regions; \textbf{(B)} the initial states of objects in the format of a list of predicates; and \textbf{(C)} the goal in a logic proposition format that consists of predicates. The goal is satisfied when all the predicates are true. The upper right shows screenshots of initial configurations and the configuration when the goal is satisfied.
+    }
+    \label{fig:libero-procedural-generation}
+\end{figure*}
+
+\mysubsection{Procedural Generation of Tasks}
+\label{sec:procedural}
+Research in \lldm{} requires a systematic way to create new tasks while maintaining task diversity and relevance to existing tasks. \lb{} procedurally generates new tasks in three steps: \textbf{1)} extract behavioral templates from language annotations of human activities and generate sampled tasks described in natural language based on such templates; \textbf{2)} specify an initial object distribution given a task description; and \textbf{3)} specify task goals using a propositional formula that aligns with the language instructions.
+%
+Our generation pipeline is built on top of \robosuite{}~\citep{zhu2020robosuite}, a modular manipulation simulator that offers seamless integration. Figure~\ref{fig:libero-procedural-generation} illustrates an example of task creation using this pipeline, and each component is expanded upon below.
+
+\myparagraph{Behavioral Templates and Instruction Generation} Human activities serve as a fertile source of tasks that can inspire and generate a vast number of manipulation tasks. 
+%
+We choose a large-scale activity dataset, Ego4D~\citep{grauman2022ego4d}, which includes a large variety of everyday activities with language annotations. We pre-process the dataset by extracting the language descriptions and then summarize them into a large set of commonly used language templates. After this pre-processing step, we use the templates and select objects available in the simulator to generate a set of task descriptions in the form of language instructions. For example, we can generate an instruction ``Open the drawer of the cabinet'' from the template ``Open ...''.
+
+\myparagraph{Initial State Distribution ($\mu_0$)} 
+To specify $\mu_0$, we first sample a scene layout that matches the objects/behaviors in a provided instruction. For instance, a kitchen scene is selected for an instruction \textit{Open the top drawer of the cabinet and put the bowl in it}. Then, the details about $\mu_0$ are generated in the PDDL language~\citep{mcdermott1998pddl,srivastava2022behavior}.
+Concretely, $\mu_0$ contains information about object categories and their placement (Figure~\ref{fig:libero-procedural-generation}-\textbf{(A)}), and their initial status (Figure~\ref{fig:libero-procedural-generation}-\textbf{(B)}).
+
+\myparagraph{Goal Specifications $(g)$} Based on $\mu_{0}$ and the language instruction, we specify the task goal using a conjunction of predicates. Predicates include \emph{unary predicates} that describe the properties of an object, such as \texttt{Open}(X) or \texttt{TurnOff}(X), and \emph{binary predicates} that describe spatial relations between objects, such as \texttt{On}(A, B) or \texttt{In}(A, B). An example of the goal specification using PDDL language can be found in Figure~\ref{fig:libero-procedural-generation}-\textbf{(C)}. The simulation terminates when all predicates are verified true.
+
+\mysubsection{Task Suites}
+\label{sec:libero-suite}
+While the pipeline in Section~\ref{sec:procedural} supports the generation of an unlimited number of tasks, we offer fixed sets of tasks for benchmarking purposes.
+\lb{} has four task suites: \liberospatial, \liberoobject, \liberogoal, and \liberohundred. The first three task suites are curated to disentangle the transfer of \emph{declarative} and \emph{procedural} knowledge (as mentioned in~\challengeknowledge{}), while \liberohundred{} is a suite of 100 tasks with entangled knowledge transfer. 
+% Note that the procedural generation pipeline can scale up the number of tasks in the future with ease.
+
+\myparagraph{\liberox{}} \liberospatial{}, \liberoobject{}, and \liberogoal{} all have 10 tasks\footnote{
+A suite of 10 tasks is enough to observe catastrophic forgetting while maintaining computation efficiency.
+} 
+and are designed to investigate the controlled transfer of knowledge about spatial information (declarative), objects (declarative), and task goals (procedural).
+Specifically, all tasks in \liberospatial{} request the robot to place a bowl, among the same set of objects, on a plate. But there are two identical bowls that differ only in their location or spatial relationship to other objects. Hence, to successfully complete \liberospatial{}, the robot needs to continually learn and memorize new spatial relationships.
+% evaluates if a policy can associate visual features and language with knowledge of spatial understanding by using consistent object layouts except for two bowls with unique arrangements in each task. The goal for the robot is to identify one of the bowls based on its spatial location or relation to other objects and place it on the plate. 
+% The robot is requested to pick-place a unique object in all the \liberoobject{} tasks.
+All tasks in \liberoobject{} request the robot to pick-place a unique object. 
+Hence, to accomplish \liberoobject{}, the robot needs to continually learn and memorize new object types.
+%
+All tasks in \liberogoal{} share the same objects with fixed spatial relationships but differ only in the task goal. Hence, to accomplish \liberogoal{}, the robot needs to continually learn new knowledge about motions and behaviors.
+More details are in Appendix~\ref{appendix:task}.
+
+\myparagraph{\liberohundred}  \liberohundred{} contains 100 tasks that entail diverse object interactions and versatile motor skills. 
+In this paper, we split \liberohundred{} into 90 short-horizon tasks (\liberoninety{}) and 10 long-horizon tasks (\liberolong{}). \liberoninety{} serves as the data source for pretraining~\textbf{\challengepretraining{}} and \liberolong{} for downstream evaluation of lifelong learning algorithms.
+
+\mysubsection{Lifelong Learning Algorithms}
+\label{sec:algo}
+We implement three representative lifelong learning algorithms to facilitate research in algorithmic design for \lldm{}. Specifically, we implement Experience Replay (\er{})~\citep{chaudhry2019tiny}, Elastic Weight Consolidation (\ewc{})~\citep{kirkpatrick2017overcoming}, and~\packnet{}~\citep{mallya2018packnet}. We pick \er{}, \ewc{}, and \packnet{} because they correspond to the memory-based, regularization-based, and dynamic-architecture-based methods for lifelong learning. In addition, prior research~\cite{Woczyk2021ContinualWA} has discovered that they are state-of-the-art methods. Besides these three methods, we also implement sequential finetuning (\seql{}) and multitask learning (\mtl{}), which serve as a lower bound and upper bound for lifelong learning algorithms, respectively. More details about the algorithms are in Appendix~\ref{appendix:llalgo}.
+% To evaluate the efficacy of different algorithmic designs to retain knowledge in \lldm{}, we study three representative lifelong learning algorithms, Experience Replay (\er{})~\citep{chaudhry2019tiny}, Elastic Weight Consolidation (\ewc{})~\citep{kirkpatrick2017overcoming}, and~\packnet{}~\citep{mallya2018packnet}. \er{} is a memory-based method to store important past data for new task learning. \ewc{} is a regularization-based method that constrains the neural network update. \packnet{} is a method based on a dynamic architecture that updates the neural network architectures on the fly across different tasks. We additionally implement two baseline methods, sequential learning (\seql{}) and multitask learning (\mtl{}), which serve as a lower bound and upper bound for lifelong learning algorithms, respectively.
+
+\mysubsection{Neural Network Architectures} 
+\label{sec:arch}
+
+\label{sec:method-architecture}
+We implement three vision-language policy networks, \bcrnn{}, \bct{}, and \bcvilt{}, that integrate visual, temporal, and linguistic information for \lldm{}.
+%
+Language instructions of tasks are encoded using pretrained BERT embeddings~\cite{devlin2018bert}. 
+% \bcrnn{}/\bct{}/\bcvilt{} uses ResNet/ResNet/Vision Transformer (ViT) to abstract knowledge from visual inputs and uses LSTM/Transformer/Transformer to integrate temporal information (See Figure~\ref{fig:architectures}, \ref{fig:encoders}). The task information is encoded using a task token from language embedding if a ViT is used or encoded using the FiLM method~\citep{perez2018film} if a ResNet is used.
+The \bcrnn{}~\citep{mandlekar2021matters} uses a ResNet as the visual backbone that encodes per-step visual observations and an LSTM as the temporal backbone to process a sequence of encoded visual information. The language instruction is incorporated into the ResNet features using the FiLM method~\citep{perez2018film} and added to the LSTM inputs, respectively.
+\bct{} architecture~\citep{zhu2022viola} uses a similar ResNet-based visual backbone, but a transformer decoder~\citep{vaswani2017attention} as the temporal backbone to process outputs from ResNet, which are a temporal sequence of visual tokens. The language embedding is treated as a separate token in inputs to the transformer alongside the visual tokens.
+The \bcvilt{} architecture~\citep{kim2021vilt}, which is widely used in visual-language tasks, uses a Vision Transformer (ViT) as the visual backbone and a transformer decoder as the temporal backbone. The language embedding is treated as a separate token in inputs of both ViT and the transformer decoder. All the temporal backbones output a latent vector for every decision-making step. We compute the multi-modal distribution over manipulation actions using a Gaussian-Mixture-Model (GMM) based output head~\citep{bishop1994mixture, mandlekar2021matters, wang2023mimicplay}. In the end, a robot executes a policy by sampling a continuous value for end-effector action from the output distribution. Figure~\ref{fig:architectures} visualizes the three architectures.\loosepar{}
+
+For all the lifelong learning algorithms and neural architectures, we use behavioral cloning (BC)~\citep{bain1995framework} to train policies for individual tasks (See \eqref{eq:bc}). BC allows for efficient policy learning such that we can study lifelong learning algorithms with limited computational resources. 
+To train BC, we provide 50 trajectories of high-quality demonstrations for every single task in the generated task suites. The demonstrations are collected by human experts through teleoperation with 3Dconnexion Spacemouse.
+
+

@@ -1,0 +1,39 @@
+\begin{figure}
+ 
+\centering
+\begin{minipage}{0.55\linewidth}{
+\includegraphics[width=0.95\linewidth]{figures/framework.pdf}	
+}\end{minipage}
+\hfill
+\begin{minipage}{0.44\linewidth}{
+    \caption{\textbf{HPT architecture.}  \methodname{} is modularized into stems, trunk, and heads. The stem, consisting of a {\textdarkseagreen{proprioception} tokenizer} and a {\textapricot{vision} tokenizer}, maps the vision and proprioception observations of different embodiments to a fixed number (e.g. 16) of tokens.     The  \textit{shared} trunk, which is a Transformer, maps the concatenated tokens into shared representations. The head then maps the processed tokens to actions in different downstream tasks. For a specific embodiment, one stem/head pair is activated (denoted by the switch). The trunk is shared and pre-trained on action-labeled data with supervised learning and then transferred to new embodiments. This procedure scales up to 52 datasets and 1B parameters.  }
+\label{fig:framework}
+}\end{minipage}
+ \vspace{-1em}
+\end{figure}
+
+\section{Related Works}
+\label{sec:related_works}
+\paragraph{Pre-training and Transfer Learning.} Pre-training \cite{bengio2013representation},  through direct supervision \citep{krizhevsky2012imagenet} and/or self-supervision  \citep{oord2018representation,he2020momentum,chen2021exploring,grill2020bootstrap,caron2020unsupervised}, has been shown to learn representation useful for unseen downstream tasks in computer vision \cite{videoworldsimulators2024,kirillov2023segment} and natural language \cite{openai2023gpt4}, and their intersections \cite{radford2019language}. The representation learned from ImagetNet \cite{deng2009imagenet} or web-scale data \citep{krizhevsky2012imagenet,radford2019language,el2024scalable} shows robustness to distribution shifts and can be transferred to new tasks. 
+
+
+
+The recent surge of foundation models \cite{bommasani2021opportunities} scales these representation learning methods \cite{henighan2020scaling,hoffmann2022training} by applying task-agnostic objectives to multitask data. Moreover, recent works \cite{liu2024visual,li2023blip,liu2023visual}  show that small projection layers can be used to align the pre-trained feature spaces of the foundation models. 
+Different from other fields, robotics has less data quantity and diversity but much more heterogeneity.
+
+\textbf{Alignment.} Recent works such as Flamingo \cite{alayrac2022flamingo}, Perceiver \cite{jaegle2021perceiver}, and ImageBind \cite{girdhar2023imagebind} proposed ways to combine representations from \textit{multimodal data} such as image, language, and audio by aligning these different modalities to the same latent space in the pursuit of representation learning. Our architecture design is also motivated by methods such as LLaVA\cite{liu2023visual} in the multimodal learning community. Very recently, GPT-4o \cite{openai2023gpt4}, Gemini \cite{team2023gemini}, MM1 \cite{mckinzie2024mm1}, X-VILA \cite{ye2024x}, and Chameleon \cite{chameleonteam2024chameleon} demonstrated the capabilities of heterogeneous pre-training a universal transformer from and for multiple modalities. The idea of alignment, across modalities and/or embodiments, is important as we scale to use heterogeneous embodiments and reuse data from distinct embodiments.
+ 
+\paragraph{Representation Learning in Robotics.} Representation learning has been explored in the robotic community. Previous works such as R3M \cite{nair2022r3m}, VC-1\cite{vc2023},  Voltron\cite{karamcheti2023language}, and SpatialVLM \cite{chen2024spatialvlm} investigate visual representations by training the policy with human videos and robotic data \cite{seo2023masked}.  Recent works \cite{radosavovic2023robot,bonatti2023pact,yang2023polybot,shah2023mutex,lee2024behavior} also align representations from multiple modalities and data distributions for robotic tasks. After pre-training, transfer learning with the frozen representation and/or finetuning is conducted in the target domains.
+
+ 
+
+
+
+\textbf{Generalist Policies.} Large-scale policy learning in robotics has leveraged diverse data from real robots \cite{brohan2022rt,shridhar2023perceiver},  human videos \cite{nair2022r3m,vc2023}, and simulation domain \cite{jiang2023vima,radosavovic2024humanoid,wang2023poco,wang2023gensim} separately. There are also works in multi-task learning \cite{reed2022generalist,ruder2017overview,wu2023masked,haldar2024baku}, meta-learning \cite{vilalta2002perspective,nichol2018first,finn2017model}, few-shot learning \cite{wang2020generalizing}, and fleet learning \cite{wang2023fleet}.  Recently, RT-X, Octo, OpenVLA \cite{brohan2022rt,open_x_embodiment_rt_x_2023,octo_2023,kim2024openvla} train generalist vision-language-action robotic policies on datasets from diverse robotic embodiments.
+
+Compared with these works, HPT handles broader heterogeneity including proprioception and vision, explores scaling behaviors on more heterogeneous domains including real robots, human videos, and simulation data, and is evaluated at a larger scale in simulation benchmarks.
+
+ 
+\paragraph{Mixture of Experts.} Our architecture design is related to works in conditional computation and MoE \cite{masoudnia2014mixture,lin2024moma,shazeer2017outrageously}, where we create one expert for each embodiment, and the router (for the whole network) is determined by the embodiment. This technique has been used to scale language models to a substantial size \cite{jiang2024mixtral}. 
+
+

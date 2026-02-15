@@ -1,0 +1,164 @@
+\documentclass{article}
+
+% if you need to pass options to natbib, use, e.g.:
+%     \PassOptionsToPackage{numbers, compress}{natbib}
+% before loading neurips_data_2023
+
+% ready for submission
+\PassOptionsToPackage{numbers, compress}{natbib}
+\usepackage[final]{neurips_data_2023}
+
+% to compile a preprint version, add the [preprint] option, e.g.:
+%     \usepackage[preprint]{neurips_data_2023}
+% This will indicate that the work is currently under review.
+
+% to compile a camera-ready version, add the [final] option, e.g.:
+%     \usepackage[final]{neurips_data_2023}
+
+% to avoid loading the natbib package, add option nonatbib:
+%    \usepackage[nonatbib]{neurips_data_2023}
+
+% Submissions to the datasets and benchmarks are typically non anonymous,
+% but anonymous submissions are allowed. If you feel that you must submit 
+% anonymously, you can compile an anonymous version by adding the [anonymous] 
+% option, e.g.:
+%     \usepackage[anonymous]{neurips_data_2023}
+% This will hide all author names.
+
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{hyperref}       % hyperlinks
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{xcolor}         % colors
+\usepackage{qiangstyle}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{amsthm}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{xcolor}
+\usepackage{amssymb}
+\usepackage{multirow}
+\usepackage{bbding}
+\usepackage{bbm}
+\usepackage{listings}
+\usepackage[T1]{fontenc}
+\usepackage{booktabs, tabularx, colortbl} 
+\usepackage{caption}
+\usepackage{wrapfig,lipsum}
+\usepackage{hhline}
+\usepackage{tcolorbox}
+\usepackage{graphicx}
+\usepackage{bmpsize}
+
+\definecolor{myRed}{rgb}{0.9, 0.5, 0.6}
+\definecolor{myBlue}{rgb}{0.55, 0.70, 0.90}
+\definecolor{myGreen}{rgb}{0.64, 0.83, 0.35}
+\definecolor{myYellow}{rgb}{0.9, 0.75, 0.4}
+
+\newcommand{\bo}[1]{{\textcolor{magenta}{[bo: #1]}}}
+\newcommand{\commentp}[1]{{\textcolor[rgb]{0.9,0.1,0.1}{[Peter: #1]}}}
+\newcommand{\yuke}[1]{{\textcolor{green}{[YZ: #1]}}}
+\newcommand{\chongkai}[1]{{\textcolor{cyan}{[chongkai: #1]}}}
+\newcommand{\yifeng}[1]{{\textcolor[rgb]{0.2,0.7,0.2}{[Yifeng: #1]}}}
+\newcommand{\yifengchange}[1]{{\textcolor[rgb]{0.2,0.7,0.2}{[Yifeng's Change Suggestsions: #1]}}}
+\newcommand{\yy}[1]{\small{\textcolor{blue}{Yihao: #1}}}
+
+\newcommand{\loosepar}{\looseness=-1}
+
+\newcommand{\lldm}{\textsc{LLDM}}
+\newcommand{\lb}{\textsc{LIBERO}}
+\newcommand{\liberohundred}{\textsc{LIBERO-100}}
+\newcommand{\liberolong}{\textsc{LIBERO-Long}}
+\newcommand{\liberoninety}{\textsc{LIBERO-90}}
+\newcommand{\liberospatial}{\textsc{LIBERO-Spatial}}
+\newcommand{\liberoobject}{\textsc{LIBERO-Object}}
+\newcommand{\liberox}{\textsc{LIBERO-X}}
+\newcommand{\liberogoal}{\textsc{LIBERO-Goal}}
+\newcommand{\challengeknowledge}{\textsc{(T1)}}
+\newcommand{\challengealgorithm}{\textsc{(T3)}}
+\newcommand{\challengearchitecture}{\textsc{(T2)}}
+\newcommand{\challengeordering}{\textsc{(T4)}}
+\newcommand{\challengepretraining}{\textsc{(T5)}}
+\newcommand{\qone}{\textbf{Q1}}
+\newcommand{\qtwo}{\textbf{Q2}}
+\newcommand{\qthree}{\textbf{Q3}}
+\newcommand{\qfour}{\textbf{Q4}}
+\newcommand{\qfive}{\textbf{Q5}}
+\newcommand{\qsix}{\textbf{Q6}}
+
+\newcommand{\bcrnn}{\textsc{ResNet-RNN}}
+\newcommand{\bct}{\textsc{ResNet-T}}
+\newcommand{\bcvilt}{\textsc{ViT-T}}
+
+\newcommand{\er}{\textsc{ER}}
+\newcommand{\ewc}{\textsc{EWC}}
+\newcommand{\packnet}{\textsc{PackNet}}
+\newcommand{\seql}{\textsc{SeqL}}
+\newcommand{\mtl}{\textsc{MTL}}
+
+\newcommand{\robomimic}{\texttt{Robomimic}}
+\newcommand{\robosuite}{\texttt{Robosuite}}
+
+
+\newcommand{\myparagraph}[1]{\textbf{#1}~~~}
+\newcommand{\mysection}[1]{\section{#1}}
+\newcommand{\mysubsection}[1]{\subsection{#1}}
+
+\newcommand{\fs}[1]{\footnotesize $\pm$#1}
+
+\usepackage[capitalize,noabbrev]{cleveref}
+\definecolor{top1_boxit_color}{RGB}{186,51,121}
+\definecolor{top2_boxit_color}{RGB}{186,51,121}
+\definecolor{top3_boxit_color}{RGB}{186,51,121}
+\newcommand{\toponeboxit}{\cellcolor{top1_boxit_color!90}}
+\newcommand{\toptwoboxit}{\cellcolor{top2_boxit_color!50}}
+\newcommand{\topthreeboxit}{\cellcolor{top3_boxit_color!20}}
+
+\title{LIBERO: Benchmarking Knowledge Transfer for Lifelong Robot Learning}
+
+
+% The \author macro works with any number of authors. There are two commands
+% used to separate the names and addresses of multiple authors: \And and \AND.
+%
+% Using \And between authors leaves it to LaTeX to determine where to break the
+% lines. Using \AND forces a line break at that point. So, if LaTeX puts 3 of 4
+% authors names on the first line, and the last on the second line, try using
+% \AND instead of \And before the third author name.
+
+\author{%
+  $^\dagger$Bo Liu\thanks{Equal contribution.}, $^\dagger$Yifeng Zhu$^*$, $^\ddagger$Chongkai Gao$^*$, $^{\dagger}$Yihao Feng\\\textbf{$^\dagger$Qiang Liu, $^{\dagger}$Yuke Zhu, $^{\dagger,\mathsection}$Peter Stone} \\
+  $^\dagger$The University of Texas at Austin, $^{\mathsection}$Sony AI, $^\ddagger$Tsinghua University\\
+  \texttt{\{bliu,yifengz,lqiang,yukez,pstone\}@cs.utexas.edu}\\
+  \texttt{yihao.ac@gmail.com, gck20@mails.tsinghua.edu.cn}
+}
+
+\begin{document}
+
+\maketitle
+
+\input{content/abstract}
+\input{content/intro}
+\input{content/background}
+\input{content/challenges}
+\input{content/method}
+\input{content/experiment}
+\input{content/related}
+\input{content/conclusion}
+
+\bibliography{neurips_2023}
+\bibliographystyle{plain}
+
+\input{content/checklist}
+\input{content/appendix.tex}
+
+\end{document}

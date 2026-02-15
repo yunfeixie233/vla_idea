@@ -1,0 +1,319 @@
+\clearpage
+\appendix 
+ 
+
+\pagebreak
+ 
+\section{Implementation Details}
+\label{appendix:impl}
+
+
+\paragraph{Experiment Details.} We conduct pre-training experiments across several orders of magnitudes in computes and data. The number of trajectories and transitions in the dataset is limited by the maximum number of trajectories in each of the constituent datasets. We use maximum episode counts per dataset ranging from 10 trajectories to 100000 trajectories, and the total trajectories range from around 300 trajectories and 6000 transitions to around 300k trajectories and 5 million data points. When training with 80k iterations, the approximate training epochs with fixed batch size 512 range from 200 epochs to 2 epochs. In terms of tokens, our experiment model ranges from 0.5 million to 1 billion parameters, the dataset tokens from all modalities range from approximately 32 million tokens to 5 billion tokens, and the tokens in a batch range from 0.03 million tokens to 2 million tokens (including sequence length). The compute FLOPs range from 0.03GFlops to 31GFlops. See Table~\ref{tab:min_max} for more details of the scale and see Figure~\ref{fig:dataset} for example lists of dataset mixtures. To facilitate future research, we will open-source the data processing scripts.
+
+
+Different from previous work \cite{octo_2023,yang2024pushing}, we use minimal amounts of processing and cleaning of the observation and actions in the raw trajectories. Specifically, the default training setup is to train 80000 iterations with a batch size 256, which is around 0.65B tokens in the latent space that feeds into HPTs and around 5B tokens in the perception token spaces of the raw perception inputs (such as image patches). Due to resource limits, for some bigger datasets such as Droid \cite{khazatsky2024droid}, we did not process the full size.  
+
+
+
+\subsection{Dataset Details}
+\label{subsec:dataset}
+\textbf{Real Robot Teleoperation Dataset.} In total, we use a subset of 42 datasets in the Open-X Embodiment dataset \cite{open_x_embodiment_rt_x_2023}, including the recent Droid \cite{khazatsky2024droid} dataset. These public datasets have high heterogeneity including distinct embodiment, environments to operate on, tasks to solve, etc.  
+
+
+\textbf{Simulation Dataset.} For the additional 7 simulation dataset, we use the simulator benchmarks across all popular simulators Drake \cite{wang2023fleet}, Mujoco \cite{yu2020meta,robomimic2021}, Isaac Sim \cite{gong2023arnold}, and PyBullet \cite{wang2022goal}, as well as Sapien \cite{mu2021maniskill} and Flex \cite{salhotra2022learning}, with image inputs and expert demonstrations. These are used as additional training data from the simulation domains. 
+
+
+\textbf{Human Video Dataset.} Since the human datasets do not contain proprioception and action information, we use hand poses and 2D positions in the image space as surrogates for the supervised learning objectives. In the PoCo \cite{wang2023poco} dataset, we use 3D positions of the hand and use 6-Dof poses extracted by ICP as actions, and for EPIC-Kitchen \cite{Damen2018EPICKITCHENS}, we use normalized 2D centers of the detection box as proprioceptions and the difference to the next frame as actions.  We use in total of 2000 trajectories of video clips from EPIC kitchen with a maximum trajectory length of 500. 
+
+
+\textbf{Deployed Robot Dataset.} To further increase the heterogeneity in the pre-training dataset, we consider FrodoBot-2k \cite{frodobots2024frodobots2k} dataset that involves plays of driving robots in the wild for gaming. This dataset is composed of deployed mobile robots in the wild. We use the front camera for this dataset. The action space of this robot is parametrized by linear and angular velocity actions and the proprioception space includes measurements from the IMU. We use a total of 150 trajectories and each trajectory contains more than 500 steps.
+
+\begin{figure}
+    \centering
+    {\includegraphics[width=\linewidth]{figures/dataset_figure.pdf}}
+    \vspace{.1em}
+    \caption{\textbf{Large-scale Dataset Heterogeneity in Robotics.}  We show different dataset mixtures at increasing scales (top row) across trajectory counts, dataset sample counts, and sampling weights (bottom row). We also show illustrations of the different embodiments including real robots, simulations, and human videos. By default, during training, we use a uniform distribution to sample from each of the embodiment datasets. }
+    \label{fig:dataset}
+\end{figure}
+
+See Figure \ref{fig:dataset} for visualization of some examples of heterogeneous dataset compositions. In practice when training on the mixture of these datasets, users can define customized sampling weights or apply stratified sampling methods. For generality, in this work, we use a balanced weight sampling method, commonly used in multitask learning. For these datasets, we process the visual features separately and save them on the disks.
+
+ 
+ 
+\begin{table}[ht]
+\begin{center}
+\centering
+\tiny    
+\begin{tabular}{l|c|c|c|c}
+\hline
+{\bf Dataset} & {\bf Trajectory} & {\bf Trajectory \%} & {\bf Sample} & {\bf Sample \%} \\ 
+\hline
+Austin Sailor Dataset & 205 & 0.09\% & 290167 & 1.85\% \\
+Stanford Hydra Dataset & 487 & 0.22\% & 300217 & 1.92\% \\
+Austin Buds Dataset & 42 & 0.02\% & 27894 & 0.18\% \\
+Austin Sirius Dataset & 478 & 0.21\% & 235175 & 1.50\% \\
+Berkeley MVP & 410 & 0.18\% & 34039 & 0.22\% \\
+Berkeley RPT & 776 & 0.35\% & 326504 & 2.08\% \\
+IAMLAb CMU Pickup Insert & 539 & 0.24\% & 118055 & 0.75\% \\
+UT Austin Mutex & 1283 & 0.57\% & 295042 & 1.88\% \\
+Imperial College Sawyer Wrist Cam & 145 & 0.06\% & 4519 & 0.03\% \\
+Stanford Mask VIT & 7788 & 3.49\% & 155760 & 0.99\% \\
+Language Table & 29554 & 13.24\% & 175855 & 1.12\% \\
+Kuka & 15903 & 7.13\% & 73158 & 0.47\% \\
+BC-Z & 4365 & 1.96\% & 559009 & 3.57\% \\
+Robo Net & 47127 & 21.12\% & 895413 & 5.72\% \\
+DLR Sara Pour & 171 & 0.08\% & 19462 & 0.12\% \\
+Stanford Robocook & 2103 & 0.94\% & 73493 & 0.47\% \\
+CMU Play Fusion & 492 & 0.22\% & 192988 & 1.23\% \\
+Bridge & 21768 & 9.75\% & 500331 & 3.19\% \\
+Furniture Bench Dataset & 2763 & 1.24\% & 2424703 & 15.48\% \\
+UCSD Pick And Place Dataset & 1158 & 0.52\% & 45162 & 0.29\% \\
+USC Cloth Sim & 684 & 0.31\% & 60876 & 0.39\% \\
+Stanford Kuka Multimodal Dataset & 2565 & 1.15\% & 100021 & 0.64\% \\
+Roboturk & 1535 & 0.69\% & 127523 & 0.81\% \\
+KAIST Nonprehensile & 171 & 0.08\% & 25478 & 0.16\% \\
+ASU Table Top & 94 & 0.04\% & 22029 & 0.14\% \\
+UTokyo Xarm Pick And Place & 78 & 0.03\% & 4860 & 0.03\% \\
+Berkeley Cable Routing & 1266 & 0.57\% & 19328 & 0.12\% \\
+Droid & 29437 & 13.19\% & 2800000 & 17.88\% \\
+UIUC D3Field & 164 & 0.07\% & 9803 & 0.06\% \\
+Robo Set & 15603 & 6.99\% & 1042887 & 6.66\% \\
+QUT Dexterous Manipulation & 171 & 0.08\% & 150698 & 0.96\% \\
+NYU Door Opening Surprising Effectiveness & 372 & 0.17\% & 11418 & 0.07\% \\
+NYU Franka Play Dataset & 311 & 0.14\% & 25536 & 0.16\% \\
+Mimic Play & 323 & 0.14\% & 303738 & 1.94\% \\
+ManiSkill Dataset & 21346 & 9.57\% & 2969893 & 18.96\% \\
+Columbia CairLab Pusht Real & 103 & 0.05\% & 20375 & 0.13\% \\
+Conq Hose Manipulation & 96 & 0.04\% & 4078 & 0.03\% \\
+DLR EDAN Shared Control & 88 & 0.04\% & 6698 & 0.04\% \\
+Berkeley GNM SAC Son & 2526 & 1.13\% & 183078 & 1.17\% \\
+Berkeley Autolab UR5 & 766 & 0.34\% & 66425 & 0.42\% \\
+Aloha Mobile & 236 & 0.11\% & 401754 & 2.57\% \\
+Agent Aware Affordances & 101 & 0.05\% & 127403 & 0.81\% \\
+Epic Kitchen & 58 & 0.03\% & 173012 & 1.10\% \\
+PoCo Hammer & 220 & 0.10\% & 12517 & 0.08\% \\
+PoCo Spatula & 142 & 0.06\% & 7517 & 0.05\% \\
+Drake Tooluse & 925 & 0.41\% & 16650 & 0.11\% \\
+PyBullet Grasping Image & 1788 & 0.80\% & 51852 & 0.33\% \\
+MuJoCo MetaWorld & 741 & 0.33\% & 34725 & 0.22\% \\
+MuJoCo RoboMimic & 180 & 0.08\% & 6735 & 0.04\% \\
+Isaac Arnold Image & 3214 & 1.44\% & 16070 & 0.10\% \\
+PyBullet TriFinger & 147 & 0.07\% & 89383 & 0.57\% \\
+MuJoCo Adroit & 90 & 0.04\% & 8010 & 0.05\% \\
+FrodoBot & 60 & 0.03\% & 12891 & 0.08\% \\
+\hline
+\end{tabular}
+\end{center}
+\caption{\textbf{Detailed Dataset Mixture.} We include the detailed number of trajectories and the number of dataset samples in the training mixture. These include 41 dataset from Open-X \cite{open_x_embodiment_rt_x_2023}, 7 datasets from simulation, 3 datasets from human video, and 1 from in-the-wild deployed dataset. }
+\label{table:mixture}
+\end{table}
+ 
+
+\subsection{Network Details}
+\label{appendix:network_details}
+
+  
+\paragraph{Stem.} For vision inputs, we resize each image to the standard square size (224x224) before feeding into a ResNet18 \cite{he2016deep} into a 7x7 vision modality token. These tokens are specifically the features before the final global pooling. If multiple views are available, we create individual projector MLP for each image view and then concatenate the vision tokens. For the vision encoders. In Figure \ref{fig:stem_ablate}, We have experimented with multiple vision encoders such as MAE ViT base \cite{he2021masked}, Dino V2\cite{oquab2023dinov2}, and CLIP ViT Base \cite{radford2019language}. We choose ResNet and the default image size for their simplicity and common usage in policy learning. The investigation of more complex fusion and processing for vision features is left to future works.
+
+When language is used, we use T5 \cite{raffel2020exploring} to encode trajectory-level language modality tokens.  Rather than using raw data and computing the tokens each time, these tokens are processed offline and saved as datasets before training.
+
+
+For low-dimensional inputs such as proprioceptions and actions, we first flatten these vectors and then apply normalization to each dimension, as a single token. We have also experimented with increasing the dimensions of these modalities by adding sinusoidal position embeddings. For multiple steps in the observation horizon, we concatenate the sequence for each modality separately. At inference time, these tokens are forwarded once and cached to avoid multiple calculations.
+
+
+We apply cross attention (with sinusoidal position encodings) and a shallow MLP projector \cite{li2023blip,liu2024visual} within the stem to map different various sequences of tokens into a fixed number of tokens for that modality. The cross-attention layer has 8 heads and 64 hidden dimensions per head. We map the modality tokens into 16 tokens, 16 tokens, and 8 tokens respectively for image, proprioception, and language.
+
+
+
+\paragraph{Trunk.} The trunk is parametrized by a decoder-only transformer architecture with embedding dimension $h$ that we ablate from 64 to 2048, and with block numbers ranging from 16 to 80. Note that the number of parameters for the trunk scales quadratically with the dimension size and linearly with the number of layers. The trunk also supports loading from existing large language models. Refer to Table. \ref{tab:model_size_table} for more details on model sizes.
+
+
+The code is modularized so that the trunk training and transfer are independent of the encoder architecture or pre-trained weights of the stem, which can be ImageNet pre-trained ResNet \cite{he2016deep}, R3M \cite{nair2022r3m}, Voltron \cite{karamcheti2023language}, Dino v2 \cite{oquab2023dinov2}, etc, and can be fintuned during transfer learning. It is also independent of the head, which can be diffusion policies, MLP, or transformer.
+
+
+\paragraph{Head.} For the head architecture, we normalize the action spaces of each embodiment dataset to be between -1 and 1 element-wise, based on the dataset statistics, such that the output scale of the heads and the loss and gradients remain at similar scales. Since action trajectories and observation history can often help with the robotic problem, we pick a fixed action horizon (length 8) and observation horizon (length 4) for each embodiment. We then apply random masking along the time dimensions for each batch during training to be suitable for downstream tasks with different horizons. 
+
+
+We support various types of policy heads in the network architectures such as standard MLP, transformer decoder, and diffusion policy. For the MLP head, we pooled the trunk feature (e.g. averaging) and then applied a 3-layer MLP. For the transformer decoder, we concatenate learnable tokens to the tokens before feeding into the trunk and use 1D convolution layer on these output tokens to regress actions. For diffusion policy in real world experiments, we use a diffusion head and train with DDPM \cite{ho2020denoising}. Finally, the actions are unnormalized based on dataset statistics and Huber losses are applied for regression. The reason behind Huber loss is to balance between the ``difficult frame'' in robot trajectories and the easy but lengthy part of the trajectories.
+
+
+
+As discussed, HPT is a meta-level architecture where the stem, trunk, and head code are modular and each supports various architectural changes with pre-trained weights. The inference time, which includes all the pre-processing and encoder time, on the local computer with an old NVIDIA RTX 3070 GPU is 39Hz for HPT-base and 33Hz for HPT-xlarge. A modern GPU such as A100 will likely improve the speed by 3-4 times.
+
+\begin{figure}
+    \centering
+\includegraphics[width=0.99\linewidth]{figures/head_arch.png}
+\vspace{.5em}
+    \caption{\textbf{Flexible Head Architectures in HPT.} We highlight that our HPT architecture is a meta-level architecture for policy learning, and it can work with various head architectures. The important takeaway is the scalable transformer architecture in the middle of the policy to absorb the diverse data and provide tokens for these policy heads to regress on the action outputs. } 
+  \label{fig:head_arch}
+\end{figure}
+
+\begin{table}
+\centering
+\begin{minipage}[t]{0.8\linewidth}
+\setlength{\tabcolsep}{4pt}
+\resizebox{\linewidth}{!}
+{
+\begin{tabular}{l|cccc}
+{\bf Method }  & {\bf  Dataset } & {\bf  Trajectories}  & {\bf  Model Size}     & {\bf Heterogeneous Proprioception}    \\ 
+\midrule
+RT-1 \cite{brohan2022rt}    & 1    & 0.1M      &   16M       & $\times$ \\
+RT-2X \cite{open_x_embodiment_rt_x_2023}    & 12    & -    &   55B       & $\times$ \\
+Octo \cite{octo_2023}    & 25    & 0.8M     &   93M    & $\times$ \\
+OpenVLA \cite{kim2024openvla}    & 25    & 1M     &   7B    & $\times$ \\
+HPT      & 52     & 0.2M         &  1.1B       & \checkmark \\
+\end{tabular}
+}
+ 
+\end{minipage}
+\vspace{.5em}
+\caption{\textbf{Experiment Statistics.} By leveraging heterogeneous datasets, the embodiment diversity in data and training scales reaches across several orders. Note that the training flops and the number of tokens are approximated from a single iteration and the model size only counts the trunk parameters (stem and head only have a small active parameter count. HPT is also provided with multiple open-source implementations and extensive simulation evaluation tasks across 6 different benchmarks. }
+\label{tab:min_max}
+\end{table}
+
+
+
+\subsection{Pre-training Experiment Details.}
+\label{appendix:training_details}
+
+We train \methodname{} with AdamW \cite{loshchilov2017decoupled} optimizer with a weight decay ratio 0.05, and a base learning rate of 0.0002 with a cosine learning rate schedule with warmups and dropouts. We apply proportional scaling of the base learning rate depending on the batch size. To support various horizons during transfer learning, we apply random masking along the time dimensions for each batch during training. Since action trajectories can have imbalanced losses along prediction horizons, we use Huber loss with $\delta=0.1$ (empirically found). We found the pre-training stage to be stable across various hyperparameters in learning rate schedules and optimizers, and the choice of the validation dataset. The code is open-sourced and the pre-released model can be downloaded easily from Huggingface.
+
+
+
+In practice, since training losses can vary across different datasets and our goal is to perform well on all embodiments and tasks, we apply a weighted sampling procedure for data loading. For every training iteration, we sample a dataset with inverse probabilities based on an exponential of its dataset size as a temperature. Specifically, we compute the squared root of each dataset size and sum these sizes to compute a normalization constant. For each batch item, we then sample from these dataset with the corresponding probability. This prevents large datasets from dominating a full training epoch, which is a common practice in multitask learning. 
+
+
+
+Note that the stem and head for each embodiment are updated in different frequencies than the trunk, similar to a mixture-of-expert \cite{shazeer2017outrageously} training procedure. Especially under distributed training settings, each stem and head is trained with data from a particular embodiment and tasks, and the trunk will accumulate gradients from all batches from training workers. The compute resources for these pre-training experiments range from 8 V-100s to 128 V-100s and the training time spans from half a day to 1 month. The total dataset disk size is around 10Tb and the RAM memory requirement is below 50Gb. See Table~\ref{tab:min_max}  for summary details of the experiment.
+
+
+
+\subsection{Simulation Experiment Details}
+\label{appendix:sim}
+For simulation benchmarks, we use the released datasets as the expert demonstrations \cite{yu2020meta,wang2023fleet,chi2023diffusion}. In summary, Metaworld \cite{yu2020meta} uses wrist camera view, and Robomimic \cite{robomimic2021} as well as Simpler \cite{li24simpler} uses third-person view, with their own proprioception definitions by the dataset. Fleet-Tools \cite{wang2023fleet} uses both views as inputs and uses the end effector poses as the proprioception inputs. We encode the image using pre-trained frozen ResNet features and normalize the proprioception inputs before passing them into the stem. We train single-task policies for all these simulation benchmarks except for Metaworld. 
+
+
+{For the Simpler \cite{li24simpler} benchmark, we focus on the \texttt{Close-Drawer}, \texttt{Move Near}, and \texttt{Pick Coke Can} task and Google EDR embodiment with a visual matching setting. We test 9 different initializations with a total of 218 episodes. Note that the simulation tasks have a focus on language conditioning and do not expose proprioception inputs, which is not the most suitable testbed for HPT. To address these issues, we finetune HPT on the RTX supervised datasets with 79 trajectories as other simulation benchmarks.  We use HPT-base as the backbone for this experiment.}
+
+
+By default, we train with 20000 iterations with batch size 512 and small learning rate $1e^{-5}$. The image and state stem are one-layer MLP with hidden dimension 128 and the head is two-layer MLP. We only use an observation window of length 1 and MLP as the policy head. Each training dataset uses from 10-100 trajectories per task and each test covers 50 episodes with different initial conditions. Each trajectory in the simulation has a slight difference in scene initialization. To reduce the variance, we conduct independent training runs 5 times, and the average for each baseline. In Figure \ref{fig:sim_setup_tasks}, we show illustrations of some simulation tasks we evaluated.
+
+
+
+
+\subsection{Real-World Experiment Details}
+\label{appendix:realworld}
+\paragraph{Task Definition.}   We experiment with robotic tool-use tasks \texttt{Sweep Leftover}, \texttt{Fill Water}, \texttt{Scoop Food} and \texttt{Switch Insertion} across two different robot setups. While for both setups, we use Franka Panda as the robot, we note that the sensor locations as well as the action spaces are drastically different. We collect approximately 100 demos for each task and evaluate each task for 15 trials to measure the average success rate.  
+
+
+During evaluation, a human supervises the robot at all times.  An evaluation episode can be terminated due to safety concerns, robot faults, timeout, etc. An episode is considered successful if it accomplishes the task. In the \texttt{Fill Water} task, the success score of 1 means some water is poured into the bowl. In the \texttt{Sweep Leftover} tasks, a success score of 1 means all the piles are pushed into the plate, and a success score of 0.5 means some piles are pushed into the plate. In the \texttt{Scoop Food}  task, a success score of 1 means some dog food is scooped and all is poured into the bowl and a score of 0.5 means some food is scooped. In the \texttt{Switch Insertion} task \cite{zhao2024transferable}, a success score of 1 means the switch is precisely inserted into the three pins on the PCB board. The robot moves to a pre-defined pose before it attempts the insertion. We pick these challenging tasks as they require contact-rich interactions with tools and granular objects, and they require high-precision as well as dense contacts.  We make sure the initial conditions of the robots are the same. Due to the complexity of these tasks and human errors, the initial conditions of the object setups are not exactly the same.
+
+
+
+\paragraph{Transfer Learning.} For the policy head in the real-world experiments, we have experimented with both MLPs and diffusion policies \cite{chi2023diffusion}. Fine-tuning only has active parameters of no more than 3Mb, compared to much bigger models (e.g. 100M) often used for a single task in other works. We use an observation history window of 2 with a small learning rate 2$e^{-5}$. We train with batch size 256 on a single NVIDIA RTX 2080Ti GPU for 20000 iterations (around 4 hours of wall time).
+
+ 
+
+\section{Additional Experiments}
+\label{appendix:addtion_exp}
+In this section, we present some additional experiments and ablation studies.
+
+
+ 
+
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{figures/additional_ablation.pdf}
+    \caption{\textbf{Additional Architectural Ablation.} (a) We found that architecture changes on HPT-Base such as adding previous actions as inputs, multiview as inputs, and language input can help with HPT pre-training performance. (b,c) We ablate other policy head architectures such as discrete classification heads as well as action token heads by scaling along the number of trajectories. The experiment is conducted under the default setting with HPT-Base, fixed 27 datasets with 1000 max trajectories in each dataset.  }
+    \label{fig:ablation_additional}
+\end{figure}
+ 
+
+ 
+
+\begin{figure} 
+    \centering
+    \includegraphics[width=0.96\linewidth]{figures/sim_perf.pdf}
+    \caption{\textbf{Transfer Learning Objective.} We run transfer learning across several simulator benchmarks \cite{wang2023fleet,robomimic2021,yu2020meta}.   We compare the validation loss curves of several baselines with and without pre-trained HPT trunks.  The pre-trained trunks are trained from the Default Settings. \vspace{-1pt}}
+    \label{fig:simulation_eval} 
+\end{figure}
+
+\subsection{Additional Simulation Experiments} Based on the training curves of the four baselines in Figure \ref{fig:simulation_eval} (a), we observe that leveraging a pre-trained HPT representation can often achieve a lower validation loss curve (lower) during fine-tuning. 
+
+
+In Figure \ref{fig:simulation_eval_appendix} (a), we run HPT on the Simpler \cite{li24simpler} Benchmark, which allows for comparing with Octo \cite{octo_2023}, RT1-X, and RT2-X \cite{open_x_embodiment_rt_x_2023} on a high-fidelity simulation. We focus on three different tasks \texttt{Close Drawer}, \texttt{Move Near}, and \texttt{Pick Coke Can} in the Google EDR embodiment. For each task, we test several different initializations with a total of over 300 episodes for all tasks. Note that the pre-training corpus of HPT-S does not include \cite{brohan2022rt}, and simulation tasks have a focus on language conditioning and do not expose proprioception inputs, which is not suitable for HPT. To address these issues, we generate training data using the RT-1\cite{brohan2022rt} as the expert, and finetune HPT on the RT-1X supervised datasets with around 50 trajectories and the simulation protocol.  We use HPT-base with language tokenizers as the backbone for this experiment. We use the results from the paper \cite{li24simpler}.
+
+
+\begin{figure}
+    \centering
+    \includegraphics[width=1\linewidth]{figures/lerobot.pdf}
+    \caption{\textbf{Simulation Task Performance compared with Single-Task Policy in LeRobot Implementation.} We do evaluation in a different implementation in unseen simulation benchmarks. Left) we show that an improvement in performance can be achieved with pre-trained HPT trunks and outperforms single-task state-of-the-art architectures. We note that HPT trunks have not been pre-trained with diffusion heads and transformer decoder heads. Middle) we show the sample efficiency ablation study for HPT-Base. Right) We show model size ablation study in loss curves. }
+    \label{fig:lerobot_exp}
+\end{figure}
+
+Additionally, under the LeRobot \cite{cadene2024lerobot} implementation, we compare HPT with state-of-the-art single-task policy architecture such as Diffusion Policy \cite{chi2023diffusion} and ACT \cite{zhao2023learning}. In particular, we inherit a simple version of these complex policies as the head architectures (Figure \ref{fig:head_arch}). We run full training runs with 50 evaluation trials every 20000 training steps, and use the maximum task success rates during the 100000 training steps for comparisons. In Figure \ref{fig:lerobot_exp}, we compare  HPT with DP on the PushT task with keypoint representations using the diffusion head and achieve similar success rates at 78\%. We also compare with ACT on the Aloha Transfer Box task with the image representations using the transformer decoder head and achieve similar success rates at 60\%. This showcases the flexibility of HPT architecture to work with state-of-the-art policy architectures for high-frequency control in fine-grained tasks. Moreover, in the experiment with 50 episodes in total and HPT-base, we observe an improvement in sample efficiency with pre-trained models. We also see improvement in transfer learning loss with pre-trained models at increasing scales.
+
+ 
+In Figure \ref{fig:simulation_eval_appendix} (b), we ablate on the number of visual and proprioceptive tokens in the simulation transfer learning experiments. We observe that missing either information hurts the performance of the downstream policies. See Section \ref{appendix:sim} for more implementation and experiment details.
+
+ 
+
+\subsection{Ablation Study on the Stem}\label{sec:pretrain_stem} In this experiment, we fix the number of datasets (27) in Open-X datasets and use a maximum of 1000 trajectories for each dataset. We consider several ablations on the stem part of the HPTs. Specifically, in Figure \ref{fig:stem_ablate} (a, b), we observe an increase in validation losses when not using either the proprioception information or the vision. Intuitively, not using such proprioception or vision information would make learning action predictions from heterogeneous datasets very challenging. This also implies that both information are critical for policy pre-training at scale. 
+
+We also conduct an ablation experiment over vision backbones on a smaller subset of the training datasets among several popular vision encoders such as ViT-base \cite{he2021masked} and DiNO \cite{oquab2023dinov2} (Figure \ref{fig:stem_ablate}). Further ablating on input image resolution or joint finetuning of the vision backbone on the downstream task success rates will be interesting future work. Although the default implementation focuses on single-view visual information, the stem can naturally extend to multiple views and other modalities such as languages and action history. 
+
+
+\begin{figure}
+ \centering
+          
+\begin{minipage}{0.95\textwidth}
+    \small \centering
+    \includegraphics[width=1\linewidth]{figures/pretrain_ablation_left.pdf}
+    \caption{\textbf{Ablation Study on \methodname{} Stem.} We ablate the pre-training performance for (a) proprioception, (b) vision stems, and (c) vision encoders.  {Setting: HPT-S, batch 256, iterations 80000, 27 datasets with a maximum of 1000 trajectories for each dataset. } }
+      \label{fig:stem_ablate}\vspace{-2pt}
+    \end{minipage} 
+\end{figure}
+
+\subsection{Pre-training Ablation Study} In Figure \ref{fig:ablation_additional}, we conduct several ablations to pre-train the HPTs, such as using multiple views to provide 3D information implicitly, using languages for task guidance, and using previous action trajectories as additional ablations. We found these ablations to improve over the default HPT setting with a single view and vision and proprioceptive inputs. These ablations are more pronounced in certain datasets such as multiple views for insertion \cite{saxena2023multi}, and language modality for Language Table \cite{lynch2023interactive}. Using previous action trajectories is helpful in providing additional context and embodiment information as well.   We believe that integrating multiple modalities and investigating how to handle missing modalities is an exciting future direction. We leave the exploration of these ablations to future work. 
+
+
+From the architecture perspective, we also ablate over the token sizes and observation history and do not find a big effect on the averaged validation loss.   We hypothesize there is a trade-off between the information given to the policy and the desired generalization.  In Figure \ref{fig:ablation_additional}(b,c), we have also experimented with a discretized version \cite{brohan2022rt} of the policy head and architecture that uses additionally learned position encodings as action tokens for transformer, with conv1D head for action regression. We opt for regression on continuous values for its generality. An initial investigation of the attention map of the transformer blocks shows that there is a dense attention weight attributed to the proprioception and vision tokens.
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{figures/failure_cases.pdf}
+    \caption{\textbf{(a) Initial Condition Overlay.} We visualize different rollout initial conditions during test times. \textbf{(b) Failure Cases of the Learned Policy in the Real World.} The robot sometimes has issues executing very precise manipulation. }
+    \label{fig:failure}
+\end{figure}
+
+
+
+\section{Failure Cases}
+\label{appendix:failure}
+
+In Figure \ref{fig:failure}, we show some failure cases of the learned HPT policies in the real world. One of the common issues is overshooting or undershooting. For example, the policies tend to pour the water before it reaches the mug or pour the dog food a bit in front of the bowl. These issues could be due to the spatial precision of the policies and due to the data qualities failing to uncover the causal relationships. More targeted data recollection and better finetuning of the vision encoders might help address these issues.
+
+
+\section{Discussion and Future Directions}
+\label{appendix:future}
+
+ 
+We first discuss the metric used for measuring pre-training performance, or intrinsic evaluation. Validation (or training) loss is a common metric to evaluate the progress of large-scale pre-training \cite{kaplan2020scaling}. It is based on the goal of training a generalist model, where even fitting all the data can be a challenge \cite{openai2023gpt4}, as opposed to training a specialist model where overfitting is often appreciated. This is also considered a step towards more scientifically studying pre-training and scaling behavior in robotics \cite{huyen2023evaluation}. Previously, people often rely on a single binary metric for evaluating task success rates in the real world, with only some amount of test trials.
+
+
+Admittedly, there are several caveats to this metric. From the evaluation perspective, the averaged validation loss depends on the overall multitask losses of all datasets. For example, increasing the number of trajectories in one dataset might lower validation loss on the associated dataset, but may not lead to an overall loss decrease. In practice, the exact subset for evaluation and the number of training steps in each dataset also play a role in the averaged validation loss metric. For example, when evaluating whether additional datasets to the default setting contribute to the representation learning, selecting the default datasets allows us to compare on the same metric. But these datasets are inevitably trained less, if we fix the number of total training iterations.   Moreover, the validation loss during pre-training and the downstream policy learning performance have an evaluation gap due to task differences, and downstream policy learning and task execution have another evaluation gap due to closed-loop execution.
+
+
+Given the recent surge of scaled data, robot learning is still limited by its
+generality because of the heterogeneity, including different embodiments, tasks, and environments 
+where the robots are operated. We propose \methodname{}, a novel architecture and framework to embrace this heterogeneity through pre-training. We align proprioception and vision information of different embodiments through a modular stem, a shared scalable transformer trunk, and task-specific heads to actions. We explore and scale HPT with heterogeneous datasets to over 50 available datasets. The learned representation can be transferred and improved performance in both simulation and the real world. We hope this perspective will inspire future work in handling the \textit{heterogeneous nature} of robotic data. 
+
+Since fine-tuning is still required for robotics generalist models, future research directions include exploring different algorithms including network architectures that incorporate embodiment-specific structures, such as URDF, into network architecture as well as tokenization. One can also explore training objectives beyond supervised learning.  As we move towards scaling robot pre-training, more high-quality diverse datasets with clear annotations would be crucial, including teleoperation data, simulation data, human videos, and deployed robot data. Understanding what kinds of mixture will contribute to better representations is interesting future work.
+
+
+Due to the complexity of real-world evaluation, large-scale unified simulation benchmarks with varying dexterity and generalization challenges would be very crucial to consistently compare among different models. For real-world policy performance, we believe that extending to longer-horizon fine manipulations with a bimanual or mobile setup would be interesting future works.
+
+
+Future works can also study and extend scaling laws in policy learning,  and explore representations from heterogeneous data in other domains beyond robotic policy learning. Finally, leveraging more modalities and domains in robotics such as 3D point clouds, tactile data, simulation domains, and human data, etc, is worth investigating.
+
+ 

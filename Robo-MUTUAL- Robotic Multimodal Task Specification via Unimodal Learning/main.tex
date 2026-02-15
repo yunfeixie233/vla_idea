@@ -1,0 +1,777 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%2345678901234567890123456789012345678901234567890123456789012345678901234567890
+%        1         2         3         4         5         6         7         8
+
+% \documentclass[letterpaper, 10 pt, conference]{ieeeconf}  % Comment this line out if you need a4paper
+\documentclass{ieeeconf}
+%\documentclass[a4paper, 10pt, conference]{ieeeconf}      % Use this line for a4 paper
+
+% \IEEEoverridecommandlockouts                              % This command is only needed if 
+                                                          % you want to use the \thanks command
+
+% \overrideIEEEmargins                                      % Needed to meet printer requirements.
+
+% \newcommand{\Rmnum}[1]{\uppercase\expandafter{\romannumeral #1}}  %定义命令输入大写罗马数字
+% \newcommand{\rmnum}[1]{\romannumeral #1}  %定义命令输入小写罗马数字
+% \newcommand{\ljx}[1]{\textcolor{blue}{\small{\bf [ljx: #1]}}}
+% \newcommand{\imp}[1]{\textcolor{blue}{\small{ [implemented: #1]}}}
+% \newcommand{\jj}[1]{\textcolor{red}{\small{\bf [JJ: #1]}}}
+
+% \newcommand{\tbd}[1]{\textcolor{red}{\small{ [TBD: #1]}}}
+% \newcommand{\wzh}[1]{\textcolor{magenta}{\small{ [wzh: #1]}}}
+% \newcommand{\dline}[0]{\textcolor{green}{\scriptsize{\bf \#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#Dividing Line\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#\#}}}
+
+\usepackage{cite}
+\usepackage{enumerate}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{graphicx} 
+\usepackage{xcolor}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\let\labelindent\relax
+\usepackage{enumitem}
+\usepackage{marvosym}
+
+
+\hypersetup{
+    colorlinks=true,          % 启用彩色链接
+    linkcolor=blue,           % 内部链接的颜色
+    citecolor=green,          % 引用的颜色
+    filecolor=magenta,        % 文件链接的颜色
+    urlcolor=cyan,            % URL链接的颜色
+    pdfborder={0 0 1},        % 禁用框架,启用颜色
+    linkbordercolor={0 1 0},  % 内部链接框架颜色
+    citebordercolor={1 0 0},  % 引用框架颜色
+    filebordercolor={0 0 1},  % 文件链接框架颜色
+    urlbordercolor={0 1 1}    % URL链接框架颜色
+}
+
+\title{\LARGE \bf
+% Language and Image Instructions Correspond Exactly for Robots
+% Robotic Multimodal Task Specifications via Unimodal Task Learning
+% Training Robots on Unimodal Instructions for Multimodal Task Specifications
+
+Robo-MUTUAL: Robotic Multimodal Task Specification via Unimodal Learning
+% \jj{Why not use: Robo-MUTUAL: Robotic Multimodal Task Specification via Unimodal Learning}
+% Video Demonstrations are Secretly Language Instructions for Robots.
+}
+% title TBD (e.g: multimodal embodied agents)
+
+
+\author{Jianxiong Li$^{1*}$, Zhihao Wang$^{2, 1*}$, Jinliang Zheng$^{1, 3*}$, Xiaoai Zhou$^{4,1}$, Guanming Wang$^{5,1}$, Guanglu Song$^{3}$,\\ Yu Liu$^{3}$, Jingjing Liu$^{1}$, Ya-Qin Zhang$^{1}$, Junzhi Yu$^{2}$\textsuperscript{\Letter} and Xianyuan Zhan$^{1, 6}$\textsuperscript{\Letter}% <-this % stops a space
+\thanks{*Equal Contribution. % <-this % stops a space
+$^{1}$Institute for AI Industry Research (AIR), Tsinghua University. $^{2}$College of Engineering, Peking University. $^{3}$Sensetime Research. $^{4}$University of Toronto. $^{5}$University College London. $^{6}$Shanghai AI Lab. \textsuperscript{\Letter} Correspondence to {\tt\small yujunzhi@pku.edu.cn, zhanxianyuan@air.tsinghua.edu.cn}.}
+% $^{1}$Albert Author is with Faculty of Electrical Engineering, Mathematics and Computer Science,
+        % University of Twente, 7500 AE Enschede, The Netherlands
+        % {\tt\small albert.author@papercept.net}
+        % }%
+% \thanks{$^{2}$Bernard D. Researcheris with the Department of Electrical Engineering, Wright State University,
+%         Dayton, OH 45435, USA
+%         {\tt\small b.d.researcher@ieee.org}}%
+}
+
+
+% \author{}% <-this % stops a space
+% \thanks{*Equal Contributions.}% <-this % stops a space
+% \thanks{$^{1}$ AIR, Tsinghua University. $^{2}$ Peking University. $^{3}$ Sensetime Research. $^{4}$ University of Toronto. $^{5}$ UCL. $^{6}$ Shanghai AI Lab.}
+% % \thanks{$^{1}$Albert Author is with Faculty of Electrical Engineering, Mathematics and Computer Science,
+% %         University of Twente, 7500 AE Enschede, The Netherlands
+% %         {\tt\small albert.author@papercept.net}}%
+% % \thanks{$^{2}$Bernard D. Researcheris with the Department of Electrical Engineering, Wright State University,
+% %         Dayton, OH 45435, USA
+% %         {\tt\small b.d.researcher@ieee.org}}%
+% }
+
+
+\begin{document}
+
+
+
+\maketitle
+\thispagestyle{empty}
+\pagestyle{empty}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{abstract}
+Multimodal task specification is essential for enhanced robotic performance, where \textit{Cross-modality Alignment} enables the robot to holistically understand complex task instructions. Directly annotating multimodal instructions for model training proves impractical, due to the sparsity of paired multimodal data. In this study, we demonstrate that by leveraging unimodal instructions abundant in real data, we can effectively teach robots to learn multimodal task specifications. First, we endow the robot with strong \textit{Cross-modality Alignment} capabilities, by pretraining a  robotic multimodal encoder using extensive out-of-domain data. Then, we employ two Collapse and Corrupt operations to further bridge the remaining modality gap in the learned multimodal representation. This approach projects different modalities of identical task goal as interchangeable representations, thus enabling accurate robotic operations within a well-aligned multimodal latent space. Evaluation across more than 130 tasks and 4000 evaluations on both simulated LIBERO benchmark and real robot platforms showcases the superior capabilities of our proposed framework, demonstrating significant advantage in overcoming data constraints in robotic learning. Website: 
+% \ljx{to be revised}
+\href{zh1hao.wang/Robo_MUTUAL}{\texttt{zh1hao.wang/Robo\_MUTUAL}}
+% which breaks down the traditional end-to-end learning pipeline into three distinct stages. We first foster strong \textit{Cross-modality Alignment} ability by leveraging powerful pretrained robotic multimodal encoder on comprehensive out-of-domain data, which, then, can be further enhanced via two simple yet effective manipulation in latent space. From which, we can operate in a well-aligned latent space where multimodalities become mutual interchangeable. 
+
+% Multimodal task specification is pivotal for advancing human-robot interaction and leveraging cross-modal strengths to enhance robot performance. A key aspect of this capability is \textit{Cross-modality Alignment}, which allows robots to consistently understand high-level task goals across different modalities. However, the extensive effort and cost associated with annotating multimodal prompts for in-domain data make traditional end-to-end training methods impractical, especially when only unimodal prompts are available. To address this challenge, our study proposes a novel approach that bypasses the reliance on multimodal data by exclusively focusing on unimodal task training. We introduce \textit{Robo-MUTUAL}, which breaks down the traditional end-to-end learning pipeline into three distinct stages. Initially, we enhance the \textit{Cross-modality Alignment} by leveraging a powerful pretrained robotic multimodal encoder on comprehensive out-of-domain data. This capability is further augmented through two simple yet effective manipulations in the latent space, enabling operations within a well-aligned latent space where modalities become mutually interchangeable. Our evaluations, conducted across over 140 tasks and 5000 instances on both simulated and real robot platforms, demonstrate the system’s robust ability to interpret unimodal prompts as multimodal instructions, marking a significant advance in robotic training and operational efficiency.
+
+% employing powerful pretrained robotic multimodal encoder that fosters \textit{Cross-modality Alignment} by generating consistent representations across different modalities for identical task goals. This approach allows robots to use unimodal data as proxies for multimodal information, dramatically reducing the need for paired multimodal data. Enhanced by retraining on a comprehensive dataset of robotic and human activities and applying training-free techniques like cosine-noise augmentation, \textit{Robo-MUTUAL} effectively bridges the modality gap. Our evaluation across more than 140 tasks and 5000 instances in both simulated and real robot platforms confirms the system's robust capability to interpret unimodal prompts as multimodal instructions, representing a significant leap in robotic training and operational efficiency.
+
+% 1. Current LCBC methods need huge amount of text labels(?), which is expensive and time-costing 
+
+% 2.With the help of SOTA pre-training vision-language representation models, and we notice the modality cap in contrastive learning
+
+% 3.We successfully bridge the gap in robotics field, and the success rate in real and simulation tasks achieve xx\%
+
+% 4.To the best of our knowledge, our method is the first approach performing LCBC with only image data for training.
+
+% 5.Github code
+% XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX XXXXX
+\end{abstract}
+
+
+
+% 1. Human brains multi-modal && for example all convertable && is it possible to apply to robo?
+% 2. current robot train with one modality then test with the same modality && some methods use uni-modal data for training but need auto-labeler
+% 3. we dive into language and vision && try to use representation models
+% 4. difficulties to apply to robo
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \vspace{-3pt}
+\section{INTRODUCTION}
+% \vspace{-3pt}
+% \ljx{motivate from robot learning, maybe multi-modal task specification is important, has good advantages over uni-modal task specification because it is more convenient for humans to specify goals to the robot, and may leverage the complementary information of each modalities to enhance the robots}.
+
+% \ljx{Challenge: fuse difference task modalities so the robots can comprehend the same task from different modalities>> high data demands on paired multi-modal data when end-to-end training, which is hard to collect. DAIL,...,related work try to solve this in the data >> this is still one open question.}
+
+% \ljx{More direct: Multi-modal task specification.... advantages...} 
+% \ljx{More direct. However, the central challenge for ... is ...} 
+
+% Developing generalist robots capable of understanding task specifications from various modalities (e.g., video, audio, or text) is a significant research topic in the robot learning field~\cite{shah2023mutex, reuss2024multimodal, octo_2023}. This not only helps human-robot interactions, but also allows robot models to leverage the complementary strengths of different modalities to enrich the information and enhance the performances~\cite{jiang2023vima, driess2023palme, myers2023goal, yu2023using}. 
+% % This not only facilitates humans to conveniently convey desired robot behaviors through any types of instructions like verbal/textual commands or image/video goal states,
+% % highly abstracted verbal/textual instructions or fine-grained image/video goal demonstrations, 
+% % but also enables robot models to leverage the complementary advantages of different modalities to enrich the shared representations and enhance the model performances~\cite{jiang2023vima, driess2023palme, myers2023goal, yu2023using}. 
+
+Developing robots that can understand task specifications from diverse modalities (e.g., image, video, text, speech) is a pivotal research area in robot learning~\cite{shah2023mutex, reuss2024multimodal, octo_2023}. This not only enhances robot performance but also enriches the human-robot interaction experience~\cite{jiang2023vima, driess2023palme, myers2023goal, yu2023using}. 
+To correctly interpret multimodal task specifications, one essential capability required is \textit{Cross-modality Alignment}~\cite{shah2023mutex,jiang2023vima,yu2023using, nguyen2021practical}, where an integral high-level task goal exists across various modalities of instructions (or known as prompts~\cite{shah2023mutex, jiang2023vima}) to prevent confusion. Existing methods typically acquire this ability through extensive end-to-end training, raising high demand for meticulously annotated multimodal prompts~\cite{octo_2023,shah2023mutex,reuss2024multimodal}. Collecting such prompts via crowd-sourcing is notably expensive and laborious~\cite{shah2023mutex, xiao2022dial}, not to mention impractical, when only unimodal prompts are accessible (\textit{e.g.}, text instructions are absent and only visual goals are provided). There have been attempts to synthetically generate missing prompts, but how to ensure data quality remains an open question~\cite{xiao2022dial}. Therefore, we wonder 
+Can we bypass the stringent demands for paired multimodal prompts via unimodal task learning? overcoming significant data constraints and opening new avenues for efficient robots learning.%\jj{Paragraph too long. What's the key message?}
+%\ljx{1. Multimodal task specification is important;
+%2. Multimoadl task specification requires too many data;
+%3. Then motivate our setting, that using unimodal instructions to train multimodal robot.}
+%\jj{Trimmed a little}\ljx{Thanks!}
+
+% challenges arises to ob. 1). 2).This ability, however, typically grows slowly through data-intensive end-to-end training from scratch.
+% achieve upper-level task analogy for cross-modality, by training a custom model with different modalities from scratch.
+% \imp{this method description has no direct connection to previous methods requires lots of paired multi-modal data. Perhaps try to emphasize more about training from scratch, end-to-end,,implicitly align different modalities slowly during training}
+% Lacking  to solve this, current works heavily rely on 
+% As a result, these works take long time for training, and rely heavily on vast quantity of paired multi-modal data, to obtain pre-knowledge of \textit{Cross-modality Alignment}. 
+% \imp{perhaps, just mention paired multi-modal data is hard to collect, do not criticize current dataset}
+% However, collecting such amount of multi-modal data is extremely expensive and laborious~\cite{xiao2022dial,blank2024scaling}.
+\begin{figure}
+    \centering
+    \includegraphics[width=1.0\linewidth]{sources/intro/intro.pdf}
+    \vspace{-20pt}
+    \caption{Training robot policies on unimodal task prompts but evaluate using prompts across multi-modalities.}
+    % \ljx{revise}\wzh{add description}}
+    \label{fig:intro_illustration}
+    \vspace{-20pt}
+\end{figure}
+
+We posit that a positive answer is achievable if the \textit{Cross-modality Alignment} capability can be pretrained using multimodal encoders~\cite{clip, li2024decisionnce, zhang2024connect, liang2022mind}.  
+Consider a multimodal encoder capable of producing representations for different modalities of prompts that share an identical high-level task goal. Can we find an effective way to encode the textual and visual embeddings of prompts that describe the same task
+ (e.g. ``open the door")   
+% \textit{e.g.}, the representations are similar for text prompts and visual demonstrations describing the same task goal: ``open the door", 
+%which has recently been demonstrated possible that representations of different modalities are 
+in a unified representation space~\cite{huh2024platonic}? If so, prompts across different modalities will become interchangeable in this shared latent space, allowing unimodal data to implicitly serve as a proxy for multimodal data, which have been demonstrated possible in other multimodal domains like text-to-image generation and different modalities are converging in representation spaces% as demonstrated by some empirical advances in other multimodal domains
+~\cite{huh2024platonic, zhang2024connect, li2023decap, liang2022mind}.
+% , which also parallels developments in other multimodal domain .
+%This enables robots to operate within a unified representation space rather than relying on the original, diverse multimodal prompts to achieve multimodal task specifications.
+% , eliminating the need for paired multimodal prompts
+% to end-to-end train the \textit{Cross-modality Alignment} capability 
+% on the limited robot data.
+% For example, the representations of verbal/text instructions and image/video demonstrations describing the same task goal: ``\textit{open the door}" would be similar.
+
+However, two main challenges must be addressed to apply this methodology to robots: \textit{1)} Existing multimodal encoders % such as CLIP~\cite{clip}, DecisionNCE~\cite{li2024decisionnce}, LIV~\cite{ma2023liv} and others~\cite{nair2022r3m, karamcheti2023voltron} 
+are  not directly applicable in our setting. They  either are not tailored for robot learning~\cite{clip}, or %lack \textit{Cross-modality Alignment} capability as they are 
+trained solely on narrow scopes of human activity data~\cite{goyal2017something,damen2018epick, grauman2022ego4d}, different from robotics domain~\cite{li2024decisionnce, ma2023liv, nair2022r3m, karamcheti2023voltron}. \textit{2)} Even with well-adapted multimodal encoders, a \textit{modality gap} between the representations of different modalities still persists~\cite{zhang2024connect, li2023decap, liang2022mind}, 
+% hindering the \textit{Cross-modality Alignment} as it 
+preventing the convergence of different modalities into a consistent latent space.
+
+ % \wzh{Add a \textit{However} here, to demonstrate these models haven't considered robotic domain. Then next paragraph shows whole method.} However, these representation models are trained with Internet human videos~\cite{goyal2017something,damen2018epick}, lack of considerations for robotic domain.
+% This approach enables the generation of similar representations that encode consistent high-level task goals across different modalities. 
+
+% In this paper, we focus on the text and image prompts modalities to explore the feasibility of the prototype system of this method.
+We propose \textit{Robo-MUTUAL} (\underline{Robo}tic \underline{MU}ltimodal \underline{T}ask specifications via \underline{U}nimod\underline{A}l \underline{L}earning). This new framework enhances the 
+\textit{Cross-modality Alignment} capability of existing multimodal encoders by consuming a broader spectrum of robot-relevant data. Specifically, we retrain DecisionNCE~\cite{li2024decisionnce}, a state-of-the-art robotic multimodal encoder on an all-encompassing dataset, which not only consists large-scale robot datasets including Open-X~\cite{padalkar2023open} and DROID~\cite{khazatsky2024droid}, but also incorporates a large human-activity dataset EPICK-KITCHEN~\cite{damen2018epick}. Combined, these datasets 
+% account for over \colorbox{yellow}{XXX} trajectories covering \colorbox{yellow}{XXX} skills, 
+form the most comprehensive collection  to date for robotic multimodal encoder pretraining. Building on the pretrained encoders, we explore two training-free methods to bridge the \textit{modality gap} within the representation space, where we further introduce an effective cosine-similarity noise to facilitate efficient data augmentation in representation space to enable generalization to new task prompts.
+% systematically identify the presence of the \textit{modality gap} in the pretrained robotics multimodal encoders and explore two simple yet effective methods to bridge this gap. 
+% and proposes a random cosine similarity noise to enhance the generalization ability.
+Tested across over 130 tasks and 4000 evaluations on both simulated LIBERO~\cite{liu2024libero} environments and the real robots platforms, extensive experiments showcase a promising avenue towards enabling robots to understand multimodal instructions via unimodal training.
+% , representing a significant step forward in robotic system training and deployment.
+% Our contributions can be summarized as following:
+% In this paper, we Our method focuses on achieving \textit{Cross-modality Alignment} within the latent representation space. 
+% Based on DecisionNCE (default as DecisionNCE-T), we first combine different robotic manipulation datasets together, including Open X-Embodiment \cite{padalkar2023open}, BridgeData V2 \cite{walke2023bridgedata}, and demos within LIBERO, to form a largest known robotic-domain dataset. Then we scale up DecisionNCE with this dataset and we present it as DecisionNCE-V2. Thereafter, we apply the most direct and straightforward $C^3$ method \cite{zhang2024connect} to reduce the modality gap between different modalities, and we replace the casual gaussian noise with a random cosine similarity noise for its effectiveness. Finally, with extensive experiments on both simulated and real robots environments, the results reveal a promising avenue for robots comprehending instructions of different modalities via uni-modal training.
+% \imp{5. methods}
+% \ljx{delete this part or not}
+% In summary, our main contributions are three folds:
+% \begin{itemize}
+%     \item We achieve multimodal task specification via unimodal task learning using pretrained multimodal encoders.
+%     \item We decouple end-to-end multimodal robot learning into two distinct stages: initially pretrain a multimodal encoder to learn \textit{Cross-modality Alignment} capability, then apply it in downstream robot learning tasks.
+%     % Present an explicit and elegent approach to achieving  for multi-modal task specification in robot domain.
+%     \item We develop a robotic multimodal encoder trained on the largest known dataset in the robotic domain and will release it for future study.
+% \end{itemize}
+% \jj{The three points seem to be about the same thing, and sound weak. Suggest to remove the contribution section altogether}\ljx{GOt it , I think so}
+% This methodology not only simplifies the training process but also enhances the flexibility and applicability of robotic systems in diverse environments.
+
+% \wzh{Discarded below}
+
+% This is easy for human by learning . The recent progresses on the platonic representation hypothesis~\cite{huh2024platonic} that the representation spaces of deep neural networks also shows the potential 
+
+% Intriguingly, human can achieve such \textit{Cross-modality Alignment} by nature. To illustrate with a task, instructions of various modalities can be comprehended as the same for human \tbd{reference here}. This demonstrates that humans can draw similar high-level task goals from different modalities, and can naturally carry out multi-modal task specification.
+% \imp{3. However. Human can easily achieve this objective, given different task descriptions from various modalities, humans can project the sharing high-level task spaces. This property arises from common knowledge.} 
+
+
+% this inborn ability arises from the brain's integrated processing mechanisms, reflecting the neural pathways that enable effective cross-modality alignment \cite{zhao2024eye, denervaud2020multisensory, burr2012multisensory}. 
+
+% Correspondingly, the platonic representation hypothesis \cite{huh2024platonic} argues that neural networks, even trained with different architecture and data, tend to output universal representations with growing model size. This indicates the interchangeability among modalities naturally exists and large models have potential to achieve \textit{Cross-modality Alignment} like humans. Apart from this implicit assumption, lots of works~\cite{radford2021clip} \tbd{more diverse reference} use contrastive learning to explicitly promote multi-modal harmony. Based on~\cite{radford2021clip}, multi-modal representation models for robotics are studied further, such as DecisionNCE~\cite{li2024decisionnce},~LIV \cite{ma2023liv} and Voltron~\cite{karamcheti2023voltron}. These representation models all aim at robotic-level multi-modal representation learning, capturing both temporal dynamics and semantic alignment features. However, these representation models are trained with Internet human videos~\cite{goyal2017something,damen2018epick}, lack of considerations for robotic domain. \imp{4. platonic representation hypothesis-> large model pretrained on diverse out-of-domain data has the potential to behave like human to extract...}
+
+% Inspired by this substitutability, we investigate into multi-modal representation models, which aim to align different modalities with contrastive learning. For example, CLIP \cite{radford2021clip} functions as a powerful multi-modal representation model, and lots of proof \cite{liang2022mind,shi2023towards,zhang2024connect} shows a constant modality gap exists between its modalities. This demonstrates modality embeddings in the representation space of CLIP can be converted theoretically. Furthermore, methods to implement the cross-modal conversion are proposed. They manage to reduce the modality gap either in training-free mode \cite{li2023decap} or in interaction with training stage \cite{zhang2024connect, nukrai2022capdec}, having gained notable success in computer vision field.
+
+
+
+
+% Nevertheless, above methods can not be applied to robotic settings easily, and we conclude the reason as 1) representation models should capture both temporal dynamics and semantic alignment features, 2) training data should be collected from robotic domain. Fortunately, multi-modal representation models for robotics are studied in recent works, such as DecisionNCE \cite{li2024decisionnce}, LIV \cite{ma2023liv} and Voltron \cite{karamcheti2023voltron}. These representation models all aim at robotic-level multi-modal representation learning. But they all trained on out-of-domain Internaet human videos \cite{damen2018epick,goyal2017something}, varying a lot from robotic domain.
+
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=1.0\linewidth]{sources/intro/intro_face3.pdf}
+%     \caption{The robot is trained with only images, but can comprehend instructions of different modalities.}
+%     \label{fig:intro_face}
+% \end{figure}
+
+
+% maybe 1. However, previous works do not show a good alignment for different modalities, after fine-tuned at LIBERO dataset (see at Figure 1.)
+
+% maybe 2. Our key insight is to boost model's representation abilities in robot domain, so `````
+
+% maybe 3. 
+
+
+
+%% pipeline
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \vspace{-3pt}
+\section{RELATED WORK}
+% \vspace{-3pt}
+\subsection{Task Specification in Robot Learning}
+A series of task specifications have been extensively explored in robot learning. 
+% The most simplest approach to communicate tasks to a robot is through one-hot vectors~\cite{rahmatizadeh2018vision, sun2022paco}, which, however, is limited to predefined task sets and is hard to incorporate new tasks after training. 
+Some works utilize flexible specifications across various modalities to specify the tasks, such as language instructions~\cite{brohan2022rt1, brohan2023rt2, driess2023palme, octo_2023, kim2024openvla, li2024decisionnce, ma2023liv, karamcheti2023voltron, xiao2022robotic, belkhale2024rt, shi2024yell} or visual goals~\cite{ma2023vip, nasiriany2019planning, cui2022can, cui2023from, yu2018one, bonardi2020learning, james2018task}, but are specialized for unimodal task specifications.
+% limiting the versatility for human to specify tasks and fail to leverage the complementary information from different modalities. % To tackle this problem, 
+In recent years, some works explore multimodal task specifications~\cite{lynch2020language, myers2023goal, mees2022matters, jang2022bc, shah2023mutex, jiang2023vima, yu2023using} and demonstrate positive benefits of leveraging multimodal prompts to enhance the robot policies. In these methods, \textit{Cross-modality Alignment} is one critical capability for multimodal task specifications, where multimodal prompts that share the same high-level task goal should be encoded as similar representations to encourage a well-organized representation space~\cite{shah2023mutex, mees2022matters, myers2023goal, yu2023using}. However, these methods typically train such ability from scratch on limited robot data with carefully annotated or synthetic multimodal prompts.
+% , rendering these methods hard to deploy in most real-world applications where high-quality multimodal prompts are absent but only unimodal prompts are available~\cite{xiao2022dial}. 
+In this paper, instead, we aim to bypass the restrictive demands on paired multimodal prompts but directly utilize unimodal prompts to achieve multimodal task specifications utilizing the powerful pretrained mutlimodal encoders.
+
+
+% \textbf{Multimodal Task Specifications in Robot Learning}. 
+
+\subsection{Multimodal Representation in Robot Learning}
+ % To achieve this objective, previous methods often use end-to-end training \cite{shah2023mutex, octo_2023} based on annotated paired data from multiple modalities. However, the high cost and labor required for crowd-sourcing such data make these methods impractical when only unimodal prompts are available.
+ % Several works aim to obtain a universal representation for both vision and languages, presenting a Visual-Language Model (VLM) that can be frozen and used for downstream tasks. This 
+
+Numerous multimodal encoders, such as CLIP~\cite{clip}, BLIP~\cite{li2022blip} and BLIP2~\cite{li2023blip}, are designed to align various modalities within a unified representation space, demonstrating notable success in various areas such as image/video caption~\cite{mokady2021clipcap, hessel2021clipscore, ventura2024learning}, text-to-image generation~\cite{lafite}, and also robotics~\cite{khandelwal2022simple}. However, these encoders are not optimally suited for robot learning as they often fail to capture the temporal visual dynamics critical for robotics~\cite{ma2023vip}. To address this shortfall, specialized robotic multimodal encoders, such as R3M~\cite{nair2022r3m}, LIV~\cite{ma2023liv}, Voltron~\cite{karamcheti2023voltron}, Lorel~\cite{nair2022lorel} and the recent SOTA DecisionNCE~\cite{li2024decisionnce},  have been developed to extract these robotic-critical features. However, the \textit{Cross-modality Alignment} ability of these models is constrained by the narrow scope of their training data, typically limited to specific human datasets~\cite{damen2018epick, grauman2022ego4d, goyal2017something}, without covering diverse out-of-domain robotic data~\cite{khazatsky2024droid, walke2023bridgedata, damen2018epick, padalkar2023open}. 
+% In this paper, we introduce DecisionNCE-V2, an enhancement over DecisionNCE~\cite{li2024decisionnce}, by pretraining on a large, diverse collection of datasets~\cite{khazatsky2024droid, walke2023bridgedata, damen2018epick, padalkar2023open}, significantly broadening its capability for robust cross-modality alignment in robotic contexts.
+% \vspace{-2pt}
+\subsection{Modality Gap in Multimodal Representations}
+% \vspace{-2pt}
+% \ljx{perhaps, we can move this part to methods, because if we present the modality gap too early, the reviewers may not easily understand it, and the related works are too long}
+%\zxa{Humans possess an inborn ability to achieve multimodal alignment, driven by the brain's integrated processing mechanisms \cite{zhao2024eye, denervaud2020multisensory, burr2012multisensory}. Correspondingly, the platonic representation hypothesis \cite{huh2024platonic} suggests that as neural networks scale, they naturally exhibit interchangeability across modalities, showing potential to emulate human-like \textit{Cross-modality Alignment}. Inspired by this potential, ......(followed by multimodal encoders)} 
+% Humans possess an inborn strong ability to achieve multimodal alignment~\cite{zhao2024eye, denervaud2020multisensory, burr2012multisensory}, where similar mental thoughts can be extracted given different modalities of prompts.
+Human can easily summarize similar mental thoughts from multimodal prompts~\cite{zhao2024eye, denervaud2020multisensory, burr2012multisensory}, which is also noticed in neural networks~\cite{huh2024platonic} where multimodal representations with same semantics are converging. This shows the potential for multimodal encoders to construct a well-aligned representation space, where modalities are interchangeable and unimodal data can approximate multimodal information. However, a persistent modality gap remains even with well-trained multimodal encoders, preventing the convergence of different modality features~\cite{liang2022mind}. Several methods such C3~\cite{zhang2024connect}, CapDec~\cite{nukrai2022capdec}, and LAFITE~\cite{lafite}, etc~\cite{schrodi2024two} try to bridge this gap, but the efficacy of these methods and how to enhance the generalization for robotics remain unexplored.
+
+
+% Even with multi-modal representation models which are well-trained in robotic domain, a significant modality gap exists between the text domain and the image domain \cite{zhang2024connect, liang2022mind}. Hence, one important part of this project is to resolve the gap between image embeddings and text embeddings in LCBC settings. Early works such as \cite{liang2022mind} demonstrated the modality gap but did not aim to reduce it.
+
+% Multiple approaches have been developed to reduce the differences between modalities. C3 \cite{zhang2024connect}, CapDec \cite{nukrai2022capdec}, and LAFITE \cite{zhou2111lafite} all demonstrated that adding Gaussian noise would reduce the modality difference. DeCap \cite{li2023decap} proposes a training-free projection mechanism. Though promising, the mechanism struggles with complex scenes, especially in diverse robotic settings. While our method share the most similarity with C3, we keep the first two procedure called \textit{Corrupt} and \textit{Collapse}, while we change the third part \textit{Corrupt} from a simple gaussian noise to a cosine similarity based noise, which shows a huge improvement. We will show in the experiments that Gaussian noise cannot adequately address the modality gap in LCBC settings.
+
+ % To overcome the limitations of traditional end-to-end training, various robotic multimodal encoders have become available. Some methods, such as CIP \cite{radford2021clip}, R3M \cite{nair2022r3m}, and LIV \cite{ma2023liv}, utilize multimodal encoders pre-trained on large human video datasets. Though these encoders reduce reliance on paired data through pre-trained representations for effective downstream learning, they are trained on out-of-domain internet videos. The significant mismatch with the diverse robotic domain leads to suboptimal multimodal representations, making these models unsuitable for application in robotic settings.
+
+
+% \ljx{perhaps, add some discussions on human and planotic hypothesis...}
+
+% \ljx{some robotic multimodal encoder exists. show promises to solve this in advance before end-to-end training} \ljx{limitations of existing multimodal encoders} \ljx{briefly introduce our method's advantages}
+
+
+% To address the limitations of these multimodal encoders, we leverage DecisionNCE-T \cite{li2024decisionnce}, trained on a comprehensive dataset that combines large-scale robot data from Open X-Embodiment \cite{padalkar2023open} and DROID \cite{khazatsky2024droid} with EPIC-KITCHEN \cite{damen2018epick} human activity data, enabling precise alignment of text instructions with trajectory goals in robotic settings. The detailed reason will be further elaborated in Section \Rmnum{3}.
+
+% \subsection{Conditioned robot behavior cloning}
+
+% \textbf{Ways to achieve \textit{cross-modal alignment}}
+% \ljx{This new subsection division is good}
+
+% \dline
+
+% \textbf{Language conditioned robot learning}
+
+% Some methods \cite{zhou2023language} fully rely on language training, while others, such as DIAL \cite{xiao2022robotic} and MDT \cite{reuss2024multimodal}, reduce the percentage of language labels to 3.5\% or 2\%. MDT \cite{reuss2024multimodal} leverages diffusion transformers and self-supervised objectives, incorporating contrastive alignment and masked foresight techniques to enhance policy learning efficiency, allowing it to learn robotic behaviors from minimal annotations. DIAL \cite{xiao2022robotic} fine-tunes a vision-language model to relabel large robotic datasets, enriches instruction diversity, and then uses the augmented instructions to train a language-conditioned policy through behavior cloning. Furthermore, LUPUS method \cite{blank2024scaling} further reduces the percentage of language labels to almost zero by leveraging pre-trained vision-language models to identify objects in the video frames and generate potential tasks.
+
+% Nevertheless, for both DIAL and LUPUS, they emphasize obtaining language labels for the entire dataset using a minimal percentage of paired data. While promising, these two methods are based on the assumption that image and language are distinct domains, overlooking the potential for robots to treat the two modalities as a unified entity. In contrast, our approach enables robots to uniformly understand and integrate both image and language as a unified modality, achieving true image-only data training and eliminating the need for costly manual labels, successfully performing zero-shot language-conditioned behavior cloning experiments.
+
+
+% \textbf{Video captioning} (xiaoai)
+
+% Traditional video captioning methods need paired data for training \cite{shi2019dense}, \cite{ryu2021semantic}, which is labor-extensive. In addition, video captioning requires capturing the dynamic process within videos instead of relying solely on static images. One straightforward approach to deal with both issues is based on GPT-4o \cite{islam2024gpt}, which has achieved decent multimodal capabilities. However, the lack of training on robotics domain will result in low-quality annotations.
+
+% To understand other potential solutions, we first look at image captioning. Many existing image captioning methods such as ClipCap \cite{mokady2021clipcap} are based on the CLIP model \cite{radford2021learning} and contrastive latent optimization. Extending these ideas to video captioning, some video captioning methods like \cite{ventura2024learning} are based on image captioning models and CLIPScore ranking \cite{hessel2021clipscore}. Also, as discussed in last subsection, DIAL \cite{xiao2022robotic} obtains captions by leveraging a fine-tuned vision-language model and selecting the ones with the highest similarity. Other video captioning methods are based on more complex neural network architectures or more inflexible pre-training \cite{gu2023text}, \cite{tang2021clip4caption}. The modality gap resulted in these methods is significant, and annotation-dependent pre-training makes them unsuitable for our image-only training goal. 
+
+% \textbf{Modality gap in contrastive learning} (xiaoai)
+
+% Existing multi-modal representation models for robotics exist significant modality gap, so one important part of this project is to resolve the gap between image embeddings and text embeddings in LCBC settings. Early works such as \cite{liang2022mind} demonstrated the modality gap but did not aim to reduce it.
+
+% Multiple approaches have been developed to reduce the differences between modalities. C3 \cite{zhang2024connect}, CapDec \cite{nukrai2022capdec}, and LAFITE \cite{zhou2111lafite} all demonstrated that adding Gaussian noise would reduce the modality difference. DeCap \cite{li2023decap} proposes a training-free projection mechanism. Though promising, the mechanism struggles with complex scenes, especially in LCBC field. While our method share the most similarity with C3, we keep the first two procedure called \textit{Corrupt} and \textit{Collapse}, while we change the third part \textit{Corrupt} from a simple gaussian noise to a cosine similarity based noise, which shows a huge improvement. We will show in the experiments that Gaussian noise cannot adequately address the modality gap in LCBC settings.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{figure*}[t]
+    \centering
+    \includegraphics[width=1.0\linewidth]{sources/method/method.jpg}
+    \vspace{-15pt}
+    \caption{Robo-MUTUAL training pipeline. \textit{I}. Pretrain robotic multimodal encoder consuming broader out-of-domain human and robotics data. \textit{II}. Utilize the pretrained powerful \textit{Cross-modality Alignment} capability and further bridge the modality gap in an efficient and training-free manner. \textit{III}. Achieve multimodal task specifications via unimodal task learning leveraging the well-aligned multimodal representations.}
+    % \ljx{revise}\wzh{change corrupt formula}}
+    \label{fig:method}
+    \vspace{-5pt}
+\end{figure*}
+
+% \vspace{-3pt}
+\section{Method}
+% \vspace{-3pt}
+% \ljx{need to mention that we study only the image and text modality to specify the tasks. More task modalities are left for future work.}
+% To shake off the burden of collecting multimodal labelled prompts for training multimodal robots, we present a two-stage method to utilize pretrained multimodal encoders instead of training from scratch. We combine several robotic datasets together, forming an extensive dataset to train DecisionNCE-V2. Then we reduce the constant \textit{modality gap} between different modalities, and successfully perform different modalities conditioned robot learning tasks with unimodal training. The following sections outline further details of our approach.
+\subsection{Problem Formulation}
+We aim to learn a goal-conditioned policy $\pi_\theta(a|s, {g})$ that observes state $s\in\mathcal{S}$ and outputs actions $a\in\mathcal{A}$ conditioned on a task prompt ${g}$ in various modalities, using a small in-domain robot dataset $\mathcal{D}_I=\{(s_i,a_i,{g}_i)\}_{i=1}^N$. In this paper, we study the most popular prompt $g$ modalities including free-form language instruction $g_L\in\mathcal{G}_L$ and fine-grained visual goal $g_V\in\mathcal{G}_V$~\cite{lynch2020language, myers2023goal, mees2022matters, jang2022bc}, \textit{i.e.}, $g\in\{g_V, g_L\}$ and will explore more modalities like audio in future work. We assume the prompts $g$ in dataset $\mathcal{D}_I$ are unimodal.
+% , \textit{i.e.}, language prompts $g_l$ or visual goal $g_V$ are missing.
+For instance, in the case of $g_L$ is missing, we can only obtain a unimodal visual-goal conditioned policy $\pi_\theta(a|s,g_V)$ in common sense. In this paper, we also hope to let $\pi_\theta$ understand language prompts and execute similar behaviours given $g_L$ that depicts the same task as $g_V$, \textit{i.e.}, $d^{\pi_\theta}_{g_L}(s)\approx d^{\pi_\theta}_{g_V}(s)$, $\forall s\in\mathcal{S}$ for $C(g_L)\approx C(g_V)$, where $C(g)$ is the high-level task described by prompts $g$ across different modalities, $d^{\pi_\theta}_{g_L}$ and $d^{\pi_\theta}_{g_V}$ denote the state occupancy, or widely known as visitation distribution~\cite{nachum2019dualdice, li2023mind}, following the policy $\pi_\theta(a|s,g_L)$ and $\pi_\theta(a|s,g_V)$, respectively. 
+
+
+% \begin{equation}
+%     \min_\theta \mathbb{E}_{(s,a,g_V,g_l)\sim \mathcal{D}}\left[-\log \pi_\theta(a|s,g_V)-\log \pi_\theta(a|s,g_l)\right]
+% \end{equation}
+\subsection{Cross-modality Alignment in Representation Space}
+In standard training process, mostly, $d^{\pi_\theta}_{g_L}(s)\neq d^{\pi_\theta}_{g_V}(s)$, since language instructions $g_L$ and visual goals $g_V$ are two distinct modalities, \textit{i.e.}, $g_L\neq g_V$, where the central challenge is \textit{Cross-modality Alignment}, that similar high-level tasks $C(g_L)\approx C(g_V)$ should be extracted by the policy $\pi_\theta$ to avoid this conflicts~\cite{shah2023mutex,jiang2023vima,yu2023using, nguyen2021practical, mees2022matters, jang2022bc}. 
+
+We aim to achieve strong \textit{Cross-modality Alignment} ability by utilizing  powerful multimodal encoders $(\phi_V, \phi_L)$ pretrained on a diverse out-of-domain dataset $\mathcal{D}_{O}$ instead of training from scratch based on the limited in-domain robot data $\mathcal{D}_{I}$ like previous works~\cite{shah2023mutex, jang2022bc, mees2022matters, nguyen2021practical}. If such encoders are accessible, multimodal prompts that encode similar tasks can be projected as interchangeable representations, \textit{i.e.}, $\phi_V(g_V)\approx \phi_L(g_L)$ for $C(g_L)\approx C(g_V)$.
+% , then the visual goal $g_V$ and language instruction $g_I$ become interchangeable in the representation space.
+Then, we can train multimodal policies $\pi_\theta$ capable of understanding prompts across various modalities within this unified representation space trained solely on unimodal prompts.
+% In standard training process, it is pretty challenging to transfer the visual goal-conditioned policy $\pi_\theta(a|s,g_V)$ to a language-conditioned policy $\pi_\theta(a|s,g_L)$ and $\pi_\theta(a|s,g_L)\neq\pi_\theta(a|s,g_V)$ for $C(g_L)\approx C(g_V)$, since language instructions $g_L$ and visual goals $g_V$ are two distinct modalities, \textit{i.e.}, $g_L\neq g_V$. However, things become possible if we consider a well-aligned multimodal encoder ($\phi_L$, $\phi_V$) that can project multimodal prompts that encode similar high-level tasks into similar representations, \textit{i.e.}, $\phi_L(g_V)\approx\phi_V(g_V)$ for $C(g_L)\approx C(g_V)$. Intuitively, this well-aligned multimodal encoder is trying to mining the similar high-level tasks $C$ behind multimodal prompts. By doing so, the visual goal $g_V$ and language instruction $g_I$ become interchangeable in the representation space. Then, we can train the robot policy within this unified representation space using unimodal data:
+\begin{equation}
+% \small
+\begin{aligned}
+    % &{\rm Train: \ } \min_\theta \mathbb{E}_{(s,a,g_V)\sim\mathcal{D}_I} 
+    % \left[-\log \pi_\theta(a|s,\phi_V(g_V))\right], \\
+    C(g_V)\approx C(g_L) &\Leftrightarrow \phi_V(g_V)\approx\phi_L(g_L)\\ &\Leftrightarrow d^{\pi_{\theta, \phi_L}}_{g_L}(s)\approx d^{\pi_{\theta,\phi_V}}_{g_V}(s), \forall s\in \mathcal{S}.
+    % \pi_\theta (a|s,\phi_V(g_V))\approx \pi_\theta(a|s, \phi_L(g_L)).   
+    \label{equ:train_deploy}
+\end{aligned}
+\end{equation}
+where $\pi_{\theta, \phi_L}$, $\pi_{\theta, \phi_V}$  denotes $\pi_\theta(a|s,\phi_L(g_L))$ and $\pi_\theta(a|s,\phi_V(g_V))$, respectively.
+Targeting this goal, we propose \textit{Robo-MUTUAL} (\underline{Robo}tic \underline{MU}ltimodal \underline{T}ask specifications via \underline{U}nimod\underline{A}l \underline{L}earning), containing three parts (Fig~\ref{fig:method}): \textit{Robotic Multimodal Encoder Pretrain} (Section~\ref{subsec:mmencoder_train}), \textit{Modality Gap Reduction} (Section~\ref{subsec:modality_gap}), and \textit{Robot Policy Train and Evaluation}~\ref{subsec:robot_train_eval}).
+
+% ,and directly replace $\phi_V(g_V)$ with $\phi_L(g_L)$ during inference to 
+% Then, we will elaborate details about pretraining the multimodal encoder to obtain \textit{Cross-modality Alignment}.
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=1.0\linewidth]{sources/method/heatmap.png}
+    % \includegraphics[width=0.35\linewidth]{sources/baseline/llm_example_input_0.pdf}
+    % \includegraphics[width=0.35\linewidth]{sources/baseline/llm_example_input_0.pdf}
+    % \includegraphics[width=0.35\linewidth]{sources/baseline/llm_example_input_0.pdf}
+    % \includegraphics[width=0.35\linewidth]{sources/baseline/llm_example_input_0.pdf}
+    \vspace{-15pt}
+    \caption{Heatmaps of cosine similarity between representations of language and visual goals. The diagonals are matched pairs. DecisionNCE (Robo-MUTUAL) enjoys strong \textit{Cross-modality Alignment} capability after absorbing broader out-of-domain data.}
+    % \wzh{Enlarge captions and add (a)(b)...}}
+    \vspace{-15pt}
+    \label{fig:mmencoder_fail}
+\end{figure}
+\subsection{Robotic Multimodal Encoder Pretraining}
+\label{subsec:mmencoder_train}
+% As depicted in Section \Rmnum{1}, existing multimodal encoders lack consideration for robotic domain.
+Numerous multimodal encoders are available ~\cite{clip, ma2023liv, li2024decisionnce}, but are not specifically designed for robotics or trained solely on limited human video that fails to cover the diverse robotics domain. We evaluate the \textit{Cross-modality Alignment} capability of several popular multimodal encoders including CLIP~\cite{clip}, LIV~\cite{ma2023liv} and DecisionNCE~\cite{li2024decisionnce}.  Fig~\ref{fig:mmencoder_fail} shows that these encoders fail to align matched visual goals and language instructions well in the robotics domain. 
+
+Hence, we aggregate diverse large-scale robot-relevant data for robotic multimodal encoder training, aiming at improve the \textit{Cross-modality Alignment} capability as much as possible. This dataset includes Open-X dataset~\cite{padalkar2023open}, DROID~\cite{khazatsky2024droid}, and EPICK-KITCHEN~\cite{damen2018epick}, 
+% covering \colorbox{yellow}{XXX} trajectories over \colorbox{yellow}{XXX} skills, 
+forming a comprehensive dataset $\mathcal{D}_O$ that spans diverse skills/tasks and scenarios. 
+% With such extensive dataset, we could train DecisionNCE-V2 from scratch.
+Based on this dataset, numerous robotic multimodal encoders could be viable, we opted to retrain the recent SOTA DecisionNCE~\cite{li2024decisionnce} for its superior temporal consistency and less sensitivity for hyper-parameter tuning. 
+% Following the most official implementation details,
+In difference, we freeze the language encoder $\phi_L$ from the pretrained CLIP~\cite{clip} model, focusing solely on contrasting visual goals, as we observe CLIP~\cite{clip} exhibits robust textual generalization, which is likely attributed to the extensive language data used in CLIP pretraining compared to that in robotics domains. 
+We denote our encoder as DecisionNCE (Robo-MUTUAL) and the training objective is as follows:
+% found that instead of reusing the original loss objective in \cite{li2024decisionnce}, we freeze the language encoder $\psi(l)$ in training phase, and only train visual encoder $\phi(o)$. This provides powerful textual generalization capability for robot learning, enabling robots understand textual instructions that have never seen before. Eq. (\ref{loss_objective}) shows the loss objective $\mathcal{L}_{\mathrm{NCE}}$ of DecisionNCE-V2:
+\begin{equation}
+\label{loss_objective}
+\small
+    % \textstyle
+    % \mathcal{L}_{\mathrm{NCE}} = 
+    \min_{\phi_V} \frac{1}{B} \sum\nolimits_{i=1}^{B}
+    -\log\frac{\exp\mathcal{S}(\phi_V(o_{n_i+m_i})-\phi_V(o_{n_i}),\phi_L(l_i))}
+    {\sum_{j=1}^{B} \exp\mathcal{S}(\phi_V(o_{n_j+m_j})-\phi_V(o_{n_j}),\phi_L(l_i))},
+\end{equation}
+where $n$ is a random selected start frame in a video clip, $m$ is a random segmentation length and $B$ is batch size. We set $B=1024$ and train it on 8$\times$A100 GPU for 8 days.
+See from Fig~\ref{fig:mmencoder_fail} that DecisionNCE (Robo-MUTUAL) aligns matched visual and textual goals well, where $\mathcal{S}\left(\phi_V(g_V), \phi_L(g_L)\right)$ is high for $C(g_V)\approx C(g_L)$ 
+% but low for $C(g_V)\neq C(g_L)$ 
+and $\mathcal{S}$ is cosine similarity. Considering this superior ability,  We will release our check point for DecisionNCE (Robo-MUTUAL) to support researchers develop other future applications conveniently.
+% Here $\psi(l)$ is frozen and excluded from gradient descent.
+\begin{figure}[t]
+    \centering
+    \includegraphics[width=1.0\linewidth]{sources/method/diff_plt.pdf}
+    \vspace{-15pt}
+    \caption{Abs. difference in the means of each embedding dimension cross different modalities. The modality gap manifests in a few dimensions with large discrepancies across modalities, while others remain consistent.}
+    \label{fig:diff_plt}
+    \centering
+    \vspace{+2pt}
+    \includegraphics[width=1.0\linewidth]{sources/method/clustering.pdf}
+    \vspace{-15pt}
+     \caption{t-SNE~\cite{van2008visualizing} projection of DecisionNCE (Robo-MUTUAL) representations of matched visual and language goals. Although different modalities are separate initially, indicating a huge modality gap, this gap can be reduced through the simple \textit{centralize} or \textit{delete} Collapse methods.}
+     % \wzh{Enlarge legends and change title}}
+    \label{fig:modality_gap}
+    \vspace{-10pt}
+\end{figure}
+
+\subsection{Modality Gap Reduction}
+\label{subsec:modality_gap}
+Nevertheless, huge modality gap exists in the pretrained representation space, where different modalities with similar semantic meanings fail to absolutely converge but instead are clustered per modality, resulting in $\phi_V(g_V)\neq\phi_L(g_L)$ for $C(g_V)\approx C(g_L)$ 
+% due to the dimensional collapse phenomenon of the representation space
+~\cite{zhang2024connect, jing2022understanding}, as shown in Fig~\ref{fig:modality_gap}.
+% After scaling up the training of DecisionNCE-V2, we get a fixed pretraining multimodal encoders can deployed for traing multimodal robot via unimodal data. 
+% Ineitably, DecisionNCE-V2 also suffers from a constant modality gap, which prevents \textit{Cross-modality Alignment} for multimodal prompts. 
+Inspired by recent progresses in minimizing the modality gaps~\cite{zhang2024connect, li2023decap, liang2022mind, zhang2023diagnosing}, we apply two simple yet efficient \textit{Collapse} and \textit{Corrupt} manipulation to fill the gap.%\ljx{more}
+
+% \textbf{Connect.} Prompts of different modalities are feed to pretrained DecisionNCE-V2 model. These modalities though totally irrelevant as raw data, are connected after transformed into embeddings in the latent representation space.
+
+\noindent \textbf{Collapse.} \ Specifically, the modality gap is primarily characterized as a constant gap between the span of the visual and textual representations clusters $e_V:=\{\phi_V(g_{V})\},g_V\sim\mathcal{G}_V$ and $e_L:=\{\phi_L(g_{L})\}, g_L\sim\mathcal{G}_L$, as proved in~\cite{zhang2024connect, liang2022mind}. This gap manifests in a few dimensions of the embeddings, which display significant discrepancies across modalities, while the remaining dimensions remain consistent, as shown in~\cite{schrodi2024two} and is also observed in Fig~\ref{fig:diff_plt}. Thus, intuitively this gap can be straightforwardly removed 
+% by deleting the embedding dimensions with most differences across different modalities~\cite{schrodi2024two}:
+% \begin{equation}
+% \begin{aligned}
+%      &\hat{\phi_V}(g_V)= \phi_V(g_V) - \mathbb{E}_{g_V\sim\mathcal{G}_V}\left[\phi_V(g_V)\right],\\
+%     &\hat{\phi_L}(g_L)= \phi_L(g_L) - \mathbb{E}_{g_L\sim\mathcal{G}_L}\left[\phi_L(g_L)\right],\\
+% \end{aligned}
+% \end{equation}
+% or 
+by deleting the most different dimensions to address the modality gap~\cite{schrodi2024two}.
+\begin{equation}
+    \begin{aligned}
+             {\rm detele:} \ &\hat{\phi_V}\leftarrow {\rm del} (\phi_V, \arg\max_i \|\phi_V^i-\phi_L^i\|), \\ &\hat{\phi_L}\leftarrow {\rm del} (\phi_L, \arg\max_i \|\phi_V^i-\phi_L^i\|),
+    \end{aligned}
+\end{equation}
+where, $\phi^i$ denotes the $i$-th dimension of $\phi$, and ${\rm del}(\phi, i)$ denotes deleting the $i$-th dimension of $\phi$. Or we can reduce each modality by its mean values to consider the modality difference across all dimensions, as proved in~\cite{zhang2023diagnosing, liang2022mind, zhang2024connect}:
+\begin{equation}
+\begin{aligned}
+     {\rm centralize:} \ &\hat{\phi_V}\leftarrow \phi_V - \mathbb{E}_{g_V}\left[\phi_V(g_V)\right],\\ &\hat{\phi_L}\leftarrow \phi_L - \mathbb{E}_{g_L}\left[\phi_L(g_L)\right],
+\end{aligned}
+\end{equation}
+% , replace $e_x$ with $e_x - \mathbb{E}[e_x]$, and replace $e_y$ with $e_y - \mathbb{E}[e_y]$. 
+% In our implementation of \textit{Collapse}, 
+where we approximate the expectation term via mini-batch samples from the dataset $\mathcal{D}_O$. After these simple manipulation, the collapsed multimodal representations can mostly bridge the modality gap and collapse together, \textit{i.e.}, $\hat{\phi_V}(g_V)\approx\hat{\phi_L}(g_L)$ for $C(g_V)\approx C(g_L)$, as shown in Fig~\ref{fig:modality_gap}. In our paper, we report the main results using \textit{Centralize} by default and provide ablation studies in experiments.
+% only minus modality mean values for textual embeddings and treat image ebeddings with no modification. We do this minor change for its effectiveness in DecisionNCE-V2 representations, and more details will be discussed at \textit{Ablation Studies} in Section \ref{subsec:ablation}.
+
+\noindent \textbf{Corrupt.} \ 
+% \ljx{revise}\wzh{change formula and description}
+Note that one language can describe diverse visual goals and vice versa. Hence, we can conveniently augment the collapsed representations to improve the generalization by adding some random noise, which enables $\pi_\theta$ potentially understand unseen prompts. Some works argue that the simple Gaussian noise is effective~\cite{zhang2024connect}, but we found the cosine similarity noise offers superior augmentation in the high-dimensional embedding spaces~\cite{liu2024arcsin}. Here we slightly abuse the notation by simplifying $\phi_V$ or $\phi_L$ as $\phi$:
+% \ljx{the formula is correct?}
+% not seen in the dataset $\mathcal{D}_I$:
+% \begin{equation}
+% \label{cosine}
+%     \begin{aligned}
+%         % &\tilde{\phi}\leftarrow\hat{\phi}+\eta, \eta\sim\mathcal{N},\\
+%         &\tilde{\phi}\leftarrow s \hat{\phi}+\sqrt{1-s^2}\hat{\phi}_{\perp}, {\rm where \ \ }\hat{\phi}_{\perp}= \frac{v-v\cdot\hat{\phi}}{\| v-v\cdot \hat{\phi} \|},\\[3pt]
+%         % &\tilde{\phi}\leftarrow s \hat{\phi}+\sqrt{1-s^2}\hat{\phi}_{\perp}
+%         % &\tilde{\phi_L}(g_L)=\hat{\phi_L}(g_L)+\eta, \eta\sim\mathcal{N},
+%     \end{aligned}
+% \end{equation}
+\begin{equation}
+\label{cosine}
+    \begin{aligned}
+    \small
+        \tilde{\phi}\leftarrow s \cdot{\rm norm}(\hat{\phi})+\sqrt{1-s^2}\cdot {\rm norm}({\phi}_{\perp}), \hat{\phi}_{\perp} = {v-\frac{v\cdot\hat{\phi}}{\hat{\phi}\cdot \hat{\phi}}\cdot \hat{\phi}}
+    \end{aligned}
+\end{equation}
+where $v$ is a random embedding, $\hat{\phi}_{\perp}$ is the orthogonal vector in $v$ \textit{w.r.t} $\hat{\phi}$, 
+$\rm norm(x):=\frac{x}{\|x\|}$, 
+$s$ is a cosine similarity randomly selected from $[\alpha, 1]$ and we set $\alpha$ to 0.2 as default. 
+% $\mathcal{N}$ denotes random noise. 
+% Some works argue that the simple Gaussian noise is effective~\cite{zhang2024connect}, but we found the cosine similarity noise offers superior augmentation in the high-dimensional embedding spaces~\cite{liu2024arcsin}.
+The direction of augmented representations remain close to the original to preserve the semantics after corruption, \textit{i.e.}, in (\ref{cosine}), $\mathcal{S}(\tilde{\phi}, \hat{\phi})=\frac{\tilde{\phi}\cdot\hat{\phi}}{\|\tilde{\phi}\|\|\hat{\phi}\|}=s\ge\alpha$, which however can be potentially destroyed by a too large Gaussian noise.
+
+% where $\mathcal{N}$ denotes random noise. Some works argue that the simple Gaussian noise is effective~\cite{zhang2024connect}, but we found the cosine similarity noise offers superior augmentation in the high-dimensional embedding spaces~\cite{liu2024arcsin}. Specifically, the direction of augmented representations should remain close to the original to preserve the semantics after corruption, \textit{i.e.}, $\mathcal{S}(\tilde{\phi_V}(g_V), \hat{\phi_V}(g_V))\in(s, 1]$ and $s\in(-1,1)$ is a pre-defined value and is set to {0.2} by default, which however can be potentially destroyed by a too large Gaussian noise.
+
+% \vspace{-5pt}
+\subsection{Robot Policy Training and Evaluation}
+\vspace{-2pt}
+\label{subsec:robot_train_eval}
+Now, we can achieve \textit{Cross-modality Alignment} in representation space. For instance, in scenarios where only visual goals $g_V$ are available and language instructions $g_L$ are absent, we can utilize the pretrained DecisionNCE (Robo-MUTUAL) visual encoder $\phi_V$ to generate the visual goal representations $\phi_V(g_V)$, then derive the final corrupted representations $\tilde{\phi_V}(g_V)$ for training the robot policy $\pi_\theta$. During deployment, the policy $\pi_\theta$ can be prompted with either visual goals $g_V$ or language goals $g_L$, by using the collapsed and aligned representations $\hat{\phi_V}(g_V)$ or $\hat{\phi_L}(g_L)$.
+
+In training details, we utilize ResNet34~\cite{He_2016_CVPR} to extract visual feature from both a base and wrist view, where task embedding $\phi$ is injected via Film conditioning layers~\cite{perez2018film}. Then, the visual feature is passed through a residual MLPs to predict actions similar to IDQL~\cite{hansen2023idql}. The policy is optimized with diffusion loss~\cite{ho2020denoising} for its superior effectiveness to model complex distributions~\cite{chi2023diffusion, zheng2024safe, walke2023bridgedata}. We also use action chunking~\cite{zhao2023learning} to improve the policy smoothness.
+
+% Although reducing the modality gap already, alignment noise still exists and disturb \textit{Cross modality Alignment} \cite{liu2024arcsin,zhang2024connect,nukrai2022capdec}. Instead of using the normal gaussian noise like $C^3$, \cite{liu2024arcsin} argues that cosine similarity noise can offer a more adaptable approach that aligns with the fundamental nature of features shaped by contrastive loss. \wzh{start from here}
+% \subsection{Multimodal Robot Learning using Unimodal Data}
+% 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \section{Perform Language Conditioned Behavior Cloning via Visual-only Training}
+
+% In section \Rmnum{3}, we have draw the conclusion that DecisionNCE-T enables well alignment of corresponding instruction and trajectory goals. Follow the simple and efficient modality gap removing method proposed by C3, we also divide our modality gap eliminating process as \textit{Connect}, \textit{Collapse} and \textit{Corrupt}.
+
+% \subsection{Connect}
+
+% \subsection{Collapse}
+
+% \subsection{Corrupt}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Experiments}
+% \vspace{-2pt}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1.0\linewidth]{sources/experiments/task_setup.jpg}
+    \vspace{-20pt}
+    \caption{Simulation and real world robotics evaluation setups.}
+    \vspace{-10pt}
+    \label{fig:setup}
+\end{figure}
+
+\begin{figure*}[h]
+    \centering
+    \includegraphics[width=1.0\linewidth]{sources/experiments/baseline-v4.pdf}
+    \vspace{-18pt}
+    \caption{\textbf{Simulation evaluation.} (eval with textual/visual goals) denote the robot policy is evaluated with textual goal and visual goals, respectively. For each bar, the robot policy is trained on 3 different random seeds and is evaluated for 10 episodes for each task.
+    % or Robo-MUTUAL (visual goals). And we divide the original LIBERO benchmark \cite{liu2024libero} for training into two parts: (a) All methods is trained with images-only dataset. (b) All methods is trained with texts-only dataset
+    }
+    \label{fig:exp_sim}
+% \end{figure*}
+\vspace{+2pt}
+% \begin{figure*}[t]
+    % \centering
+    \includegraphics[width=1.0\linewidth]{sources/experiments/airkitchen-v3.pdf}
+    \vspace{-18pt}
+    \caption{\textbf{Real robot evaluation.} (eval with textual/visual goals) denote the robot policy is evaluated with textual goal and visual goals, respectively. For each bar, the robot policy is trained on 3 different random seeds and is evaluated for 10 episodes for each task.}
+    \vspace{0pt}
+    \label{fig:exp_real}
+\end{figure*}
+
+
+The experiments try to answer the following questions:
+\begin{itemize}
+    \item Can Robo-MUTUAL achieve multimodal task specifications with unimodal data training?
+    \item Does Robo-MUTUAL outperform baseline models that use synthetic prompts generated from unimodal data for multimodal task specifications?
+    \item How do specific design choices for Robo-MUTUAL, such as the use of enhanced robotic multimodal encoders, various collapse, corruption methods, and different scales of corruption, contribute to its effectiveness?
+\end{itemize}
+% Since we mainly focus the modality interchangeability between vision and text, we divide the experiment into two parts. One is \textbf{\textit{image2language}}, representing for training robot on visual instructions and testing it with textual prompts. The other is \textbf{\textit{language2image}}, denoting robot trained with language labels and tested by image goals. 
+% In Sec. \ref{subsec:train multi via uni}, we compare Robo-MUTUAL with related baselines on 130 simulated and 10 real world robotic manipulation tasks.  And in Sec. \ref{subsec:ablation}, we present detailed ablation results of our method.
+\subsection{Experimental Setup}
+\noindent\textbf{Simulation Environments}. We employ the LIBERO benchmark \cite{liu2024libero}, which consists of 130 robotic simulation tasks across four distinct suites: LIBERO-Goal/Object/Spatial/100. LIBERO-100 contains 100 tasks, while the other three suites each have 10 tasks. Each task is accompanied by a language instruction $g_L$ and 50 expert trajectories. Collectively, these suites contain 6500 expert demonstrations and 130 different tasks, which we refer to as LIBERO-All in this paper.
+
+\noindent\textbf{Real Robot Environments.} We evaluate 6 tasks on a WidowX robot, spanning skills include \texttt{pick \& place}, \texttt{fold}, \texttt{flip} and \texttt{move}. We collect around 100 demonstrations per task using the Bridgedata system~\cite{walke2023bridgedata}, and annotate each task with a language instruction $g_L$. Successful catching correct object is recorded as half-completed of the whole task, and a continued correct placement will scored a full success.
+
+\noindent\textbf{Evaluation Scenarios}. \textit{1)} We train Robo-MUTUAL in a common scenario where only visual goals $g_V$ are available. Visual goal is provided as the transition between the representations of the initial and final frames of a video clip~\cite{li2024decisionnce}. In this case, 
+the policy only observes visual goals $g_V$ during training but is required to understand both visual goals $g_V$ and language instructions $g_L$ during evaluation. \textit{2)} We also explore the reverse scenario, \textit{i.e.}, training exclusively on textual goals $g_L$ but evaluating with visual goals $g_V$ to assess bidirectional transferability across modalities. Due to the high cost associated with real-world evaluations, we compare Robo-MUTUAL against baseline methods in simulations. However, we believe the 130 tasks in LIBERO benchmark offer comprehensive coverage across a diverse range of tasks and skills, ensuring fair and sufficient comparisons.
+% The evaluations are conducted on both simulated and real-world robotic platforms, as shown in Fig.~\ref{fig:setup}.
+
+% \textbf{Implementation Details.} For simulation evaluations, we train for 200K gradient steps for LIBERO-All in both modality datasets. LIBERO-Goal, LIBERO-Object and LIBERO-Spatial are trained for 100 thousand steps in \textit{Image-only Dataset} and 50 thousand steps in \textit{Text-only Dataset}. As for real robot experiments, Robo-MUTUAL is trained for \colorbox{yellow}{250} thousand steps for \textit{Image-only Dataset} and \colorbox{yellow}{100} thousand steps for \textit{Text-only Dataset}. Every success rate is averaged over 10 episodes and 3 seeds.
+
+\noindent\textbf{Baselines.} 
+% The main baselines are summarized as follows:
+% \begin{enumerate}[leftmargin=2.5em]
+    \textbf{1) GPT4-Synthetic} is the main baseline in the common scenario that textual goals are missing. This approach represents a series of methods that firstly generate missing language instructions from unimodal visual goals using pretrained large multimodal models~\cite{xiao2022dial,blank2024scaling}, and then train policies conditioned on these synthetic goals. During evaluation, we prompt the policies using the ground truth language instructions to evaluate the success rates. To ensure a fair comparison, we employ the advanced GPT-4V to generate language instructions based on the initial and final frames of a trajectory. Furthermore, we incorporate several ground truth examples to enhance the quality of synthetic instructions leveraging the substantial in-context learning capability of large models~\cite{dong2022survey}. 
+    % . To enhance the quality of synthetic demonstrations, we also feed GPT-4 one random original language instruction from LIBERO for each task. Finally, for the whole number of 6500 episodes in LIBERO-All suite, we assign each episode a synthetic language label.
+    \textbf{2) Robo-MUTUAL-EPICK} adheres the same implementation protocols as our Robo-MUTUAL, but directly uses the DecisionNCE~\cite{li2024decisionnce} pretrained solely on the narrow EPICK-KITCHEN dataset~\cite{damen2018epick} as the robotic multimodal encoder without the specialized improvement in Section~\ref{subsec:mmencoder_train}, which may suffer from limited \textit{Cross-modality Alignment} capability. 
+    % We choose DecisionNCE~\cite{li2024decisionnce} as a baseline and name it as DecisionNCE (Epic-Kitchen). 
+    % For a fair comparison, we use this encoder to calculate its corresponding visual and textual modality means as \textit{Collapse}, incorporating the same cosine noise as \textit{Corrupt}.
+% \end{enumerate}
+
+
+\begin{figure*}[t]
+    \includegraphics[width=1.0\linewidth]{sources/experiments/ablation.pdf}
+    \vspace{-15pt}
+    \caption{\textbf{Ablation studies.} (a) Comparison between (\textit{delete} and \textit{centralize}) collapse methods; (b) Comparison between \textit{Cosine-similarity noise} and Gaussian noise; (c) Corrupt strength of \textit{Cosine-similarity noise}; (d) The generalization ability on unseen new textual instructions}
+    \vspace{-10pt}
+    \label{fig:ablation}
+\end{figure*}
+
+\vspace{-3pt}
+\subsection{Main Results}
+\vspace{-3pt}
+\label{subsec:train multi via uni}
+\noindent\textbf{Transfer from Visual to Textual Goals}. 
+% It's of great importance to enable robots learn from unlabelled and easily collected visual goals while performing textual goals in zero-shot manner.
+In the common scenario where only visual goals are available, both the simulated and real-world evaluations in Fig~\ref{fig:exp_sim} (a) and Fig~\ref{fig:exp_real} (a) clearly demonstrate that Robo-MUTUAL can successfully understand both visual and textual goals trained exclusively on visual goals. Specifically, we only observe a moderate performance drop when evaluating Robo-MUTUAL from visual to textual goals. However, this property is not enjoyed by Robo-MUTUAL-EPICK, which fails to transfer from visual to textual goals and undergoes severe performance drop, as shown in Fig~\ref{fig:exp_sim} (a), primarily due to the limited \textit{Cross-modality Alignment} capability (see Fig~\ref{fig:mmencoder_fail} for details). Moreover, GPT4-Synthetic can partially work well using the synthetic language instructions thanks to the superior capability of large models, however, still underperforms Robo-MUTUAL.
+% even leveraging the superior in-context learning capability.
+We think this is because GPT-4V only consider limited robotic data during pretraining and it is hard to guarantee the quality of synthetic data~\cite{xiao2022dial}.
+% , and the modality 
+
+% This crucial ability of Robo-MUTUAL can be seen at Fig~\ref{fig:exp_sim}a. For simulation settings, Robo-MUTUAL can obtain an average success rate of \colorbox{yellow}{xx\%} when evaluated with pure textual goals, outperforming all other baselines. There exists a tolerable shift of average \colorbox{yellow}{xx\%} for Robo-MUTUAL between textual evaluated goals and visual evaluated goals. As for Robo-MUTUAL-EPICK-KITCHEN, the shift is \colorbox{yellow}{xx\%}, leading to the low success rate of \colorbox{yellow}{xx\%} when evaluated with textual goals. Interestingly, even when evaluated with visual goals, Robo-MUTUAL can still beat Robo-MUTUAL-EPIC-KITCHEN for \colorbox{yellow}{xx\%}, we contribute this to the use of frozen CLIP language encoder when training DecisionNCE (Robo-MUTUAL). GPT4-Synthetic achieves a relative high success rate in LIBERO-Object suit, while performs poorly in other suits, even reduced to 5\% in LIBERO-Goal. We hypothesize this results from LLM's weak ability of generating human-level annotations and lack of considerations for robotic temporal dynamics \cite{nair2022r3m,ma2023liv,li2024decisionnce}.
+
+% . Here we do not compare Robo-MUTUAL against other baselines due to the heavy computing burden and manual costs to carry out real robot experiments. We can see that, 
+% Robo-MUTUAL achieves an average success rate of \colorbox{yellow}{xx\%} when evaluated with textual goals, and the shift is \colorbox{yellow}{xx\%}. This hints that Robo-MUTUAL is able to indeed facilitate real world robots, enabling training a language conditioned policy with constrained manual labels and overflowing visual data.
+
+\noindent\textbf{Transfer from Textual to Visual Goals}. We also explore the reverse scenario in which Robo-MUTUAL is trained exclusively on textual goals and then evaluated with visual goals. In Fig~\ref{fig:exp_sim} (b) and Fig~\ref{fig:exp_real} (b), Robo-MUTUAL demonstrates effective transferability in this reversed setup. Importantly, the visual goals provided for task specifications do not align precisely with the robot's current observations, \textit{i.e.}, discrepancies exist in the location of target object, the target position, and even the number, location, types of distractors. Under this hard condition, Robo-MUTUAL must accurately extract correct semantic task information from visual goals that contain many distracting elements in a zero-shot manner trained solely with textual goals. Overall, Robot-MUTUAL demonstrates strong bidirectional transferability to enable multimodal task instructions via unimodal learning\footnote{See detailed videos in \href{zh1hao.wang/Robo_MUTUAL}{\texttt{zh1hao.wang/Robo\_MUTUAL}}.}. 
+% We further explore the reverse scenario in which Robo-MUTUAL is trained exclusively on textual goals and then evaluated using visual goals. As illustrated in Fig~\ref{fig
+% } (b) and Fig~\ref{fig
+% } (b), Robo-MUTUAL demonstrates effective transferability in this reversed setup. Importantly, the visual goals provided for task specification do not align precisely with the robot's current observations; discrepancies exist in the location of the target object, the target position, and even the number, location, and types of distractors. Under these conditions, Robo-MUTUAL is required to accurately extract relevant semantic task information from these distracting elements in a zero-shot fashion, having been trained solely with language goals.
+
+
+% , to demonstrate the bidirectional transferability of Robo-MUTUAL to enable multimodal task instructions via unimodal learning. 
+% Though of little practicality,
+% Robo-MUTUAL's powerful multimodal task specification ability can be verified. The average success rate of Robo-MUTUAL when evaluated with visual goals is \colorbox{yellow}{xx\%} and \colorbox{yellow}{xx\%} for LIBERO benchmark and real world platform respectively. Robo-MUTUAL also surpasses Robo-MUTUAL-EPIC-KITCHEN for \colorbox{yellow}{xx\%} in simulation environments. We do not deploy GPT4-Synthetic method in simulation, because it's expensive and unnecessary to generate synthetic images from textual goals.
+
+% \textbf{Simulation Results.} We present the whole results in Fig. \ref{fig:baselines}. We can draw that Robo-MUTUAL is capable of performing multimodal task specifications via unimodal training. Although there exists a small shift of average \colorbox{yellow}{xx\%} when Robo-MUTUAL is evaluated with different modalities from training phase, Robo-MUTUAL still obtains an average success rate of \colorbox{yellow}{xx\%} after \textit{Cross-modality Alignment}. Robo-MUTUAL outperforms all baselines in all task suits, achieving average \colorbox{yellow}{xx\%} beyond GPT-based method in \textit{Image-only Dataset} and \colorbox{yellow}{xx\%} above CLIP-based method for both datasets.
+
+% We deploy GPT-based method only in \textit{Image-only Dataset}, for it's expensive and unnecessary to generate synthetic images from \textit{Text-only Dataset}. GPT-based method shows a good performance in LIBERO-Object suit, achieving a success rate of 67\%. But GPT-based method performs relatively poorly in other task suits, and only get a success rate of 5\% for LIBERO-Goal . We conclude this phenomenon to GPT-4's powerful discriminative ability of objects, which is the crucial tested ability in LIBERO-Object. As for other suits, GPT-based method can not generate high quality human-like annotations due to its lack of considerations for robotic temporal dynamics and semantically relevant features \cite{nair2022r3m,ma2023liv,li2024decisionnce} , thus leading to the bad performance. The CLIP-based method achieves an average success rate of \colorbox{yellow}{xx\%} and \colorbox{yellow}{xx\%} for \textit{Image-only Dataset} and \textit{Text-only Dataset} respectively. We infer the reason as there exits a slight \textit{Cross-modality ALignment} capability for robotic multimodal encoders trained with internet human videos, as shown in \colorbox{yellow}{Fig. x}. 
+
+% \textbf{Real Robot Environments.} We deploy Robo-MUTUAL in a WidowX single arm robot platform, which is equipped with a wrist camera and a fixed third-person-view D435 camera. We collect in-domain data containing \colorbox{yellow}{968} trajectories along with \colorbox{yellow}{10} tasks with human teleoperation. \wzh{Score details.}
+
+% \textbf{Real Robot Results.} Fig. \ref{fig:experiments_real_all} shows the results of Robo-MUTUAL deployed on the WidowX single arm platform. Here we do not compare Robo-MUTUAL with other baselines due to the heavy computing burden and manual costs to carry out real robot experiments. We can see that, in \textit{Image-only Dataset}, Robo-MUTUAL achieves an average success rate of \colorbox{yellow}{xx\%} when evaluated with text goals, and the shift for \textit{Cross-modality Alignment} is \colorbox{yellow}{xx\%}. In \textit{Text-only Dataset}, the average success rate after \textit{Cross-modality Alignment} is \colorbox{yellow}{xx\%} and the shift is \colorbox{yellow}{xx\%}. It is safe to conclude that Robo-MUTUAL is able to realize multimodal task specifications via unimodal training, and this capability is able to apply to real robot settings while with an acceptable average shift of \colorbox{yellow}{xx\%} after \textit{Cross-modality Alignment}.
+
+
+\subsection{Ablation Studies}
+\label{subsec:ablation}
+\noindent\textbf{{Collapse} Methods}. 
+% Above experiments are performed with \textit{-mean} for collapse process. 
+% \ljx{-mean better than delete}
+% We compare the \textit{-mean} and \textit{delete} collapse methods. As shown in Fig~\ref{fig:ablation} (a), the \textit{-mean} method outperforms the \textit{delete} approach, demonstrating a smaller performance decline after cross-modality transfer. We attribute this to the \textit{-mean} method's comprehensive consideration of the modality gap across all embedding dimensions, in contrast to the \textit{delete} method, which only addresses the most divergent dimensions. Thus, the \textit{-mean} operation provides a more nuanced resolution of the modality gap. This is also shown in Fig~\ref{fig:modality_gap}, where \textit{-mean} method effectively clusters all matched pairs, but the \textit{delete} method fails to achieve such precise alignment (the blue and green language instructions are misplaced by the \textit{delete} method in Fig~\ref{fig:modality_gap}).
+%\ljx{-mean equal to delete}
+In the main results, we only report \textit{centralize} due to space limits. Here, we compare the \textit{centralize} and \textit{delete} collapse methods. Fig~\ref{fig:ablation}(a) shows that they achieve comparable performance and enjoy moderate performance gap. Also, Fig~\ref{fig:modality_gap} shows that both of them effectively cluster matched textual and visual pairs. One future work is to investigate the conditions under which \textit{centralize} and \textit{delete} outperform each other in the robotics domain.
+
+% While we have introduced another method \textit{delete} to collapse the modality gap, the difference between these 2 methods can be viewed at Fig~\ref{fig:ablation} (a). \textit{-mean} shows more promising cross-modality alignment ability than \textit{delete}. We attribute this to \textit{delete} lacks of considerations for the dimensions without major variants, while \textit{-mean} brings every dimensions of modality embeddings to the origin nearby.
+
+% Except of minusing modality means can bring different modality embeddings to the same representation space, \cite{cut} argues that modality gap exists due to some huge value differences between two modalities in several dimensions, and we verify this difference of modality means in several encoders (Fig. \colorbox{yellow}{x}). According to \cite{cut}, for CLIP (ViT/B-16), by ablating the top 40 most divergent dimensions, modality gap can be almost closed while downstream performance will remain high. Hence we choose to ablate 80 dimensions for DecisionNCE (ResNet 50), and the perfomance between these \textit{Collapse} methods can be seen at Fig. \colorbox{yellow}{x}. 
+
+% \ljx{revised till here}
+\noindent\textbf{{Corrupt} Noise Types.} We compare our \textit{Cosine-similarity noise} with the widely adopted simple Gaussian noise with different standard deviation (Std)~\cite{zhang2024connect}. Fig~\ref{fig:ablation} (b) demonstrates that the simple Gaussian noise is quite unstable \textit{w.r.t} different Std and is inferior to \textit{Cosine-similarity noise}. Intuitively, this is because \textit{Cosine-similarity noise} naturally enables the augmented data to preserve the semantics of its origins, as the augmented data remains a high cosine similarity with the original data, \textit{i.e.}, $\mathcal{S}(\tilde{\phi}, \hat{\phi})\in[\alpha,1]$. However, this can be easily violated by the simple Gaussian noise, as a too large Gaussian noise can mostly reverse the direction of the original representation after augmentation and thus lost its original semantics. On the other hand, however, a too small noise lacks enough augmentations, making it quite sensitive to tune the Std of the Gaussian noise.
+% Therefore, it would be quite sensitive to tune the \texttt{Std.} of the Gaussian noise, where a too large \textit{Std.} will... and 
+
+% \cite{zhang2024connect} argues that \textit{Corrupt} should refer to using a noise approximated by zero-mean Gaussian noise, which is calculated with the whole dataset of MS-COCO \cite{mscoco}. We do not use this kind of noise for its reliance on huge amount of data source and difficulty in selecting noise scale. As shown in Fig~\ref{fig:ablation} (b), our proposed cosine noise shows a better performance than Gaussian noise, this verifies the intuitiveness and efficiency of cosine noise.
+
+
+\noindent\textbf{{Corrupt} Strength}. To further demonstrate the effectiveness of \textit{Cosine-similarity noise}, we ablate on different corrupt strength by adjusting the cosine-similarity threshold $\alpha$. Fig~\ref{fig:ablation} (c) shows that \textit{Cosine-similarity noise} is robust to various corrupt strength, maintaining consistent performance across various $\alpha$. Meanwhile, $\alpha=0.2$ works best in our evaluation and is set as our default choice. This likely correlates with the pre-corruption cosine-similarity of matched pairs, which averages around 0.2, as shown in Fig~\ref{fig:mmencoder_fail}(d).
+% Furthermore, to substantiate the easily tunable ability of cosine noise and investigate the impact of noise scales on policy performance. We train Robo-MUTUAL in LIBERO-Goal by pure visual goals with different noise scales. In Fig ~\ref{fig:ablation} (c), we can draw that 0.2 works best for Robo-MUTUAL, and we hypothesize that 0.2 can be a just balanced noise scale and also fit the natural similarity level of DecisionNCE (Robo-MUTUAL) in Fig \ref{fig:mmencoder_fail}.
+
+
+\noindent\textbf{Robustness on New Textual Prompts}. We also investigate whether Robot-MUTUAL can generalize beyond the ground-truth goals in the downstream dataset $\mathcal{D}_I$. For example, we replace the original ``pick up the red cup and place it on the plate" as ``move the red cup to the plate", sharing the same abstracted task goal but are expressed differently. Fig~\ref{fig:ablation} (d) shows that Robo-MUTUAL enjoys robustness to such new textual prompts thanks to the strong \textit{Cross-modality Alignment} capability that maps different instructions with similar semantics as similar representations. This means that we can conveniently augment instructions in the latent space in one implicit way by simply adding noise, like the \textit{Cosine-similarity noise}, rather than relying on heavy large models to explicitly synthesize or refine instructions like GPT4-Synthetic and other relevant works~\cite{xiao2022dial, blank2024scaling}.
+
+
+% . We think this is because we leverage continuous representations to specify the goal and adopt \textit{Cosine-similarity noise} augmentations, which can provide good generalization ability~\cite{jang2022bc}. On the other hand, the other methods like GPT4-Synthetic 
+% Since we freeze the language encoder of CLIP to train DecisionNCE (Robo-MUTUAL), one critical improvement is the generalizability to comprehend novel textual goals. Fig~\ref{fig:ablation} (d) shows the success rate of Robo-MUTUAL trained with visual goals and evaluated with novel textual goals in LIBERO-Goal. For example, ''put the bowl on the plate" is replaced with ''place the bowl onto the plate", while the other DecisionNCE model trained without frozen language encoder fails to understand these prompts. More generalization results can be seen in the website \colorbox{yellow}{www.xxx.com}.
+
+% \textbf{AirKitchen}
+
+% \subsection{Baselines}
+
+% \textbf{NCE-epick + reduce gap + img-train-lang-test}
+
+% \textbf{NCE-T training with language injected (0\%, 1\%, 5\%, 10\%, 20\%, 50\%, 80\%, 100\%)}
+
+% \textbf{LLM-based image goal method}
+
+% GPT-4o, with its multimodal capabilities developed through training on text and image datasets, has the capability to capture the transition from the first to the last frame and aligning it with text annotations. To match DecisionNCE-T’s input, the first and last frames of a robotic video were provided as input to GPT-4o, along with a prompt to describe the actions between these frames.
+
+% %% baseline
+% \begin{figure}[h]
+    
+%     \centering
+%     \includegraphics[width=0.2\linewidth]{sources/baseline/llm_example_input_0.pdf}
+%     \includegraphics[width=0.2\linewidth]{sources/baseline/llm_example_input_1.pdf}
+%     \caption{\small an example initial and last frame as input for the gpt-based method}
+%     \label{fig: example input_0}
+%     \vspace{-10pt}
+% \end{figure}
+
+% % \begin{figure}[t]
+    
+% %     \centering
+% %     \includegraphics[width=0.90\linewidth]{sources/baseline/llm_example_input_1.pdf}
+% %     \caption{\small an example last frame as input for the gpt-based method}
+% %     \label{fig: example input_1}
+% %     \vspace{-10pt}
+% % \end{figure}
+
+% After using this baseline to generate captions for all videos, we identified two main issues with resulting captions. 
+
+% (1) First, since GPT-4o was not specifically trained in the robotics domain, it struggled to accurately capture the subtle details of robotic arm movements, such as lifted objects and the spatial relationship with surrounding objects. 
+
+% % The example presented in Figure \ref{fig: example input_0} can illustrate this issue. Using the initial frame and the last frame shown in these figures as inputs, the resulting instruction is: "Pick up the object from the right side of the black cabinet and insert it into the open drawer of the black cabinet."
+
+% % DIAL method (TBD)
+
+% (2) Due to the inherent nature of generative models, GPT-4o introduces a certain degree of randomness when generating image descriptions. This means that the same image might produce different descriptions in different runs.
+
+% Based on above issues, we conclude that GPT-4o is not well-suited for aligning textual instructions with video content in robotic settings.
+
+% \subsection{Results}
+
+% \textbf{Results on simulated robots.}
+
+% % 4*4 figure
+% Fig.1 success rate of NCE-T w/(o) cross and LIV w/(o) cross on libero-goal/object/spatial
+
+% % 2*1 figure, mini figure
+% Fig.2 success rate of NCE-T w/(o) cross on libero-130 
+
+% % draw curves
+% Fig.3 NCE-T training with language injected on libero-goal
+
+% \textbf{Results on real robots.}
+
+% % 4*1 figure
+% Fig.1 success rate of NCE-T w/(o) cross and LIV w/(o) cross on airkitchen
+
+
+% \subsection{Ablation Studies}
+% \label{subsec:ablation_}
+
+% \subsubsection{Different corrupt noise}
+
+% % \wzh{\cite{liu2024arcsin} }
+% cosine similarity based noise: \cite{liu2024arcsin}
+
+
+
+% gaussian noise:
+
+% \subsubsection{Different BC network}
+
+% \subsubsection{Different count of demonstrations}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Conclusions}
+
+We introduce Robo-MUTUAL, a framework that enbales robots to comprehend multimodal task specifications using only unimodal prompts. This is achieved by treating multimodal instructions as interchangeable embeddings within a well-aligned multimodal representation space, leveraging the strong \textit{Cross-modality Alignment} capability from pretrained encoders on a comprehensive robotic dataset and two simple yet effective modality gap reduction methods. Extensive evaluations on both real and simulated robots validate the effectiveness of our approach. One limitation is we only consider the language and image modalities, and we will explore more modalities like audio in future work. Further enhancements will also focus on refining multimodal encoders and improving modality gap reduction techniques.
+
+% -only data to train a language conditioned behavior cloning agent. Our method takes advantage of SOTA embodied multi-modal representation model, and with essential techniques to perfectly bridge the modality gap. Broadly, our method significantly alleviates the need of laborious manual labels to train a LCBC agent. While our methodology performs a powerful ability in zero-shot LCBC, it vastly relys on the multi-modal alignment ability of DecisionNCE-T and there are no alternatives yet. A further promising direction is enhancing the representation model's alignment accuracy, and thus brings smaller performance drop when cross the conditioned modality.
+
+% \addtolength{\textheight}{-12cm}   % This command serves to balance the column lengths
+                                  % on the last page of the document manually. It shortens
+                                  % the textheight of the last page by a suitable amount.
+                                  % This command does not take effect until the next page
+                                  % so it should come on the page before the last. Make
+                                  % sure that you do not shorten the textheight too much.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \section*{APPENDIX}
+
+% Appendixes should appear before the acknowledgment.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \section*{ACKNOWLEDGMENT}
+% 
+% Acknowledgement balabala
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% References are important to the reader; therefore, each citation must be complete and correct. If at all possible, references should be commonly available publications.
+
+
+
+% \begin{thebibliography}{99}
+\newpage
+\bibliographystyle{ieeetr}
+\bibliography{main}
+
+
+
+
+\end{document}

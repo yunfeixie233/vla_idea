@@ -1,0 +1,13 @@
+\abstract{%
+This work highlights that video world modeling, alongside vision-language pre-training, establishes a fresh and independent foundation for robot learning.
+Intuitively, video world models provide the ability to ``imagine'' the near future by understanding the causality between actions and visual dynamics.
+Inspired by this, we introduce \method, an autoregressive diffusion framework that learns frame prediction and policy execution simultaneously.
+Our model features three carefully crafted designs:
+(1) \textbf{\textit{a shared latent space}}, integrating vision and action tokens, driven by a Mixture-of-Transformers (MoT) architecture,
+(2) \textbf{\textit{a closed-loop rollout mechanism}}, allowing for ongoing acquisition of environmental feedback with ground-truth observations,
+(3) \textbf{\textit{an asynchronous inference pipeline}}, parallelizing action prediction and motor execution to support efficient control.
+We evaluate our model on both simulation benchmarks and real-world scenarios, where it shows significant promise in long-horizon manipulation, data efficiency in post-training, and strong generalizability to novel configurations.
+The code and model are made publicly available to facilitate the community.
+}
+
+

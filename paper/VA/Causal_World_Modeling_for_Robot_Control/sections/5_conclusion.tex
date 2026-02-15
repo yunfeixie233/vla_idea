@@ -1,0 +1,14 @@
+\section{Conclusion}\label{sec:conclusion}
+
+We present \method, an autoregressive diffusion framework that unifies video dynamics prediction and action inference for robotic manipulation.
+By interleaving video and action tokens within a Mixture-of-Transformers architecture, our model captures the causal structure of physical interactions while enabling closed-loop control through continuous integration of real-world observations.
+Extensive evaluation demonstrates strong performance across simulation benchmarks (92.0\% on RoboTwin 2.0, 98.5\% on LIBERO) and real-world deployment, achieving over 20\% improvement on challenging tasks compared to $\pi_{0.5}$ with only 50 demonstrations for adaptation.
+These results suggest that autoregressive video-action world modeling provides a principled foundation for learning generalizable manipulation policies, offering a compelling alternative to reactive VLA paradigms.
+
+\noindent\textbf{Future Work.}
+Future directions include developing more efficient video compression schemes to reduce computational overhead, and incorporating multi-modal sensory inputs (tactile, force, audio) for more robust manipulation in tasks with complex contact dynamics.
+
+
+\noindent\textbf{Acknowledgment.}
+We thank Kecheng Zheng for insightful discussions and Wei Wu for valuable assistance with dataset preparation.
+We also thank Fangyi Xu and Yishu Shen for their help with the post-training data collection.

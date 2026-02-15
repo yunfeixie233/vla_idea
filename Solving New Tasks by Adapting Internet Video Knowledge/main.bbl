@@ -1,0 +1,223 @@
+\begin{thebibliography}{43}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Ajay et~al.(2023)Ajay, Han, Du, Li, Gupta, Jaakkola, Tenenbaum, Kaelbling, Srivastava, and Agrawal]{ajaj2023hip}
+Anurag Ajay, Seungwook Han, Yilun Du, Shuang Li, Abhi Gupta, Tommi Jaakkola, Josh Tenenbaum, Leslie Kaelbling, Akash Srivastava, and Pulkit Agrawal.
+\newblock Compositional foundation models for hierarchical planning.
+\newblock In \emph{Conference on Neural Information Processing Systems (NeurIPS)}, 2023.
+
+\bibitem[Bain et~al.(2021)Bain, Nagrani, Varol, and Zisserman]{bain2021webvid}
+Max Bain, Arsha Nagrani, Gül Varol, and Andrew Zisserman.
+\newblock Frozen in time: A joint video and image encoder for end-to-end retrieval.
+\newblock In \emph{IEEE International Conference on Computer Vision (ICCV)}, 2021.
+
+\bibitem[Du et~al.(2024{\natexlab{a}})Du, Yang, Dai, Dai, Nachum, Tenenbaum, Schuurmans, and Abbeel]{du2024learning}
+Yilun Du, Sherry Yang, Bo~Dai, Hanjun Dai, Ofir Nachum, Josh Tenenbaum, Dale Schuurmans, and Pieter Abbeel.
+\newblock Learning universal policies via text-guided video generation.
+\newblock \emph{Advances in Neural Information Processing Systems}, 36, 2024{\natexlab{a}}.
+
+\bibitem[Du et~al.(2024{\natexlab{b}})Du, Yang, Florence, Xia, Wahid, brian ichter, Sermanet, Yu, Abbeel, Tenenbaum, Kaelbling, Zeng, and Tompson]{du2024video}
+Yilun Du, Sherry Yang, Pete Florence, Fei Xia, Ayzaan Wahid, brian ichter, Pierre Sermanet, Tianhe Yu, Pieter Abbeel, Joshua~B. Tenenbaum, Leslie~Pack Kaelbling, Andy Zeng, and Jonathan Tompson.
+\newblock Video language planning.
+\newblock In \emph{International Conference on Learning Representations (ICLR)}, 2024{\natexlab{b}}.
+
+\bibitem[Eric et~al.(2017)Eric, Roozbeh, Winson, Eli, Luca, Alvaro, Matt, Kiana, Daniel, Yuke, Aniruddha, Abhinav, and Ali]{eric2017ai2thor}
+Kolve Eric, Mottaghi Roozbeh, Han Winson, VanderBilt Eli, Weihs Luca, Herrasti Alvaro, Deitke Matt, Ehsani Kiana, Gordon Daniel, Zhu Yuke, Kembhavi Aniruddha, Gupta Abhinav, and Farhadi Ali.
+\newblock {AI2-THOR:} an interactive 3d environment for visual {AI}.
+\newblock \emph{arXiv}, 1712.05474, 2017.
+
+\bibitem[Escontrela et~al.(2023)Escontrela, Adeniji, Yan, Jain, Peng, Goldberg, Lee, Hafner, and Abbeel]{alejandro2023viper}
+Alejandro Escontrela, Ademi Adeniji, Wilson Yan, Ajay Jain, Xue~Bin Peng, Ken Goldberg, Youngwoon Lee, Danijar Hafner, and Pieter Abbeel.
+\newblock Video prediction models as rewards for reinforcement learning.
+\newblock In \emph{Conference on Neural Information Processing Systems (NeurIPS)}, 2023.
+
+\bibitem[Escontrela et~al.(2024)Escontrela, Adeniji, Yan, Jain, Peng, Goldberg, Lee, Hafner, and Abbeel]{escontrela2024video}
+Alejandro Escontrela, Ademi Adeniji, Wilson Yan, Ajay Jain, Xue~Bin Peng, Ken Goldberg, Youngwoon Lee, Danijar Hafner, and Pieter Abbeel.
+\newblock Video prediction models as rewards for reinforcement learning.
+\newblock \emph{Advances in Neural Information Processing Systems}, 36, 2024.
+
+\bibitem[Gal et~al.(2023)Gal, Alaluf, Atzmon, Patashnik, Bermano, Chechik, and Cohen-or]{rinon2023textualinv}
+Rinon Gal, Yuval Alaluf, Yuval Atzmon, Or~Patashnik, Amit~Haim Bermano, Gal Chechik, and Daniel Cohen-or.
+\newblock An image is worth one word: Personalizing text-to-image generation using textual inversion.
+\newblock In \emph{International Conference on Learning Representations (ICLR)}, 2023.
+
+\bibitem[Guo et~al.(2023)Guo, Yang, Rao, Wang, Qiao, Lin, and Dai]{guo2023animatediff}
+Yuwei Guo, Ceyuan Yang, Anyi Rao, Yaohui Wang, Yu~Qiao, Dahua Lin, and Bo~Dai.
+\newblock Animatediff: Animate your personalized text-to-image diffusion models without specific tuning.
+\newblock \emph{arXiv preprint arXiv:2307.04725}, 2023.
+
+\bibitem[Hansen et~al.(2022)Hansen, Wang, and Su]{hansen2022temporal}
+Nicklas Hansen, Xiaolong Wang, and Hao Su.
+\newblock Temporal difference learning for model predictive control.
+\newblock \emph{arXiv preprint arXiv:2203.04955}, 2022.
+
+\bibitem[Heusel et~al.(2017)Heusel, Ramsauer, Unterthiner, Nessler, and Hochreiter]{heusel2017gans}
+Martin Heusel, Hubert Ramsauer, Thomas Unterthiner, Bernhard Nessler, and Sepp Hochreiter.
+\newblock Gans trained by a two time-scale update rule converge to a local nash equilibrium.
+\newblock \emph{Advances in neural information processing systems}, 30, 2017.
+
+\bibitem[Ho \& Salimans(2022)Ho and Salimans]{ho2022classifier}
+Jonathan Ho and Tim Salimans.
+\newblock Classifier-free diffusion guidance.
+\newblock \emph{arXiv preprint arXiv:2207.12598}, 2022.
+
+\bibitem[Ho et~al.(2020)Ho, Jain, and Abbeel]{ho2022ddpm}
+Jonathan Ho, Ajay Jain, and Pieter Abbeel.
+\newblock Denoising diffusion probabilistic models.
+\newblock In \emph{Conference on Neural Information Processing Systems (NeurIPS)}, 2020.
+
+\bibitem[Ho et~al.(2022)Ho, Salimans, Gritsenko, Chan, Norouzi, and Fleet]{ho2022video}
+Jonathan Ho, Tim Salimans, Alexey Gritsenko, William Chan, Mohammad Norouzi, and David~J Fleet.
+\newblock Video diffusion models.
+\newblock \emph{Advances in Neural Information Processing Systems}, 35:\penalty0 8633--8646, 2022.
+
+\bibitem[Hu et~al.(2022)Hu, yelong shen, Wallis, Allen-Zhu, Li, Wang, Wang, and Chen]{hu2022lora}
+Edward~J Hu, yelong shen, Phillip Wallis, Zeyuan Allen-Zhu, Yuanzhi Li, Shean Wang, Lu~Wang, and Weizhu Chen.
+\newblock {LoRA:} low-rank adaptation of large language models.
+\newblock In \emph{International Conference on Learning Representations (ICLR)}, 2022.
+
+\bibitem[Huang et~al.(2023)Huang, Jiang, Ze, and Xu]{huang2023diffusion}
+Tao Huang, Guangqi Jiang, Yanjie Ze, and Huazhe Xu.
+\newblock Diffusion reward: Learning rewards via conditional video diffusion.
+\newblock \emph{arXiv preprint arXiv:2312.14134}, 2023.
+
+\bibitem[Khachatryan et~al.(2023)Khachatryan, Movsisyan, Tadevosyan, Henschel, Wang, Navasardyan, and Shi]{khachatryan2023text2video}
+Levon Khachatryan, Andranik Movsisyan, Vahram Tadevosyan, Roberto Henschel, Zhangyang Wang, Shant Navasardyan, and Humphrey Shi.
+\newblock Text2video-zero: Text-to-image diffusion models are zero-shot video generators.
+\newblock \emph{arXiv preprint arXiv:2303.13439}, 2023.
+
+\bibitem[Ko et~al.(2024)Ko, Mao, Du, Sun, and Tenenbaum]{ko2024avdc}
+Po-Chen Ko, Jiayuan Mao, Yilun Du, Shao-Hua Sun, and Joshua~B. Tenenbaum.
+\newblock Learning to act from actionless videos through dense correspondences.
+\newblock In \emph{International Conference on Learning Representations (ICLR)}, 2024.
+
+\bibitem[Liang et~al.(2024)Liang, Liu, Ozguroglu, Sudhakar, Dave, Tokmakov, Song, and Vondrick]{liang2024dreamitate}
+Junbang Liang, Ruoshi Liu, Ege Ozguroglu, Sruthi Sudhakar, Achal Dave, Pavel Tokmakov, Shuran Song, and Carl Vondrick.
+\newblock Dreamitate: Real-world visuomotor policy learning via video generation.
+\newblock \emph{arXiv preprint arXiv:2406.16862}, 2024.
+
+\bibitem[Luo et~al.(2024)Luo, He, Zeng, and Sun]{luo2024text}
+Calvin Luo, Mandy He, Zilai Zeng, and Chen Sun.
+\newblock Text-aware diffusion for policy learning.
+\newblock In \emph{NeurIPS}, 2024.
+
+\bibitem[Ma et~al.(2022)Ma, Sodhani, Jayaraman, Bastani, Kumar, and Zhang]{ma2022vip}
+Yecheng~Jason Ma, Shagun Sodhani, Dinesh Jayaraman, Osbert Bastani, Vikash Kumar, and Amy Zhang.
+\newblock Vip: Towards universal visual reward and representation via value-implicit pre-training.
+\newblock \emph{arXiv preprint arXiv:2210.00030}, 2022.
+
+\bibitem[Majumdar et~al.(2023)Majumdar, Yadav, Arnaud, Ma, Chen, Silwal, Jain, Berges, Wu, Vakil, Abbeel, Malik, Batra, Lin, Maksymets, Rajeswaran, and Meier]{majumdar2023vc1}
+Arjun Majumdar, Karmesh Yadav, Sergio Arnaud, Jason Ma, Claire Chen, Sneha Silwal, Aryan Jain, Vincent-Pierre Berges, Tingfan Wu, Jay Vakil, Pieter Abbeel, Jitendra Malik, Dhruv Batra, Yixin Lin, Oleksandr Maksymets, Aravind Rajeswaran, and Franziska Meier.
+\newblock Where are we in the search for an artificial visual cortex for embodied intelligence?
+\newblock In \emph{Conference on Neural Information Processing Systems (NeurIPS)}, 2023.
+
+\bibitem[McCarthy et~al.(2024)McCarthy, Tan, Schmidt, Acero, Herr, Du, Thuruthel, and Li]{mccarthy2024towards}
+Robert McCarthy, Daniel~CH Tan, Dominik Schmidt, Fernando Acero, Nathan Herr, Yilun Du, Thomas~G Thuruthel, and Zhibin Li.
+\newblock Towards generalist robot learning from internet video: A survey.
+\newblock \emph{arXiv preprint arXiv:2404.19664}, 2024.
+
+\bibitem[Ramesh et~al.(2022)Ramesh, Dhariwal, Nichol, Chu, and Chen]{ramesh2022hierarchical}
+Aditya Ramesh, Prafulla Dhariwal, Alex Nichol, Casey Chu, and Mark Chen.
+\newblock Hierarchical text-conditional image generation with clip latents.
+\newblock \emph{arXiv preprint arXiv:2204.06125}, 2022.
+
+\bibitem[Rombach et~al.(2022)Rombach, Blattmann, Lorenz, Esser, and Ommer]{rombach2022high}
+Robin Rombach, Andreas Blattmann, Dominik Lorenz, Patrick Esser, and Bj{\"o}rn Ommer.
+\newblock High-resolution image synthesis with latent diffusion models.
+\newblock In \emph{Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition}, pp.\  10684--10695, 2022.
+
+\bibitem[Ruiz et~al.(2023)Ruiz, Li, Jampani, Pritch, Rubinstein, and Aberman]{ruiz2023dreambooth}
+Nataniel Ruiz, Yuanzhen Li, Varun Jampani, Yael Pritch, Michael Rubinstein, and Kfir Aberman.
+\newblock Dreambooth: Fine tuning text-to-image diffusion models for subject-driven generation.
+\newblock In \emph{Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition}, 2023.
+
+\bibitem[Sermanet et~al.(2016)Sermanet, Xu, and Levine]{sermanet2016unsupervised}
+Pierre Sermanet, Kelvin Xu, and Sergey Levine.
+\newblock Unsupervised perceptual rewards for imitation learning.
+\newblock \emph{arXiv preprint arXiv:1612.06699}, 2016.
+
+\bibitem[Singer et~al.(2022)Singer, Polyak, Hayes, Yin, An, Zhang, Hu, Yang, Ashual, Gafni, et~al.]{singer2022make}
+Uriel Singer, Adam Polyak, Thomas Hayes, Xi~Yin, Jie An, Songyang Zhang, Qiyuan Hu, Harry Yang, Oron Ashual, Oran Gafni, et~al.
+\newblock Make-a-video: Text-to-video generation without text-video data.
+\newblock \emph{arXiv preprint arXiv:2209.14792}, 2022.
+
+\bibitem[Song et~al.(2021)Song, Meng, and Ermon]{song2021ddim}
+Jiaming Song, Chenlin Meng, and Stefano Ermon.
+\newblock Denoising diffusion implicit models.
+\newblock In \emph{International Conference on Learning Representations (ICLR)}, 2021.
+
+\bibitem[Tassa et~al.(2018)Tassa, Doron, Muldal, Erez, Li, Casas, Budden, Abdolmaleki, Merel, Lefrancq, et~al.]{tassa2018deepmind}
+Yuval Tassa, Yotam Doron, Alistair Muldal, Tom Erez, Yazhe Li, Diego de~Las Casas, David Budden, Abbas Abdolmaleki, Josh Merel, Andrew Lefrancq, et~al.
+\newblock Deepmind control suite.
+\newblock \emph{arXiv preprint arXiv:1801.00690}, 2018.
+
+\bibitem[Thomas et~al.(2018)Thomas, van Steenkiste~Sjoerd, Karol, Raphael, Marcin, and Sylvain]{thomas2018fvd}
+Unterthiner Thomas, van Steenkiste~Sjoerd, Kurach Karol, Marinier Raphael, Michalski Marcin, and Gelly Sylvain.
+\newblock Towards accurate generative models of video: A new metric \& challenges.
+\newblock \emph{arXiv}, 1812.01717, 2018.
+
+\bibitem[Villegas et~al.(2022)Villegas, Babaeizadeh, Kindermans, Moraldo, Zhang, Saffar, Castro, Kunze, and Erhan]{villegas2022phenaki}
+Ruben Villegas, Mohammad Babaeizadeh, Pieter-Jan Kindermans, Hernan Moraldo, Han Zhang, Mohammad~Taghi Saffar, Santiago Castro, Julius Kunze, and Dumitru Erhan.
+\newblock Phenaki: Variable length video generation from open domain textual description.
+\newblock \emph{arXiv preprint arXiv:2210.02399}, 2022.
+
+\bibitem[Wang et~al.(2024{\natexlab{a}})Wang, Sridhar, Feng, Van~der Merwe, Fishman, Fazeli, and Park]{wang2024language}
+Boyang Wang, Nikhil Sridhar, Chao Feng, Mark Van~der Merwe, Adam Fishman, Nima Fazeli, and Jeong~Joon Park.
+\newblock This\&that: Language-gesture controlled video generation for robot planning.
+\newblock \emph{arXiv preprint arXiv:2407.05530}, 2024{\natexlab{a}}.
+
+\bibitem[Wang et~al.(2024{\natexlab{b}})Wang, Huang, Bian, Shi, Sun, Song, Liu, and Li]{wang2024animatelcm}
+Fu-Yun Wang, Zhaoyang Huang, Weikang Bian, Xiaoyu Shi, Keqiang Sun, Guanglu Song, Yu~Liu, and Hongsheng Li.
+\newblock {AnimateLCM:} computation-efficient personalized style video generation without personalized video data.
+\newblock \emph{arXiv}, 2402.00769, 2024{\natexlab{b}}.
+
+\bibitem[Wei et~al.(2024)Wei, Zhang, Qing, Yuan, Liu, Liu, Zhang, Zhou, and Shan]{wei2024dreamvideo}
+Yujie Wei, Shiwei Zhang, Zhiwu Qing, Hangjie Yuan, Zhiheng Liu, Yu~Liu, Yingya Zhang, Jingren Zhou, and Hongming Shan.
+\newblock Dreamvideo: Composing your dream videos with customized subject and motion.
+\newblock In \emph{Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition}, pp.\  6537--6549, 2024.
+
+\bibitem[Wen et~al.(2023)Wen, Lin, So, Chen, Dou, Gao, and Abbeel]{wen2023any}
+Chuan Wen, Xingyu Lin, John So, Kai Chen, Qi~Dou, Yang Gao, and Pieter Abbeel.
+\newblock Any-point trajectory modeling for policy learning.
+\newblock \emph{arXiv preprint arXiv:2401.00025}, 2023.
+
+\bibitem[Xing et~al.(2023)Xing, Xia, Zhang, Chen, Wang, Wong, and Shan]{xing2023dynamicrafter}
+Jinbo Xing, Menghan Xia, Yong Zhang, Haoxin Chen, Xintao Wang, Tien-Tsin Wong, and Ying Shan.
+\newblock Dynamicrafter: Animating open-domain images with video diffusion priors.
+\newblock \emph{arXiv preprint arXiv:2310.12190}, 2023.
+
+\bibitem[Yang et~al.(2023{\natexlab{a}})Yang, Du, Dai, Schuurmans, Tenenbaum, and Abbeel]{yang2023probabilistic}
+Mengjiao Yang, Yilun Du, Bo~Dai, Dale Schuurmans, Joshua~B Tenenbaum, and Pieter Abbeel.
+\newblock Probabilistic adaptation of text-to-video models.
+\newblock \emph{arXiv preprint arXiv:2306.01872}, 2023{\natexlab{a}}.
+
+\bibitem[Yang et~al.(2023{\natexlab{b}})Yang, Du, Ghasemipour, Tompson, Schuurmans, and Abbeel]{yang2023learning}
+Mengjiao Yang, Yilun Du, Kamyar Ghasemipour, Jonathan Tompson, Dale Schuurmans, and Pieter Abbeel.
+\newblock Learning interactive real-world simulators.
+\newblock \emph{arXiv preprint arXiv:2310.06114}, 2023{\natexlab{b}}.
+
+\bibitem[Yang et~al.(2024)Yang, Walker, Parker-Holder, Du, Bruce, Barreto, Abbeel, and Schuurmans]{yang2024video}
+Sherry Yang, Jacob Walker, Jack Parker-Holder, Yilun Du, Jake Bruce, Andre Barreto, Pieter Abbeel, and Dale Schuurmans.
+\newblock Video as the new language for real-world decision making.
+\newblock \emph{arXiv preprint arXiv:2402.17139}, 2024.
+
+\bibitem[Yu et~al.(2020)Yu, Quillen, He, Julian, Hausman, Finn, and Levine]{yu2020meta}
+Tianhe Yu, Deirdre Quillen, Zhanpeng He, Ryan Julian, Karol Hausman, Chelsea Finn, and Sergey Levine.
+\newblock Meta-world: A benchmark and evaluation for multi-task and meta reinforcement learning.
+\newblock In \emph{Conference on robot learning}, pp.\  1094--1100. PMLR, 2020.
+
+\bibitem[Zhou et~al.(2024{\natexlab{a}})Zhou, Qin, Yin, Huang, Zhang, Sheng, Qiao, and Shao]{zhou2024minedreamer}
+Enshen Zhou, Yiran Qin, Zhenfei Yin, Yuzhou Huang, Ruimao Zhang, Lu~Sheng, Yu~Qiao, and Jing Shao.
+\newblock Minedreamer: Learning to follow instructions via chain-of-imagination for simulated-world control.
+\newblock \emph{arXiv preprint arXiv:2403.12037}, 2024{\natexlab{a}}.
+
+\bibitem[Zhou et~al.(2024{\natexlab{b}})Zhou, Du, Chen, Li, Yeung, and Gan]{zhou2024robodreamer}
+Siyuan Zhou, Yilun Du, Jiaben Chen, Yandong Li, Dit-Yan Yeung, and Chuang Gan.
+\newblock Robodreamer: Learning compositional world models for robot imagination.
+\newblock \emph{arXiv preprint arXiv:2404.12377}, 2024{\natexlab{b}}.
+
+\end{thebibliography}

@@ -1,0 +1,180 @@
+
+\subsection{Protocol}
+\label{sec:pretrain_protocol}
+  
+We evaluate the HPT pre-training performance with the \textit{averaged validation loss} (prediction errors on unseen trajectories) at the last iteration of pre-training. These validation datasets are fixed independent of the trajectory counts and models during training. Unless particularly noted, the validation datasets come from the same 27 datasets in the \textit{Default Setting}. Note that it is unrealistic to evaluate the pre-trained models on many real-world robotic environments at scale and there are very few evaluation alternatives to measure large-scale pre-training if we ignore this objective. In fields such as NLP\cite{huyen2023evaluation,kaplan2020scaling}, training loss objective (e.g. perplexity) is often used to measure the progress of pre-training.   Admittedly, there are several caveats to this metric including the closed-loop performance gap and the task success rate gap. We will address these issues in Section \ref{sec:transfer} on HPT transfer learning. See Appendix Section \ref{appendix:impl} and Section \ref{appendix:future} for more details and discussions.
+
+
+ 
+
+ 
+ 
+
+
+
+\begin{figure}
+        \vspace{-15pt}
+         \setlength{\abovecaptionskip}{-3pt}
+  \setlength{\belowcaptionskip}{0pt}
+\begin{minipage}{\textwidth}
+    \small
+    \centering
+    \includegraphics[width=\linewidth]{figures/scale_plot_left.pdf}
+    \caption{\textbf{Data Scaling}. We run scaling \methodname{} experiments along dataset sizes and the number of datasets. Each point is the validation loss of a full training run. (a) We evaluate the losses on 27 datasets with the number of total trajectories ranging from a maximum of 10 trajectories per dataset (270 in total)  to a maximum of 100000 trajectories per dataset (170k in total).   We compare two model sizes, HPT-S/L, where HPT-L is a bigger model trained with 4 times more tokens than HPT-S. (b) We compute the validation losses for a fixed subset of 10 datasets with a fixed number of epochs (2). We compute mean and standard deviations for 4 runs across model sizes from HPT-S to HPT-XL and across dataset counts from 10 to 52. }
+    \label{fig:pre-train_curve_data}
+    \end{minipage} \hfill
+\end{figure}
+
+\begin{figure}
+    \centering
+    \begin{minipage}{1\textwidth} \centering
+    \includegraphics[width=\linewidth]{figures/sample_seen_plot.pdf}
+    \caption{\textbf{Epoch Scaling}. We run scaling \methodname{} experiments along the number of total samples. Each point is the validation loss of a full pre-training run.   Setting: HPT-S, 27 datasets with a maximum of 1000 trajectories for each dataset. Left) We scale up the number of batch sizes and measure the changes in validation losses. Right) Derived from the left figure, we multiply the batches seen by the number of samples in each batch. }
+    \label{fig:pre-train_batch_curve}
+    \end{minipage}\hfill
+  \vspace{-10pt}
+ \end{figure}
+
+
+
+\subsection{Scaling Behaviors} \label{sec:pretrain_scale}
+\textbf{Data Scaling.} In Figure \ref{fig:pre-train_curve_data} (a), we observe stable and scaling validation losses even on increasingly heterogeneous embodiments. Moreover, we found the compute (e.g. samples seen per training run) and the data amounts needed to scale in tandem \cite{kaplan2020scaling} to get closer to convergence in the training process. In the red line in Figure \ref{fig:pre-train_curve_data} (a), we observe better validation losses as we scale up the total number of trajectories, by using a larger model and doubling the batch size every order of magnitude increase in trajectory counts. Strictly increasing data while keeping others bottlenecked (HPT-S and fixed iterations) might cause an early plateau performance at around 1000 trajectories max per dataset, as shown in the blue line in Figure \ref{fig:pre-train_curve_data}. In  Figure \ref{fig:pre-train_curve_data} (b),  we also pre-train on an increasing number of datasets with a fixed number of epochs and evaluate on the fixed subset (first 10 datasets). We hypothesize that training with more embodiments contributes to the generalization of the trunk.  These experiments can scale to the extent of 200k trajectories and 52 datasets.
+
+\begin{figure}[t]
+\setlength{\abovecaptionskip}{-3pt}
+  \setlength{\belowcaptionskip}{0pt}
+\begin{minipage}{0.48\textwidth}
+    \small
+    \centering
+    \includegraphics[width=\linewidth]{figures/scale_plot_right.pdf}
+    \end{minipage} \hfill
+    \begin{minipage}{0.48\textwidth}
+    \caption{\textbf{Model Scaling}.  We run scaling \methodname{} experiments along model sizes. Each point is a full training run.  Setting: 27 datasets with a maximum of 1000 trajectories for each dataset.  We scale along model size (from 1M to 1B) for both the blue and red lines. The red line is trained with increasing data and epochs to reach convergence. Specifically, we gradually increase the batch sizes from 256 to 2048 (doubles every order of model size increase) and use 170k trajectories.}
+    \label{fig:pre-train_curve_model}
+   \end{minipage} \hfill
+   \vspace{-.2em}
+\end{figure}
+
+\textbf{Model Scaling.} In Figure \ref{fig:pre-train_curve_model}, we fix the number of datasets (27) in RT-X and use a maximum of 1000 trajectories for each dataset. We scale along model size (from 1M to 1B) and gradually increase the batch sizes from 256 to 2048 (doubles every order of model size increase) and use the larger dataset with 170k trajectories. We observe that when we scale to bigger models with larger amounts of compute (red line), the pre-training can achieve low validation losses until it is plateaued. We do not find a significant difference between scaling depth or scaling width.
+
+
+ \textbf{Epoch Scaling.} In this experiment, we fix the number of datasets (27) and use a maximum of 1000 trajectories for each dataset. In Figure \ref{fig:pre-train_batch_curve}, we observe that increasing batch sizes (Left), which effectively scales training tokens (Right), can generally improve the model performance until convergence. Another observation we have is to use distributed workers to load from as many datasets as possible to aggregate each batch. We hypothesize that the large variance of training on heterogeneous datasets can be reduced by using a large batch size.  See Appendix \ref{appendix:addtion_exp} for more experiment details.
+
+
+
+\subsection{Pre-training on Synthetic Data and Internet Human Videos}\label{sec:pretrain_simhuman} We experiment beyond real-world robot teleop data, which is expensive to collect and scale. For the additional datasets, we consider 7 simulation datasets across many popular simulators Drake \cite{wang2023fleet}, Mujoco \cite{yu2020meta,robomimic2021}, Isaac Sim \cite{gong2023arnold}, and PyBullet \cite{wuthrich2020trifinger,wang2022goal}, as well as Sapien \cite{mu2021maniskill} and Flex \cite{salhotra2022learning}, with image inputs and expert demonstrations. For the human datasets that lack proprioception and action information, we use poses and 2D positions as surrogates for the supervised policy learning objectives.   We use in total 300 trajectories from EPIC kitchen \cite{Damen2018EPICKITCHENS} and PoCo \cite{wang2023poco}  with a maximum trajectory length 1000. 
+See Appendix Figure \ref{fig:dataset} and Table \ref{table:mixture} for more details on the dataset compositions. 
+
+ 
+In Figure \ref{fig:stem_ablate_dataset}, we use a maximum of 1000 trajectories for each dataset and compare against the baseline of 27 datasets with evaluation on all the pre-trained datasets. We show that pre-training on additional embodiment datasets such as simulation and human video datasets can be possible, despite the large embodiment gaps with real robots. These datasets provide complimentary embodiment data to pure teleop data, and they illustrate how much heterogeneity can be handled in the HPT framework. 
+
+
+\begin{figure}
+\vspace{-1pt}
+\begin{minipage}{0.45\textwidth}
+    \small \centering
+    \label{fig:stem_ablate_dataset}
+\includegraphics[width=1\linewidth]{figures/pretrain_ablation_right.pdf}
+        \end{minipage} \hfill
+    \begin{minipage}{0.51\textwidth}
+\caption{\textbf{Joint Pre-training with Simulation and Human Videos.} {The baseline denotes the default setting without simulation and human datasets.} Setting: We run the experiments with a training corpus of datasets with 1000 trajectories maximum.  }    \label{fig:stem_ablate_dataset}
+\end{minipage}
+ 
+\end{figure}
+
+\section{Experiments on Transfer Learning}
+\label{sec:transfer}
+
+In the previous section, we evaluate pre-training using the validation losses. In this section, we answer the following question with task success rates in transfer learning: Can the pre-trained HPT model be transferred to new embodiments, tasks, and environments in simulation and the real world? 
+ \begin{figure}[t]
+    \centering
+    \includegraphics[width=1\linewidth]{figures/sim_setup.pdf}
+    \caption{\textbf{Simulation Evaluation Tasks.} We evaluate HPT across several simulation benchmarks and show policy rollout visualizations of the experiments. Experiment details can be found in Section \ref{sec:sim_experiments} and \ref{appendix:sim}.}
+    \label{fig:sim_setup_tasks}
+\end{figure}
+
+
+\subsection{Transfer to Embodiments in Simulations}
+\label{sec:sim_experiments}
+\paragraph{Protocol.}
+ We evaluate the pre-trained representations on robot manipulation simulation benchmarks Meta-world \cite{yu2020meta}, RoboMimic \cite{robomimic2021}, and Fleet-Tools \cite{wang2023fleet}. Each training dataset uses from 20-100 trajectories per task and each testing covers 50 episodes with different initial conditions. The policies use HPT-Small as the pre-trained trunk and reinitialize the stem and head for transferring.  
+
+ During the evaluation phase, we compare the following models: \texttt{No Trunk} uses only the stem and head without the trunk in the middle and trains from scratch as common practice \cite{levine2016end}. \texttt{From Scratch} trains the entire policy from scratch with the trunk,  \texttt{Pretrained Frozen} uses and freezes the pre-trained trunk during transfer learning and \texttt{Pretrained Finetuned} loads the pre-trained HPT-Base trunk and finetunes the whole network end-to-end, and \texttt{Pretrained Finetuned (HPT-XL)} uses the same fine-tuning procedure with a pre-trained HPT-XL trunk with a lower pre-training validation loss. To reduce the variance, we conduct independent training runs and evaluations 5 times and average for each model. The inference time during transfer on an  RTX 3070 GPU is 47Hz for HPT-base and 19Hz for HPT-XL, while a more recent GPU like A100 can be 3-4 times faster.
+
+\paragraph{Experiment.}  In Figure \ref{fig:simulation_eval_appendix} (a), we test the model on the downstream tasks in closed-loop simulation and observe improved task success rate using the pre-trained models ranging from HPT-B  to HPT-XL, although pre-training for the simulation experiments only happens in the real-world embodiments. 
+
+ In Figure \ref{fig:simulation_eval_appendix} (b), we run HPT on the recently released Simpler \cite{li24simpler} Benchmark, which allows for comparing with Octo \cite{octo_2023}, RT1-X, and RT2-X \cite{open_x_embodiment_rt_x_2023} on a high-fidelity simulation. We focus on three different tasks \texttt{Close Drawer}, \texttt{Move Near}, and \texttt{Pick Coke Can} in the Google EDR embodiment. For each task, we test several different initializations with a total of over 300 episodes for all tasks. Note that the pre-training corpus of HPT-S does not include \cite{brohan2022rt}, and simulation tasks have a focus on language conditioning and do not expose proprioception inputs, which is not suitable for HPT. To address these issues, we finetune HPT on the supervised datasets with around 50 trajectories under the simulation protocol.  We use HPT-base as the backbone for this experiment. We use the baseline results from \cite{li24simpler}.
+ See Section \ref{appendix:sim} for more implementation and experiment details.
+
+ 
+
+\begin{figure}
+    \centering
+    \includegraphics[width=\linewidth]{figures/sim_perf3.pdf}
+    \caption{\textbf{Success Rates in Simulation  Experiments.} (a) We evaluate transfer learning performance of models from HPT-B to HPT-XL on tasks across 4 different simulator benchmarks. (b) We compare with several generalist models in the recent Simpler \cite{li24simpler} benchmark with Google GDR embodiment. The pre-trained trunks are trained from the Scaled Settings. The success rates are computed over 150 rollouts per approach.}
+    \label{fig:simulation_eval_appendix}
+\end{figure}
+ 
+
+
+
+
+\begin{figure}[t]
+\begin{minipage}{0.68\textwidth}{
+    \small \centering
+    \includegraphics[width=1\linewidth]{figures/realworld_figure.pdf}
+    }
+     \end{minipage} \hfill
+     \begin{minipage}{.3\textwidth}{
+     \caption{\textbf{Real World Qualitative Results}. Pre-trained  HPT policies can perform dynamic and long-horizon contact-rich precision tasks in pet care and assembly. The policies show robust and generalized behaviors under scene changes and disturbances. \vspace{-5pt} }
+     \label{fig:realworld}}
+
+     \end{minipage}
+            
+\end{figure}
+
+\begin{figure}
+    
+    \centering
+    \begin{minipage}{.6\textwidth}
+        \centering
+         \setlength{\abovecaptionskip}{-3pt}
+  \setlength{\belowcaptionskip}{0pt}
+\includegraphics[width=\linewidth]{figures/realworld_results.png}
+   \caption{\textbf{Transfer Learning in the Real World.} We evaluate the pre-trained HPTs on four tasks / two embodiments. The average success rate with standard deviations is computed for 45 trials per approach. We use the default pre-training setup with HPT-Base for this experiment. See Section \ref{sec:realworld_experiments} for detailed descriptions. }
+        \label{fig:realworld_model_perf}
+    \end{minipage} \hspace{5pt}
+    \begin{minipage}{.35\textwidth}
+    \small
+        \centering
+        \begin{tabular}{l|c}
+            \textbf{Method} & \textbf{Success (\%)} \\ 
+            \hline
+            From Scratch No Prop.  & 26.7$\pm$3.3             \\
+            From Scratch    & 43.3$\pm$3.8            \\
+            R3M  \cite{nair2022r3m}           & 50.0$\pm$3.0              \\
+            Voltron \cite{karamcheti2023language}             & 46.7$\pm$3.8                   \\
+            VC-1 \cite{vc2023}             & 53.3$\pm$2.6             \\    
+            No Prop.  Finetuned  & 63.3$\pm$2.6         \\
+            HPT-B Finetuned           & 70.0$\pm$3.0          \\
+            HPT-XL  Finetuned              & \textbf{76.7}$\pm$3.3 \\
+        \end{tabular}
+        \captionof{table}{\textbf{Comparison on the \texttt{Sweep Leftover}.} We compare the fine-tuned HPT models with several baselines including vision-only pre-trained models. }
+        \label{tab:model_ablate}
+    \end{minipage}
+    \vspace{-3pt}
+\end{figure}
+
+
+\subsection{Transfer to Embodiments in the Real World}
+\label{sec:realworld_experiments}
+
+\paragraph{Protocol.}
+For the real-world experiments, we evaluate the HPTs on two different embodiments for tasks in pet care and assembly, which are not covered in the pre-training datasets  \cite{open_x_embodiment_rt_x_2023}. In particular, for these two robots, we experiment with different observation spaces 1 camera v.s. 2 cameras as well as different action spaces relative pose v.s. absolute pose.
+For data collection, we experiment with both an Oculus Quest to collect relative pose control as action labels as well as kinesthetic teaching. The episode lengths of real-world teleoperation vary from 50 steps to 150 steps with 10 Hz control frequencies. We experiment with the tasks \texttt{Sweep Leftover}, \texttt{Fill Water},  \texttt{Scoop Food} and \texttt{Switch Insertion}, which require 5-20 seconds of interactions with granular or small objects with fine contacts, shown in Figure \ref{fig:realworld}.  We collect around 100 demos for each task and evaluate them for 15 trials to measure the average success rate. 
+
+\paragraph{Experiment.} We adopt a similar transfer learning method in the previous section and evaluate the pre-trained HPT representations under real-world evaluation protocols. We train the policy with 20000 iterations with a batch size of 256 and a learning rate of $5e^{-6}$. We defer implementation details to Appendix Section \ref{appendix:realworld}. Quantitatively in Figure \ref{fig:realworld_model_perf},  we observe pre-trained policies attain a better success rate over the \texttt{No-Trunk} and the \texttt{From-Scratch} baselines.  In particular, the \texttt{From-Scratch} baselines in \texttt{Fill-Water} use the state-of-the-art diffusion policy architecture to illustrate the flexibility of the pre-trained representations. In Figure \ref{fig:realworld}, qualitatively, we observe better generalization and robustness to varying poses and numbers of granular objects, and varying camera configurations and lighting conditions with pre-trained HPT. 
+
+
+
+{On Table \ref{tab:model_ablate}, we perform an ablation study for the \texttt{Sweep Leftover} task. We also compare with  R3M \cite{nair2022r3m}, Voltron \cite{karamcheti2023language}, and VC-1 \cite{vc2023}.  We use a finetuned model with the released backbone and weights. We note that these previous works focus on only pre-training the vision encoders of the policies with human videos. Finally, we compared with policies that train from scratch (\texttt{From Scratch}) and policies that do not use proprioception during pre-training (\texttt{No Prop.} \texttt{Finetuned}) and add in proprioception afterwards. All of our experiments use pre-trained encoders and the trainable parameters (stem and head) can be as few as 2\% of the parameters. }

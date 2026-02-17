@@ -1,0 +1,45 @@
+\captionsetup[subtable]{justification=centering} 
+\begin{table*}[t!]
+\centering
+\caption{\textbf{Ablation study.}~
+Results report the average success rate (\%) on RoboCasa-Kitchen with 300 demonstrations, analyzing the effect of \textbf{(a)} different distance definitions for soft-label supervision of robotic signals and \textbf{(b)} representation augmentation strategies for RS-CL.}
+\label{tab:ablation}
+\begin{minipage}[t]{0.48\linewidth}\centering\small
+\resizebox{!}{0.22\textwidth}{%
+\phantomsubcaption\label{tab:ablation_softlabel}
+    \begin{tabular}{l c}
+        \toprule
+        Soft-label target & Avg. \\
+        \midrule
+        Baseline (\emph{i.e.}, no regularization)          & 65.7 \\
+        No soft label (\emph{i.e.}, InfoNCE)      & 67.3 \\
+        Next action sequence distance & 66.7 \\
+        Next single action distance       & 66.8 \\
+        Current state distance   & \textbf{69.7} \\
+        \bottomrule
+    \end{tabular}
+}
+\vspace{.5em}
+\caption*{\small (a) {Soft-label target.}}
+\end{minipage}
+~~
+\begin{minipage}[t]{0.48\linewidth}\centering\small
+\resizebox{!}{0.22\textwidth}{%
+\phantomsubcaption\label{tab:ablation_augmentation}
+    \begin{tabular}{l c}
+    \toprule
+    Augmentation method \quad\quad\quad & Avg.\\
+    \midrule
+    No augmentation & 65.3 \\
+    Token cutoff  & 66.3 \\
+    Feature cutoff & 67.5 \\
+    Span cutoff   & 67.3 \\
+    View cutoff   & \textbf{69.7} \\
+    \bottomrule
+    \end{tabular}
+    }
+\vspace{.5em}
+\caption*{\small (b) {Representation augmentation method.}}
+\end{minipage}
+\vspace{-2.em}
+\end{table*}

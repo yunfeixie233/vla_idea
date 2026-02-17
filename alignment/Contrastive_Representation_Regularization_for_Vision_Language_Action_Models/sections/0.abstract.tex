@@ -1,0 +1,12 @@
+\begin{abstract}
+
+Vision-Language-Action (VLA) models have shown its capabilities in robot manipulation by leveraging rich representations from pre-trained Vision-Language Models (VLMs).
+However, their representations arguably remain suboptimal, lacking sensitivity to robotic signals such as control actions and proprioceptive states. 
+To address the issue, we introduce \textit{Robot State-aware Contrastive Loss (RS-CL)}, a simple and effective representation regularization for VLA models, designed to bridge the gap between VLM representations and robotic signals.
+In particular, RS-CL aligns the representations more closely with the robot's proprioceptive states, by using relative distances between the states as soft supervision.
+Complementing the original action prediction objective, RS-CL effectively enhances control-relevant representation learning, while being lightweight and fully compatible with standard VLA training pipeline.
+Our empirical results demonstrate that RS-CL substantially improves the manipulation performance of state-of-the-art VLA models;
+it pushes the prior art from 30.8\% to 41.5\% on pick-and-place tasks in RoboCasa-Kitchen, through more accurate positioning during grasping and placing,
+and boosts success rates from 45.0\% to 58.3\% on challenging real-robot manipulation tasks.
+
+\end{abstract}

@@ -1,0 +1,87 @@
+\section{Method}
+In this section, we introduce \textit{Robot State-aware Contrastive Loss (RS-CL)}, which enhances the action prediction capability of VLA models by guiding the representation to capture low-level robotic signals, particularly the proprioceptive states.
+We describe the VLA training framework in Sec.~\ref{subsec:vla} and present our proposed method, RS-CL, in Sec.~\ref{subsec:RS-CL}. An overview of our method is shown in Fig.~\ref{figure:method}.
+
+\subsection{Vision-Language-Action model}
+\label{subsec:vla}
+
+VLA models are trained to predict the next action chunk $\mathbf{A}_t =[\rva_t, \rva_{t+1}, \dots, \rva_{t+H}]$ of horizon $H$ at current timestep $t$, from a set of observation images from $V$ different views $\mathbf{O}_t^V$ = $\{\rvo_t^1, \rvo_t^2, \dots, \rvo_t^V\}$, a task instruction $\rvc$, and the robot's proprioceptive state $\rvq$.
+A standard framework for VLA models~\citep{pi0, gr00tn1} encodes multimodal inputs $[\mathbf{O}_t^V, \rvc]$ using a pre-trained VLM into a hidden representation, and pass it to the action decoder.
+In practice, we train a lightweight adapter module $f_{\phi}$ upon the VLM and freeze the VLM, following \citet{gr00tn1_5}.
+$f_{\phi}$ processes the output of the VLM as $\rvh = f_{\phi}\big(\textrm{VLM}(\mathbf{O}_t^V, \rvc)\big) \in \mathbb{R}^{N \times d_{\textrm{model}}} $, where $N$ is the number of input tokens for the VLM and $d_{\textrm{model}}$ is the size of the hidden dimension. 
+
+An action decoder $D_\theta$ generates $\mathbf{A}_t$ conditioned on $\rvh$ with the current robot state $\rvq$. 
+Similar to prior works~\citep{pi0, gr00tn1}, we adopt the DiT ~\citep{diffusiontransformer} architecture for the $D_\theta$ and train with the flow-matching objective~\citep{flowmatching, rectifiedflow}:
+\begin{equation}
+\mathcal{L}_{\textrm{FM}}(\theta, \phi) = \mathbb{E}_{s} \Big[ \| D_\theta(\rvh, \mathbf{A}_t^{s}, \rvq) - (\epsilon - \mathbf{A}_t) \|_2^2 \Big],
+\label{eq:fm}
+\end{equation}
+where $\mathbf{A}_{t}^{s} = s \mathbf{A}_{t} + (1-s)\epsilon$ is an interpolated action chunk at the flow-matching timestep $s \in [0,1]$ sampled from a prior distribution $p(s)$. 
+After training, $D_\theta$ generates $\mathbf{A}_t$ through an iterative denoising process starting from a random Gaussian noise $\epsilon \sim \mathcal{N}(\bm{0}, \mathbf{I})$. 
+
+\input{figures/figure_2_observations}
+
+\subsection{Robot State-aware Contrastive Loss}
+\label{subsec:RS-CL}
+While VLMs acquire rich semantic representations from Internet-scale vision–language data, they lack exposure to robotic modalities such as low-level control actions and proprioceptive states.
+As a result, their embeddings are strongly shaped by the visual appearance and often fail to capture signals relevant to robot control.
+This misalignment is evident when we visualize the VLM embeddings of robot trajectories for the same manipulation task (\emph{e.g.}, Open the microwave / cabinet) across different environments in RoboCasa-Kitchen (see Fig.~\ref{subfig:trajectories}).
+We observe that VLM embeddings are dominated by the visual cues, such as presence of large objects or background textures (see Fig.~\ref{subfig:vlmrep}), rather than control-relevant factors like the robot’s current pose or the next action needed to complete the task.
+
+\input{figures/figure_3_viewcutoff}
+This misalignment motivates our central hypothesis: explicitly aligning VLM representations with their physical state will improve action prediction.
+Based on this hypothesis, we introduce \textit{Robot State-aware Contrastive Loss (RS-CL)},
+an auxiliary objective for VLAs that regularizes the VLM's representation space using supervision from the robot's proprioceptive states.
+Our key idea is a contrastive loss that uses the distances between proprioceptive states to assign soft weights to similarity scores, which effectively guides the representation space to be aligned with robotic signals.
+As an auxiliary objective, RS-CL complements the original action prediction loss, enabling the entire model to be trained end-to-end in a single stage.
+Concretely, RS-CL consists of three key components: a \textit{learnable summarization token} that amortizes long VLM outputs, a \textit{weighting scheme} for robot state supervision, and a \textit{representation-level augmentation} strategy for lightweight representation learning.
+
+
+\vspace{0.01in}
+\textbf{Amortizing VLM embeddings for representation learning.}~
+Applying contrastive learning on the full sequence of VLM embeddings $\rvh \in \mathbb{R}^{N \times d_{\textrm{model}}}$ is impractical as the sequence length $N$ is typically large, leading to high computational cost and diluted learning signals. 
+To address this, we introduce a \textit{learnable summarization token} $\rvu \in \mathbb{R}^{1 \times d_{\textrm{model}}}$ to produce a compact representative embedding of the sequence. 
+Specifically, $\rvu$ is appended to the VLM output and processed by the adapter $f_\phi$:
+\begin{equation}
+[\rvh, \rvw] = f_\phi \big(\textrm{VLM}(\mathbf{O}_t^V, \rvc) \oplus \rvu \big),
+\end{equation}
+where $\rvw$ denotes the output corresponding to the summarization token and $\oplus$ denotes concatenation along the sequence dimension. 
+Finally, $\rvw$ is projected by a lightweight projector $g_\psi$ into \mbox{$\rvz = g_\psi(\rvw)$}, providing a compact summary for contrastive  learning~\citep{simclr}, while the original embeddings $\rvh$ serves as the conditioning input to the action decoder.
+
+
+\vspace{0.01in}
+\textbf{Incorporating robot states into contrastive learning.}~
+To effectively restructure the VLM representation space to capture robotic signals, we introduce a supervised contrastive learning objective assigned with \textit{soft weights}~\citep{supervisedcl, notallnegsoftcl}, that incorporate the distance between proprioceptive states. 
+Conceptually, embeddings associated with similar proprioceptive states receive higher weights, are pulled closer in the representation space.
+We consider InfoNCE~\citep{cpc} for the contrastive loss, which is widely used in practice~\citep{curl, r3m, vip}.
+Formally, our \textit{Robot State-aware Contrastive Loss (RS-CL)} is defined as a weighted variant of the InfoNCE loss:
+\begin{equation}
+\mathcal{L}_{\textrm{RS-CL}}\big(\{\rvz\}_{i=1}^B, \{\tilde{\rvz}\}_{j=1}^B; \phi, \psi\big)
+= - \sum_{i=1}^{B} \sum_{j=1}^{B}
+w_{ij} \,
+\log
+\frac{\exp\!\big(\mathrm{sim}(\rvz_i, \tilde{\rvz}_j)/\tau\big)}
+{\sum_{k=1}^{B} \exp\!\big(\mathrm{sim}(\rvz_i, \tilde{\rvz}_k)/\tau\big)}\text{,}
+\end{equation}
+where $\{\tilde{\rvz}\}_{j=1}^B$ is the augmented batch of $\{\rvz\}_{i=1}^B$ , \textrm{sim} denotes the cosine similarity, and $\tau>0$ is a temperature that controls the sharpness of similarity.
+The soft weights $w_{ij}$ are computed from the relative distance between proprioceptive states $\rvq_i, \rvq_j$. 
+In practice, we use the Euclidean distance and formulate $w_{ij}$ as follows:
+\begin{equation}
+w_{ij} = \frac{\exp(- \| \rvq_i - \rvq_j \|_2 / \beta )}{\sum_{k=1}^{B} \exp(- \| \rvq_i - \rvq_k \|_2 / \beta)},
+\end{equation}
+where $\beta >0$ is a temperature that controls the sharpness of the mapping from distance to weight.
+The complete training objective integrates the proposed RS-CL with the action prediction objective, implemented as the flow-matching loss in \Eqref{eq:fm}:
+\begin{equation}
+\mathcal{L} = \mathcal{L}_{\textrm{FM}} + \lambda \, \mathcal{L}_{\textrm{RS-CL}},
+\end{equation}
+where we jointly optimize $\theta$, $\phi$, and $\psi$.
+
+
+\vspace{0.01in}
+\textbf{Representation augmentation for contrastive pairs.}~
+The primary goal of our augmentation strategy is to generate diverse contrastive pairs while preserving the semantics tied to the robot’s proprioceptive states.
+In line with this goal, we exploit the property that VLA models commonly process observations of the same scene from multiple views,
+and propose \textit{view cutoff} (See Fig.~\ref{fig:viewcutoff}), a simple representation-level augmentation inspired by cutoff~\citep{cutoff}.  
+\textit{View cutoff} randomly selects a single view index $i \in \{1, \dots, V\}$ and masks out the corresponding feature slice from the VLM output $\textrm{VLM}(\mathbf{O}_t^V, \rvc)$.
+Unlike data-level augmentations requiring additional forward passes through the VLM for each augmented batch, view cutoff operates at the representation level, obtaining alternative representations with minimal overhead. 
+As a result, only the lightweight adapter $f_\phi$ and projector $g_\psi$ are required to process the augmented variants, making the method substantially more efficient, yet still providing diverse pairs for contrastive learning.

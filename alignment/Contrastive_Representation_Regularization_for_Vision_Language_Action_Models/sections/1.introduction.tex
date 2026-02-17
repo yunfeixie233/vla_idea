@@ -1,0 +1,50 @@
+\section{Introduction}
+
+
+Vision-Language-Action (VLA; \citealt{rt2}) models have  emerged as a powerful framework for robot manipulation, leveraging pre-trained Vision-Language Models (VLM; \citealt{llava}) to provide rich visual and semantic grounding for control policies. 
+Among the state-of-the-art VLA models, the common design is to employ a generative action decoder conditioned on VLM-derived representations~\citep{pi0, gr00tn1}. 
+These decoders are trained with an action prediction loss, supervised by the ground-truth sequence of actions.
+
+
+Prior studies have shown that fine-tuning the VLM alongside training the action decoder is essential to the action prediction performance of VLA models.
+This is because VLM representations are typically trained on large-scale visual instruction datasets, but have not been explicitly exposed to robotic modalities, such as low-level control actions and proprioceptive information. 
+Consequently, training VLA models conditioned on frozen VLM representations leads to suboptimal performance, as the VLM lacks the capability to capture robotic signals~\citep{knowledgeinsulation}.
+
+
+Many recent works have proposed different approaches to train the VLM backbone in VLA models to tackle this issue. 
+A widely adopted strategy is to directly update the VLM via gradients from the action prediction objective~\citep{pi0, gr00tn1}.
+Beyond this, several works introduce auxiliary objectives, such as jointly training the VLM backbone with curated instruction datasets~\citep{instructvla}, or blocking gradients from the action decoder instead learning to generate intermediate subtasks and discretized actions~\citep{knowledgeinsulation}.
+Another line of work further trains the VLM on embodied reasoning or spatial grounding tasks using robotics datasets~\citep{robobrain, vebrain, cosmosreason, gr00tn1_5}, or autoregressively predicts discretized actions~\citep{openvlaoft, pi0_5} before fine-tuning them for continuous action prediction. 
+While these approaches help bridge the gap between general-purpose VLM representations and the demands of action prediction, they often require additional training stages or carefully curated datasets.
+% their direct effect on prediction performance remains unclear, 
+
+
+In contrast, we aim to directly refine VLM representations to better serve action generation, while remaining efficient and seamlessly compatible with the existing VLA training pipelines.
+In particular, we focus on contrastive learning, as it provides a principled way to refine representations by defining similar and dissimilar pairs, effectively structuring the embedding space.
+The specific choice of pair construction determines what the embeddings should capture, ranging from semantic relations between modalities~\citep{clip} to temporal dynamics and policy-relevant representations~\citep{tcn, r3m, vip}. 
+Inspired by this perspective, we introduce a contrastive objective that explicitly guides the representations to capture robotic signals, in particular the robot’s proprioceptive states.
+By jointly optimizing the VLM representation with the standard action prediction loss, we forge representations that are not only semantically rich but also deeply grounded in the robot's physical state, leading to accurate action prediction.
+
+\input{figures/figure_1_overview}
+
+\textbf{Contribution.}~
+In this paper, we introduce a novel self-supervised regularization objective for VLA models, termed \textit{Robot State-aware Contrastive Loss (RS-CL)}, a loss that explicitly shapes VLM representations toward capturing robotic signals.
+Different from the conventional contrastive loss, RS-CL assigns pairwise weights based on the distances between robot proprioceptive states, guiding the representations to better reflect robot control-relevant structure. 
+In addition, we propose an representation-level augmentation for VLA models, called \textit{view cutoff}.
+This augmentation constructs alternative embeddings by masking out the feature corresponding to a randomly selected observation view. 
+By operating at the representation-level and minimizing the forwarding process through the pre-trained VLM, RS-CL remains lightweight and fully compatible with existing training pipeline.
+
+
+We extensively evaluate the effectiveness of RS-CL under manipulation benchmarks such as RoboCasa-Kitchen~\citep{robocasa} and LIBERO~\citep{libero}. 
+For instance, RS\mbox{-}CL pushes the prior art VLA model from 48.2\% to 53.0\% (+4.8\%), 63.9\% to 67.2\% (+3.3\%), and 65.7\% to 69.7\% (+4.0\%) on RoboCasa-Kitchen, with 30, 100, and 300 demonstrations, respectively.
+We emphasize that RS-CL gives larger improvement of 30.3\% to 41.5\% (+11.2\%) on pick-and-place tasks, which requires precise positioning during grasping and placing.
+Finally, we show that RS-CL is applicable to real-robot hardware experiments, showing improvement from 45.0\% to 58.3\% (+13.3\%) on challenging manipulation tasks.
+ 
+In summary, our contributions are as follows:
+\vspace{-0.5em}
+\begin{itemize}[leftmargin=*,itemsep=0mm]
+    \item We introduce \textit{Robot State-aware Contrastive Loss (RS-CL)}, a novel objective for VLA models that explicitly aligns VLM representations with proprioceptive states.
+    \item We design RS-CL to operate directly at the representation alongside the original action prediction objective. Therefore RS-CL remains lightweight and compatible with the existing training pipeline.
+    \item We validate RS-CL across diverse training scenarios on  manipulation benchmarks and real-world experiments, showing consistent improvements over the state-of-the-art VLA models.  
+    
+\end{itemize}

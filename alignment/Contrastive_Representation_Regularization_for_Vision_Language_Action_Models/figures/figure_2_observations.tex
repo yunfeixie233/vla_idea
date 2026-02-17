@@ -1,0 +1,26 @@
+\begin{figure}[t]
+    \centering\small
+    \begin{subfigure}[t]{0.30\textwidth}
+        \includegraphics[width=\linewidth]{assets/observation_trajectories.pdf}
+        \caption{Task trajectories.}
+        \label{subfig:trajectories}
+    \end{subfigure}
+    ~
+    \begin{subfigure}[t]{0.33\textwidth}
+        \includegraphics[width=\linewidth]{assets/observation_tsne_vlm.pdf}
+        \caption{Pre-trained VLM representations.}
+        \label{subfig:vlmrep}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.33\textwidth}
+        \includegraphics[width=\linewidth]{assets/observation_tsne_rscl.pdf}        
+        \caption{RS-CL aligned representations.}
+        \label{subfig:rsclrep}
+    \end{subfigure}
+    \caption{\textbf{Training VLM representations for action prediction.} 
+    \textbf{(a)} We visualize VLM embeddings of robot episodes performing the same task ``Open the microwave / cabinet door'' across different scenes in  RoboCasa-Kitchen. 
+    \textbf{(b)} Pre-trained VLM representations are dominated by the visual appearance (\emph{e.g.}, distractor objects).
+    \textbf{(c)} RS-CL guides embeddings to align with the robot’s proprioceptive states, yielding representations that capture common robotic signals (\emph{e.g.}, the robot's current pose, next control action) across environments, therefore aligning all episodes by the task progress.
+    }
+\vspace{-1.0em}
+\label{figure:motivation}
+\end{figure}

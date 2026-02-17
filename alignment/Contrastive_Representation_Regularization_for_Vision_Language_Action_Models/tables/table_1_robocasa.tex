@@ -1,0 +1,47 @@
+\begin{table}[t!]
+\centering\small
+\caption{
+\textbf{RoboCasa-Kitchen benchmark success rate (\%).}~
+Results include fine-tuned performance of representative VLA models ($\pi_0$-FAST, $\pi_0$, and GR00T N1).
+Performance of GR00T N1 is from the original work~\citep{gr00tn1}, while results of $\pi_0$, $\pi_0$-FAST, and GR00T N1.5 are reproduced. 
+Best and runner-up results are highlighted in \textbf{bold} and \underline{underline}, respectively.
+}
+\vspace{-0.8em}
+\label{maintable:robocasanocl}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{l ccc ccc ccc}
+    \toprule
+    \multirow{2.5}{*}{Method} &  \multicolumn{3}{c}{30 demos}  & \multicolumn{3}{c}{100 demos} & \multicolumn{3}{c}{300 demos} \\
+    \cmidrule(lr){2-4} \cmidrule(lr){5-7} \cmidrule(lr){8-10} 
+    & PnP  & Others & Avg. & PnP  & Others & Avg. & PnP  & Others & Avg. \\
+    
+    \midrule
+    $\pi_0$ \citep{pi0}
+        & 20.0 &\textbf{61.3} & 47.8 
+        & 32.7 & \underline{71.6} & 58.7 
+        & 45.0 & \underline{72.9} & 62.5 \\
+    $\pi_0$-FAST \citep{pi0fast} 
+        & \phantom{0}9.3 & 40.0 &29.8
+        & 47.3 & 67.5 & 60.2 
+        & 51.3 & 71.3 & 63.6 \\
+    GR00T N1 \citep{gr00tn1}  
+        & \phantom{0}0.4 & 25.9 & 17.4 
+        & \phantom{0}2.2 & 47.0 & 32.1 
+        & 22.6 & 63.1 & 49.6 \\
+    \arrayrulecolor{black!30}\midrule
+    GR00T N1.5 \citep{gr00tn1_5} 
+        & \underline{30.8} & 56.9 & \underline{48.2}
+        & \underline{51.8} & 70.0 & \underline{63.9}
+        & \underline{55.3} & 70.9 & \underline{65.7} \\
+    \rowcolor{green!10}
+    \textbf{\quad+ RS-CL (Ours)}  
+    & \textbf{41.5} & \underline{58.8} & \textbf{53.0} 
+    & \textbf{58.0} & \textbf{71.8} & \textbf{67.2} 
+    & \textbf{59.8} & \textbf{74.6} & \textbf{69.7} \\
+    
+    \arrayrulecolor{black}\bottomrule
+\end{tabular} 
+}
+
+\end{table}
+

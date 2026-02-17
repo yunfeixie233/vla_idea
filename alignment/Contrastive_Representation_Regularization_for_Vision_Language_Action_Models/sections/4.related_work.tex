@@ -1,0 +1,18 @@
+\section{Related Work}
+
+
+\vspace{0.01in}
+\textbf{Leveraging VLM representations for robot manipulation.}~
+Vision-Language-Action (VLA) models have shown strong capabilities in robotic control by leveraging semantically enriched features from pre-trained Vision-Language Models (VLMs)~\citep{rt2, palme, openvla, pi0, pi0fast, gr00tn1}.
+A widely used architecture for VLA models consists of a pre-trained VLM and an action decoder with its parameters~\citep{pi0, gr00tn1, smolvla, cogact, chatvla, instructvla, diffusionvla}, training the VLM backbone with action prediction loss.
+Prior works have sought to further train VLMs for core knowledge of robot manipulation such as embodied reasoning and physical grounding~\citep{robobrain, vebrain, cosmosreason, gr00tn1_5}, or by discretized action prediction ~\citep{openvlaoft, pi0_5}.
+Other methods jointly train the VLM with the action decoder on the aforementioned objectives.~\citep{knowledgeinsulation, instructvla}.
+Distinct from these approaches, our method does not rely on large-scale curated robotics datasets but instead improves VLM representations via a self-supervised objective.
+
+
+\vspace{0.01in}
+\textbf{Contrastive representation learning.}~ 
+Contrastive learning has been widely adopted for acquiring transferable representations from high-dimensional inputs~\citep{cpc, simclr, moco, curl, clip}.
+In robotics, contrastive objectives have been applied to enable robust transfer of visuomotor policies, leveraging temporal consistency~\citep{tcn, vip, r3m} or multi-view data~\citep{mvmwm}. 
+Recent efforts extend this idea to multimodal alignment~\citep{clasp, class, grif}, producing behaviorally grounded embeddings for control.
+While prior contrastive methods focus on training good representations for downstream tasks, we integrate contrastive learning into end-to-end VLA training, complementing the original action prediction objective.

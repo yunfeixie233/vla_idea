@@ -1,0 +1,38 @@
+\begin{table}[t]
+\centering\small
+\vspace{-1.0em}
+\captionof{table}{
+\textbf{LIBERO benchmark success rate (\%).}~
+Results include fine-tuned performance of representative VLA models ($\pi_0$-FAST, $\pi_0$, and GR00T N1).
+Performance of $\pi_0$-FAST, $\pi_0$ are from the original work~\citep{pi0, pi0fast}, while the results of GR00T N1 and GR00T N1.5 are reproduced. Best results are highlighted in \textbf{bold}.
+}
+\vspace{-0.8em}
+\begin{tabular}{l ccccc}
+    \toprule
+    {Method} 
+    & {Spatial} 
+    &  {Object} 
+    & {Goal} 
+    & {Long} 
+    & {Avg.} \\ 
+    
+    \midrule
+    $\pi_0$ \citep{pi0} 
+    & 96.4 & 98.8 & 95.8 & 85.2 & 94.1 \\
+    $\pi_0$-FAST \citep{pi0fast} 
+    & 96.4 & 96.8 & 88.6 & 60.2 & 85.5 \\
+    GR00T N1 \citep{gr00tn1} 
+    & 95.6 & 97.6 & 94.2 & 89.6 & 94.3 \\
+    \arrayrulecolor{black!30}\midrule
+    GR00T N1.5 \citep{gr00tn1_5} 
+    & 98.2 & \textbf{99.4} & 97.2 & 87.8 & 95.7 \\
+    \rowcolor{green!10}
+    \textbf{\quad + RS-CL (Ours)}  & \textbf{98.4} & 98.6 & \textbf{98.2 }& \textbf{90.4} & \textbf{96.4} \\
+
+    \arrayrulecolor{black}\bottomrule
+\end{tabular}
+%}
+
+\label{maintable:liberonocl}
+\vspace{-1.0em}
+\end{table}

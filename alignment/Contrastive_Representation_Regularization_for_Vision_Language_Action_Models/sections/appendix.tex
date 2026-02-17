@@ -1,0 +1,513 @@
+\clearpage
+
+%------------------------------------------------------------
+\section{Hyperparameters and Implementation Details}
+\label{appendix:implementationdetails}
+\subsection{Hyperparameters}
+\label{appendixsubsec:hyperparams}
+For the weighting coefficient for $\mathcal{L}_{\textrm{RS-CL}}$,  $\lambda$, we initialize to 1.0 and decayed to 0 using a cosine schedule by maximum training steps, such that representation refinement is emphasized in early training while accurate action prediction becomes the main focus later. 
+For similarity temperature $\tau$ and soft weight temperature $\beta$, we use 0.2 and 1.0, respectively.
+
+\subsection{Algorithm}
+\label{appendixsubsec:pseudocode}
+
+
+\begin{algorithm}[H]
+\caption{Training VLA with Robot State-aware Contrastive Loss (RS-CL)}
+\label{alg:rscl}
+\begin{algorithmic}[1]
+    \Require Observations $\mathbf{O}_t^V$, instruction $\rvc$, robot state $\rvq$, ground-truth actions $\mathbf{A}_t$, hyperparameters $(\lambda, \beta, \tau)$
+    \Ensure Trained parameters $\theta, \phi, \psi$
+
+    \For{each training step}
+        \State $\rvh \gets f_{\phi}(\mathrm{VLM}(\mathbf{O}_t^V, \rvc))$ \Comment{Encode inputs with frozen VLM + adapter}
+        \State $[\rvh, \rvw] \gets f_{\phi}(\mathrm{VLM}(\mathbf{O}_t^V, \rvc) \oplus \rvu)$ \Comment{Append summarization token}
+        \State $\rvz \gets g_{\psi}(\rvw)$ \Comment{Project summarization output}
+        \State $\tilde{\rvz} \gets \texttt{ViewCutoff}(\rvz)$ \Comment{View cutoff; Representation-level augmentation}
+
+        \State $\mathcal{L}_{\textrm{FM}} \gets \|D_\theta(\rvh, \mathbf{A}_t^s, \rvq) - (\epsilon - \mathbf{A}_t)\|_2^2$ \Comment{Flow-matching loss}
+        
+        \State $w_{ij} \gets \frac{\exp(-\|\rvq_i - \rvq_j\|_2 / \beta)}{\sum_k \exp(-\|\rvq_i - \rvq_k\|_2 / \beta)}$ \Comment{Robot state-aware contrastive loss}
+        \State $\mathcal{L}_{\textrm{RS-CL}} \gets -\sum_{i,j} w_{ij} \log \frac{\exp(\mathrm{sim}(\rvz_i, \tilde{\rvz}_j)/\tau)}{\sum_k \exp(\mathrm{sim}(\rvz_i, \tilde{\rvz}_k)/\tau)}$ \Comment{Contrastive loss}
+
+        \State $\mathcal{L} \gets \mathcal{L}_{\textrm{FM}} + \lambda \mathcal{L}_{\textrm{RS-CL}}$ \Comment{Final joint objective}
+        \State Update parameters $\theta, \phi, \psi$ via gradient descent
+    \EndFor
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Implementation Details for From-Scratch VLA Training}
+\label{appendix:fromscratch}
+We attach a randomly initialized action decoder to various pre-trained VLMs, with a lightweight adapter module $f_\phi$ in between. 
+Following \citet{gr00tn1_5}, we define $\mathrm{VLM}(\mathbf{O}_t^V, \rvc)$ as the hidden representation from layer 12 out of 36 layers for Qwen2.5-VL-3B variants and the GR00T N1.5 backbone. 
+For Qwen2.5-VL-7B, we extract $\mathrm{VLM}(\mathbf{O}_t^V, \rvc)$ from layer 18 out of 28, which yields higher performance in our layer ablation study on LIBERO (see Table~\ref{appendixtable:hiddenlayerablation}).
+For SigLIP, we instead use the final hidden representation as the condition embedding. 
+
+As the action decoder, we adopt a 16-layer DiT with 0.5B parameters. 
+Empirically, we find that omitting a projection layer to reduce embedding dimensionality before conditioning improves performance (see Table~\ref{appendixtable:hiddenlayerablation}). 
+Accordingly, we do not apply such a layer. 
+Instead, for Qwen2.5-VL-7B variants, we use a larger attention dimension that matches its hidden size $d_\textrm{model}=3584$, while Qwen2.5-VL-3B uses $d_\textrm{model}=2048$.
+
+
+
+\begin{table}[h]
+\centering\small
+\captionof{table}{
+\textbf{Hidden representation layer ablations on Qwen2.5-VL-7B backbone.}~
+We report success rates (\%) on the LIBERO benchmark, varying the hidden layer index used as the conditioning representation for VLA models trained from scratch.
+}
+\begin{tabular}{l ccccc}
+    \toprule
+    {Layer} 
+    & {Spatial} 
+    & {Object} 
+    & {Goal} 
+    & {Long} 
+    & {Avg.} \\ 
+    
+    \midrule
+    12 (with projection)& 87.4 & 94.2 & 41.8 & 40.4 & 66.0 \\
+    18 (with projection)& 86.8 & 83.4 & 61.6 & 44.0 & 69.0 \\
+    \rowcolor{black!10}
+    \textbf{18 (no projection)} & 85.2 & 89.4 & 73.2 & 36.2 & \textbf{71.0} \\
+    24 (with projection)& 85.2 & 89.4 & 73.2 & 36.2 & 57.0 \\
+    \arrayrulecolor{black}\bottomrule
+\end{tabular}
+\label{appendixtable:hiddenlayerablation}
+\end{table}
+
+
+
+
+\clearpage
+%------------------------------------------------------------
+\section{Simulation Experiment Details}
+\label{appendix:simulation}
+\subsection{Dataset}
+\label{appendix:dataset}
+For RoboCasa-Kitchen, we use the publicly available dataset~\footnote{\scriptsize\url{https://huggingface.co/datasets/nvidia/PhysicalAI-Robotics-GR00T-X-Embodiment-Sim}} containing 3000 demonstrations generated with MimicGen~\citep{mimicgen}.
+For LIBERO, we use the publicly available dataset~\footnote{\scriptsize\url{https://huggingface.co/datasets/physical-intelligence/libero}}, consisting of all 270K samples from LIBERO-Spatial, LIBERO-Object, LIBERO-Goal, and LIBERO-Long, re-rendered by \citet{openvla}.
+
+
+\subsection{Training and Evaluation Details}
+\label{appendix:trainingdetails}
+For fine-tuning experiments on GR00T N1.5~\citep{gr00tn1_5}, we employ the publicly available pre-trained checkpoint~\footnote{\scriptsize\url{https://huggingface.co/nvidia/GR00T-N1.5-3B}}.
+We follow the original training and inference recipe of \citet{gr00tn1_5}, including the prior distribution $p(s) = \mathcal{\textrm{Beta}}(\frac{a-s}{a};1.5,1), a = 0.999$ for sampling the flow-matching timestep $s$ in \eqref{eq:fm}. 
+All models are trained with the \textit{new\_embodiment} tag. 
+We omit the use of future tokens~\citep{flare}, as they are beyond the scope of this work.
+
+
+For RoboCasa-Kitchen, we train for 60K gradient steps with a global batch size of 64, using AdamW with a learning rate of 1e-4 under a cosine decay schedule and 3K warmup steps. 
+For LIBERO, we adopt a smaller global batch size of 32, as this setting yields better performance in practice.
+
+
+For $\pi_0$ and $\pi_0$-FAST, we use the pre-trained checkpoints~\footnote{\scriptsize\url{gs://openpi-assets/checkpoints/pi0_base}} ~\footnote{\scriptsize\url{gs://openpi-assets/checkpoints/pi0_fast_base}} to reproduce fine-tuned performance on RoboCasa-Kitchen.
+We train $\pi_0$ for 60K steps and $\pi_0$-FAST for 30K steps, both with a global batch size of 64. 
+We set the learning rate to 2.5e-5 with cosine decay to 2.5e-6 and 1K warmup steps. 
+At inference, we use an action horizon $H = 16$ and execute all actions without re-planning.
+
+For RoboCasa-Kitchen, we evaluate all models with 1200 trials. 
+For LIBERO, we evaluate 50 trials for each task, following~\citet{openvla}.
+
+
+\subsection{Analysis Details}
+\label{appendix:analysisdetail}
+\textbf{Soft label target distance metric.}~
+For the ablation study on soft label targets in Sec.~\ref{subsec:ablationstudy}, we define distances as follows. 
+For next single action and current state, we use Euclidean distance. 
+For next action sequence, we use Dynamic Time Warping (DTW), which measures similarity between temporal sequences that may vary in speed. 
+DTW requires an additional temperature hyperparameter $\gamma$, which we set to 10.0. 
+The soft weight temperature $\beta$ and similarity temperature $\tau$ are fixed at 1.0 and 0.2, respectively.
+
+\textbf{CKNNA measurement.}~
+CKNNA~\citep{cknna} is a nearest-neighbor variant of kernel alignment~\citep{cka}. 
+We randomly sample 10 trajectories per task in RoboCasa-Kitchen, totaling 240 trajectories. 
+Each trajectory is processed with a window size of 16, yielding 4415 transitions. 
+We extract the embeddings from the adapter module $f_{\phi}$ (used as conditioning inputs to the action decoder) along with the corresponding proprioceptive states. 
+We follow the implementation of \citet{cknna} and report results with $k=10$, measuring the alignment between proprioceptive states and conditional representations in the VLA model.
+\newpage
+
+
+
+
+%------------------------------------------------------------
+\section{Real World Experiment Details}
+\label{appendix:realworld}
+\subsection{Hardware Platform}
+We use Franka Research 3, a 7-DoF robotic arm equipped with a Robotiq 2F-85 gripper. For visual perception, we utilize the dual camera setup: a movable Stereolabs ZED 2 provides a global view, and a wrist-mounted ZED Mini captures a close-range view. Teleoperated demonstrations are collected using an Oculus Quest 2, and we log time-synchronized RGB images, joint states, and gripper width for training and evaluation. Demonstrations are recorded at 10 Hz.
+
+
+\subsection{Real-World Tasks}
+The in-domain and generalization tasks (visual, physical generalization, and language grounding) along with their corresponding prompts and representative key frames from the real-world evaluation, are shown in Fig.~\ref{figure:realtasks-in-domain}--~\ref{figure:realtasks-lang-gen}.
+
+\textbf{In-domain tasks.}~
+We introduce four pick-and-place tasks (Box to Bowl, Box to Plate, Basket to Bowl, Plate to Basket), with varied objects (teddy bear, blue cube, blue cup, yellow sponge) for each task (see Fig.~\ref{figure:realtasks-in-domain}).
+
+\textbf{Visual generalization.}~
+We use in-domain objects differing in  color (\emph{e.g.}, changing a blue cube to a green cube, or a yellow sponge to a blue sponge). 
+We further introduce background variations by changing the tabletop covering or the target container (see Fig.~\ref{figure:realtasks-vis-gen}).
+
+\textbf{Physical generalization.}~
+We evaluate with unseen objects not used in training, including a yellow banana, purple grapes, red strawberry, and a yellow cup (different shape and texture from the blue cup used in training) (see Fig.~\ref{figure:realtasks-phy-gen}). 
+
+
+
+\textbf{Language grounding.}~
+We place two in-domain objects at the pick up location, and specify which one to pick up (see Fig.~\ref{figure:realtasks-lang-gen}).
+
+
+
+\subsection{Real-World Training and Evaluation Details}
+\textbf{Dataset.}~
+We collect 60 demonstrations for each pick-and-place task and and for the close-lid task.
+
+
+\textbf{Training.}~
+We jointly train a model with the 4 pick-and-place tasks, and another model for the close-lid task.
+For pick-and-place, we employ a cartesian action space with proprioceptive states, and for the close-lid task we use a joint action space to cover various configurations in manipulation.
+
+\textbf{Evaluation.}~ 
+For real-robot evaluation, we report the average success rate over 24 trials for each pick-and-place task, with varied objects. In the close-lid task, outcomes are classified as full success (lid fully closed), partial success (partially closed), or failure (not closed). 
+For physical generalization, we evaluate on unseen objects (yellow banana, purple grapes, red strawberry, yellow cup), with success defined as the accurate completion of the pick-and-place.
+We define language following as whether the gripper approaches the correct object, and task success as completing the instructed pick-and-place.
+
+\clearpage
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.95\linewidth]{assets/real_world_in_domain_tasks.pdf}
+    \caption{Real-world in-domain tasks.}
+    \label{figure:realtasks-in-domain}
+\end{figure}
+\vspace{-2.0em}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.95\linewidth]{assets/real_world_vis_gen_tasks.pdf}
+    \caption{Real-world visual generalization tasks.}
+    \label{figure:realtasks-vis-gen}
+\end{figure}
+\vspace{-2.0em}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.95\linewidth]{assets/real_world_phy_gen_tasks.pdf}
+    \caption{Real-world physical generalization tasks.}
+    \label{figure:realtasks-phy-gen}
+\end{figure}
+\vspace{-2.0em}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=.95\linewidth]{assets/real_world_lang_gen_tasks.pdf}
+    \caption{Real-world language grounding tasks.}
+    \label{figure:realtasks-lang-gen}
+\end{figure}
+\vspace{-2.0em}
+
+
+
+
+%------------------------------------------------------------
+\section{Further Analysis}
+\subsection{Contrastive Representation Regularization}
+\label{appendix:clvsrscl}
+
+
+\begin{table}[h]
+\centering\small
+\caption{
+\textbf{RoboCasa-Kitchen benchmark success rate (\%)}. 
+}
+\vspace{-1.0em}
+\label{appendixtable:robocasa}
+\begin{tabular}{l ccc ccc ccc}
+    \toprule
+    \multirow{2.5}{*}{Method} &  \multicolumn{3}{c}{30 demos}  & \multicolumn{3}{c}{100 demos} & \multicolumn{3}{c}{300 demos} \\
+    \cmidrule(lr){2-4} \cmidrule(lr){5-7} \cmidrule(lr){8-10} 
+    & PnP  & Others & Avg. & PnP  & Others & Avg. & PnP  & Others & Avg. \\
+    
+    \midrule
+    GR00T N1.5 \citep{gr00tn1_5} 
+        & 30.8 & 56.9 & 48.2
+        & 51.8 & 70.0 & 63.9 
+        & 55.3 & 70.9 & 65.7 \\
+    \textbf{\quad+ CL (Ours)}  
+    & 36.0 & 55.0 & 48.1 
+    & \textbf{59.3} & 69.0 & 65.0
+    & 57.0 & 72.6 & 67.3 \\
+    \textbf{\quad+ RS-CL (Ours)}  
+    & \textbf{41.5} & \textbf{58.8} & \textbf{53.0}
+    & 58.0 & \textbf{71.8} & \textbf{67.2} 
+    & \textbf{59.8} & \textbf{74.6} & \textbf{69.7} \\
+    
+    \arrayrulecolor{black}\bottomrule
+\end{tabular} 
+\vspace{-1.0em}
+\end{table}
+
+\begin{table}[h]
+\centering\small
+\captionof{table}{
+\textbf{LIBERO benchmark success rate (\%).} 
+}
+\vspace{-1.0em}
+\begin{tabular}{l ccccc}
+    \toprule
+    {Method} 
+    & {Spatial} 
+    &  {Object} 
+    & {Goal} 
+    & {Long} 
+    & {Avg.} \\ 
+    
+    \midrule
+    GR00T N1.5 \citep{gr00tn1_5} 
+    & 98.2 & \textbf{99.4} & 97.2 & 87.8 & 95.7 \\
+    \textbf{\quad + CL (Ours)}  & 97.4 & 99.0 & 97.2& 87.4 & 95.3 \\
+    \textbf{\quad + RS-CL (Ours)}  & \textbf{98.4} & 98.6 & \textbf{98.2 }& \textbf{90.4} & \textbf{96.4} \\
+
+    \arrayrulecolor{black}\bottomrule
+\end{tabular}
+%}
+
+\label{appendixtable:libero}
+\end{table}
+
+On RoboCasa-Kitchen, a contrastive representation regularization, without other supervision from low-level robotic signals (\emph{i.e.}, InfoNCE) improves the performance of GR00T N1.5 (\textbf{CL} at Table~\ref{appendixtable:robocasa}).
+This result indicates the effectiveness of our proposed training framework, together with the augmentation strategy \textit{view cutoff}.
+With further supervision from the robot’s proprioceptive states (\textbf{RS-CL} at Table~\ref{appendixtable:robocasa}), the performance further improves, highlighting the complementary benefit of incorporating proprioceptive information into VLM representations.
+
+
+On LIBERO, CL performs comparably to the baseline (95.7\% vs. 95.3\%), but not improvements like RoboCasa-Kichen. 
+This is likely due to the smaller batch size, where we train RoboCasa-Kitchen with a global batch size of 64, we train LIBERO with a global batch size of 32, for better performance of baseline GR00T N1.5 (bs64: 93.40 \% vs. bs32: 95.65 \%).
+This reduces the number samples calculated in the contrastive path, leading to lower improvement.
+However, with supervision of proprioceptive states (\textbf{RS-CL} at Table~\ref{appendixtable:robocasa}), the performance improves over baseline, despite the constraints.
+
+\subsection{More Quantitative Results}
+We report further results of our RS-CL on a VLA trained from SigLIP2~\citep{siglip2}, with varying number of demonstrations, and detailed results of our fine-tuning experiments in this section.
+
+
+\begin{table}[H]
+\centering\small
+\vspace{-1.5em}
+\caption{\textbf{Detailed results on RoboCasa-Kitchen.}~
+Task-wise success rates of GR00T N1.5~\citep{gr00tn1_5} trained with, and without RS-CL, by different number of demonstrations.
+} 
+\label{tab:performance_comparison}
+\resizebox{.9\textwidth}{!}{
+    \begin{tabular}{lcccccc}
+    \toprule
+    \multirow{2.5}{*}{Task} & \multicolumn{3}{c}{GR00T N1.5 ($\mathcal{L_\textrm{FM}}$)} & \multicolumn{3}{c}{GR00T N1.5 ($\mathcal{L_\textrm{FM}}+\lambda\mathcal{L_\textrm{RS-CL}}$)} \\
+    \cmidrule(lr){2-4} \cmidrule(lr){5-7}
+    & 30 demos & 100 demos & 300 demos & 30 demos & 100 demos & 300 demos \\
+    \midrule
+    \multicolumn{7}{l}{RoboCasa Kitchen (24 tasks, PnP = Pick-and-Place)} \\
+    \cmidrule(lr){1-7}
+    Close Double Door &44.0& 86.0&80.0 &54.0&78.0&86.0\\
+    Close Drawer &96.0& 96.0&96.0&96.0&96.0&96.0 \\
+    Close Single Door &98.0& 94.0&98.0&88.0&98.0&98.0  \\
+    Coffee Press Button &70.0& 82.0&90.0&86.0&94.0&92.0 \\
+    Coffee Serve Mug &64.0& 72.0&58.0&74.0&66.0&70.0  \\
+    Coffee Setup Mug &28.0& 34.0 &24.0&30.0&54.0&46.0 \\
+    Open Double Door &80.0& 92.0&82.0&72.0&80.0&84.0  \\
+    Open Drawer &46.0& 58.0&74.0&44.0&54.0&76.0 \\
+    Open Single Door &64.0& 58.0&78.0&66.0&60.0&74.0  \\
+    PnP from Cab to Counter &28.0& 42.0&54.0&38.0&54.0&60.0 \\
+    PnP from Counter to Cab &36.0& 54.0&54.0&40.0&58.0&68.0 \\
+    PnP from Counter to Microwave &30.0& 36.0&32.0&34.0&40.0&40.0  \\
+    PnP from Counter to Sink &28.0& 66.0 &58.0&40.0&60.0&68.0 \\
+    PnP from Counter to Stove &38.0& 60.0&66.0&38.0&74.0&72.0 \\
+    PnP from Microwave to Counter &24.0& 44.0 &50.0&46.0&50.0&48.0 \\
+    PnP from Sink to Counter &40.0& 52.0 &60.0&54.0&62.0&68.0 \\
+    PnP from Stove to Counter &22.0& 60.0&68.0&42.0&66.0&54.0 \\
+    Turn Off Microwave &62.0& 86.0&94.0&62.0&84.0&94.0  \\
+    Turn Off Sink Faucet &72.0& 86.0&92.0&70.0&94.0&88.0 \\
+    Turn Off Stove &10.0& 14.0&28.0&10.0&8.0&28.0 \\
+    Turn On Microwave &44.0& 58.0 &44.0&48.0&72.0&66.0 \\
+    Turn On Sink Faucet &60.0& 90.0 &86.0&72.0&90.0&90.0 \\
+    Turn On Stove &34.0& 56.0 &32.0 &36.0&58.0&36.0 \\
+    Turn Sink Spout &38.0& 58.0 &78.0 &32.0&62.0&70.0 \\
+    \midrule
+    \textbf{Average} & \textbf{48.2} & \textbf{63.9} & \textbf{65.7} & \textbf{53.0} & \textbf{67.2} & \textbf{69.7} \\
+    \bottomrule
+    \end{tabular}
+}
+\vspace{-2.5em}
+\end{table}
+
+\begin{table}[H]
+\centering\small
+\caption{\textbf{Detailed results on RoboCasa-Kitchen.}~
+Task-wise success rates (\%) of reproduced $\pi_0$~\citep{pi0} and $\pi_0$-FAST~\citep{pi0fast}, by different number of demonstrations.
+} 
+\label{tab:pi_robocasaperofrmance}
+\resizebox{.9\textwidth}{!}{
+    \begin{tabular}{lcccccc}
+    \toprule
+    \multirow{2.5}{*}{Task} & \multicolumn{3}{c}{$\pi_0$} & \multicolumn{3}{c}{$\pi_0$-FAST} \\
+    \cmidrule(lr){2-4} \cmidrule(lr){5-7}
+    & 30 demos & 100 demos & 300 demos & 30 demos & 100 demos & 300 demos \\
+    \midrule
+    \multicolumn{7}{l}{RoboCasa Kitchen (24 tasks, PnP = Pick-and-Place)} \\
+    \cmidrule(lr){1-7}
+    Close Double Door       & 68.0 & 86.0 & 86.0 & 44.0 & 84.0 & 78.0 \\
+    Close Drawer            & 94.0 & 94.0 & 96.0 & 84.0 & 96.0 & 94.0 \\
+    Close Single Door       & 94.0 & 98.0 & 96.0 & 84.0 & 90.0 & 72.0 \\
+    Coffee Press Button     & 66.0 & 80.0 & 88.0 & 20.0 & 82.0 & 90.0 \\
+    Coffee Serve Mug        & 80.0 & 66.0 & 64.0 & 44.0 & 66.0 & 68.0 \\
+    Coffee Setup Mug        & 20.0 & 32.0 & 38.0 & 2.0  & 34.0 & 38.0 \\
+    Open Double Door        & 92.0 & 90.0 & 84.0 & 26.0 & 68.0 & 78.0 \\
+    Open Drawer             & 44.0 & 56.0 & 62.0 & 36.0 & 58.0 & 68.0 \\
+    Open Single Door        & 58.0 & 64.0 & 70.0 & 44.0 & 70.0 & 66.0 \\
+    PnP Cab $\to$ Counter   & 14.0 & 22.0 & 18.0 & 12.0 & 22.0 & 30.0 \\
+    PnP Counter $\to$ Cab   & 32.0 & 44.0 & 46.0 & 8.0  & 58.0 & 48.0 \\
+    PnP Counter $\to$ Microwave & 26.0 & 30.0 & 18.0 & 10.0 & 32.0 & 20.0 \\
+    PnP Counter $\to$ Sink  & 32.0 & 44.0 & 58.0 & 2.0  & 46.0 & 56.0 \\
+    PnP Counter $\to$ Stove & 14.0 & 32.0 & 60.0 & 10.0 & 50.0 & 64.0 \\
+    PnP Microwave $\to$ Counter & 16.0 & 20.0 & 24.0 & 4.0  & 38.0 & 46.0 \\
+    PnP Sink $\to$ Counter  & 22.0 & 24.0 & 66.0 & 12.0 & 56.0 & 62.0 \\
+    PnP Stove $\to$ Counter & 10.0 & 46.0 & 44.0 & 18.0 & 62.0 & 60.0 \\
+    Turn Off Microwave      & 64.0 & 84.0 & 96.0 & 68.0 & 98.0 & 96.0 \\
+    Turn Off Sink Faucet    & 72.0 & 86.0 & 94.0 & 48.0 & 76.0 & 94.0 \\
+    Turn Off Stove          & 14.0 & 10.0 & 22.0 & 0.0  & 18.0 & 22.0 \\
+    Turn On Microwave       & 58.0 & 82.0 & 70.0 & 52.0 & 68.0 & 88.0 \\
+    Turn On Sink Faucet     & 80.0 & 82.0 & 86.0 & 40.0 & 66.0 & 74.0 \\
+    Turn On Stove           & 26.0 & 68.0 & 42.0 & 12.0 & 52.0 & 38.0 \\
+    Turn Sink Spout         & 50.0 & 68.0 & 72.0 & 36.0 & 54.0 & 76.0 \\
+    \midrule
+    \textbf{Average}        & \textbf{47.8} & \textbf{58.7} & \textbf{62.5} & \textbf{29.8} & \textbf{60.2} & \textbf{63.6} \\
+    \bottomrule
+    \end{tabular}
+}
+\vspace{-2.0em}
+\end{table}
+
+\begin{table}[H]
+\centering\small
+\caption{
+\textbf{RoboCasa-Kitchen benchmark success rate (\%)}. Employing SigLIP2 as our VLM backbone, we train a VLA model from scratch and report the average success rate by different number of demonstrations.
+}
+
+\begin{tabular}{l c c c}
+    \toprule
+    \multirow{2.5}{*}{Method} &  \multicolumn{3}{c}{ \# of Demos} \\
+    \cmidrule(lr){2-4}
+    & {30 demos}  & {100 demos} & {300 demos} \\
+    
+    \midrule
+    SigLIP2 backbone VLA
+        &2.7 & 2.4 & \phantom{0}4.0 \\
+    \rowcolor{green!10}
+    \textbf{\quad+ RS-CL (Ours)}  
+    &\textbf{8.0} & \textbf{9.1} & \textbf{14.1} \\
+    
+    \bottomrule
+\end{tabular} 
+
+\end{table}
+
+\begin{table}[ht!]
+\centering\small
+\caption{
+\textbf{Detailed results of from-scratch experiments.} 
+Task success rate (\%) on the RoboCasa-Kitchen benchmark trained with 300 demonstrations. All models train a VLA from scratch, starting from each pre-trained VLM backbone. Best results within the same backbone indicated in \textbf{bold}.
+}
+\vspace{-1.0em}
+\label{maintable:vlmtraining}
+\begin{tabular}{l ccc}
+    \toprule
+    \multirow{2.5}{*}{Backbone Model} & \multicolumn{3}{c}{Success Rate} \\
+    \cmidrule{2-4}
+    & PnP & Others & Avg. \\
+    
+    \midrule
+    Qwen2.5-VL-3B~\citep{qwen2_5vl}
+        & \phantom{0}2.5 
+        & \phantom{0}8.6
+        & \phantom{0}6.6 \\
+    \textbf{\quad+ RS-CL (Ours)} 
+        & \textbf{\phantom{0}3.5}
+        & \textbf{16.0} 
+        & \textbf{11.8} \\
+    NORA~\citep{nora} 
+        & \phantom{0}1.5 
+        & 11.4 
+        & \phantom{0}8.1 \\
+    \textbf{\quad+ RS-CL (Ours)} 
+        & \textbf{\phantom{0}3.5} 
+        & \textbf{23.3} 
+        & \textbf{16.7} \\
+    RoboBrain2.0-3B~\citep{robobrain20}  & \phantom{0}2.8 & 13.9 & 10.2 \\
+    \textbf{\quad+ RS-CL (Ours)} 
+        & \textbf{\phantom{0}5.8} 
+        & \textbf{19.6} 
+        & \textbf{15.0} \\ 
+    \midrule
+    Qwen2.5-VL-7B~\citep{qwen2_5vl}  
+        & \phantom{0}2.5 
+        & 12.4 
+        & \phantom{0}9.1 \\
+    \textbf{\quad+ RS-CL (Ours)} 
+        & \textbf{\phantom{0}9.8}
+        & \textbf{21.1}
+        & \textbf{17.3} \\
+
+    RoboBrain2.0-7B~\citep{robobrain20}  & \phantom{0}2.3 & 12.8 & \phantom{0}9.3 \\
+    \textbf{\quad+ RS-CL (Ours)} 
+        & \textbf{12.0} 
+        & \textbf{25.9} 
+        & \textbf{21.3} \\
+
+    VeBrain-7B~\citep{vebrain}  & \phantom{0}3.0 & 10.9 & \phantom{0}8.3 \\
+    \textbf{\quad+ RS-CL (Ours)} 
+        & \textbf{\phantom{0}7.8}
+        & \textbf{20.3}
+        & \textbf{17.6} \\
+
+    Cosmos-Reason-7B~\citep{cosmosreason}  & \phantom{0}1.0 & \phantom{0}5.5 & \phantom{0}4.0 \\
+    \textbf{\quad+ RS-CL (Ours)} 
+        & \textbf{\phantom{0}7.3}
+        & \textbf{15.9}
+        & \textbf{13.0} \\
+    \midrule
+    SigLIP2~\citep{siglip2}
+        & \phantom{0}0.3
+        & \phantom{0}2.9 
+        & \phantom{0}2.0 \\
+    \textbf{\quad+ RS-CL (Ours)} 
+        & \textbf{\phantom{0}0.8} 
+        & \textbf{\phantom{0}3.5} 
+        & \textbf{\phantom{0}2.6} \\
+    SigLIP2, unfrozen backbone
+        & \phantom{0}3.3
+        & \phantom{0}4.4 
+        & \phantom{0}4.0 \\
+    \textbf{\quad+ RS-CL (Ours)} 
+        & \textbf{17.3} 
+        & \textbf{12.5} 
+        & \textbf{14.1} \\
+    GR00T N1.5 VLM~\citep{gr00tn1_5} \ & 37.5 & 62.0 & 53.8 \\
+    \textbf{\quad+ RS-CL (Ours)} 
+        & \textbf{37.8} 
+        & \textbf{66.3} 
+        & \textbf{56.8} \\
+    
+    \bottomrule
+\end{tabular} 
+\end{table}
+
+
+\section{Discussion}
+\vspace{0.01in}
+\textbf{Limitations.}~
+While RS-CL explicitly leverages proprioceptive states to align the representation space, it does not incorporate further signals in robotic manipulation, such as object poses or contact forces. 
+These modalities often provide complementary information that is captured by robot's proprioception state. 
+Extending RS-CL to integrate such modalities into the representations, represents an promising direction for future research.
+
+\textbf{Future directions.}~
+One promising extension is to apply RS-CL to settings with more complex proprioceptive spaces, such as humanoid robots or dexterous hand manipulation tasks. 
+These domains involve high-dimensional and complex state representations, where aligning VLM embeddings with proprioceptive signals may be even more beneficial for accurate action prediction.
+%------------------------------------------------------------
+\section{Use of Large Language Models}
+Large language models were used to assist with drafting and polishing the writing of this paper.
+
+
+\clearpage

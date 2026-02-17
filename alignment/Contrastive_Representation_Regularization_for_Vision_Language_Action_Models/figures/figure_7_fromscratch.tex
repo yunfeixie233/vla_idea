@@ -1,0 +1,18 @@
+\begin{figure}[t]
+    \centering
+    \begin{minipage}{\textwidth}
+    \includegraphics[width=\textwidth]{assets/experiment_fromscratch.pdf}
+    \phantomsubcaption\label{subfig:vlmtrainingmethod:a}
+    \phantomsubcaption\label{subfig:vlmtrainingmethod:b}
+    \phantomsubcaption\label{subfig:vlmtrainingmethod:c}
+    \end{minipage}
+    \vspace{-2.0em}
+    \caption{
+    \textbf{From-scratch experiments.}~
+    Success rates (\%) on RoboCasa-Kitchen for VLA models trained from various VLM backbones. 
+    Vanilla indicates Qwen2.5-VL.
+    Results show the effects of RS-CL on top of backbones further trained with robotics data, based on \textbf{(a)} Qwen2.5-VL-3B, \textbf{(b)} 7B, 
+    as well as \textbf{(c)} SigLIP2 and GR00T N1.5 to provide diverse results across backbone and train capacity.
+    }
+\label{figure:vlmtrainingmethod}
+\end{figure}

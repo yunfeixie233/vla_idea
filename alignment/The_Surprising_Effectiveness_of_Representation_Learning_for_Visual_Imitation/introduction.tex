@@ -1,0 +1,64 @@
+\section{Introduction}
+% \lpnote{TODO: Lerrel}
+
+Imitation learning serves as a powerful framework for getting robots to learn complex skills in visually rich environments~\cite{zhang2018deep, stadie2017third,duan2017one,zhu2018reinforcement,young2020visual}. 
+Recent works in this area have shown promising results in generalization to previously unseen environments for robotic tasks such as pick and place, pushing, and rearrangement~\cite{young2020visual}. 
+However, such generalization is often too narrow to be directly applied in the diverse real-world application. 
+For instance, policies trained to open one door rarely generalize to opening different doors~\cite{DBLP:journals/corr/abs-1908-01887}.
+This lack of generalization is further exacerbated by the plethora of different options to achieve generalization: either needing hundreds of diverse demonstrations, task-specific priors, or large parametric models. 
+This begs the question: What really matters for generalization in visual imitation?
+
+An obvious answer is visual representation -- generalizing to diverse visual environments should require powerful representation learning. 
+Prior work in computer vision~\cite{byol,simclr,moco2,swav,bardes2021vicreg} have shown that better representations significantly improve downstream performance for tasks such as image classification.
+However, in the case of robotics, evaluating the performance of visual representations is quite complicated.
+Consider behavior cloning~\cite{torabi2018behavioral}, one of the simplest methods of imitation. 
+Standard approaches in behavior cloning fit convolutional neural networks on a large dataset of expert demonstrations using end-to-end gradient descent.
+Although powerful, such models conflate two fundamental problems in visual imitation: (a) representation learning, i.e. inferring information-preserving low-dimensional embeddings from high-dimensional observations and (b) behavior learning, i.e. generating actions given representations of the environment state. This joint learning often results in large dataset requirements for such techniques. 
+
+\begin{figure}[t]
+  \begin{center}
+    \includegraphics[width = \linewidth]{figures/VINN_intro.pdf}
+  \end{center}
+  \vspace{-0.1in}
+  \caption{Consider the task of opening doors from visual observations. VINN, our visual imitation framework first learns visual representations through self-supervised learning. Given these representations, non-parametric weighted nearest neighbors from a handful of demonstrations is used to compute actions, which results in robust door-opening behavior.}
+  \vspace{-0.1in}
+\label{fig:intro}
+\end{figure}
+
+One way to achieve this decoupling is to use representation modules pre-trained through standard proxy tasks such as image classification, detection, or segmentation~\cite{sax2019learning}.
+However, this relies on large amounts of labelled human data on datasets that are often significantly out of distribution to robot data~\cite{chen2020robust}.
+A more scalable approach is to take inspiration from recent work in computer vision, where visual encoders are trained using self-supervised losses~\cite{moco2, simclr, byol}.
+These methods allow the encoders to learn useful features of the world without requiring human labelling.
+There has been recent progress in vision-based Reinforcement Learning (RL) that improves performance by creating this explicit decoupling \cite{stooke2021decoupling, yarats2021reinforcement}.
+Visual imitation has a significant advantage over RL settings: learning visual representations in RL is further coupled with challenges in exploration~\cite{yarats2021mastering}, which has limited its application in real-world settings due to poor sample complexity. 
+
+In this work we present a new and simple framework for visual imitation that decouples representation learning from behavior learning. First, given an offline dataset of experience, we train visual encoders that can embed high-dimensional visual observations to low-dimensional representations. Next, given a handful of demonstrations, for a new observation, we find its associated nearest neighbors in the representation space. For our agent's behavior on that new observation, we use a weighted average of the nearest neighbors' actions. This technique is inspired by Locally Weighted Regression~\cite{atkeson1997locally}, where instead of operating on state estimates, we operate on self-supervised visual representations. Intuitively, this allows the behavior to roughly correspond to a Mixture-of-Experts model trained on the visual demonstrations. Since nearest neighbors is non-parametric, this technique requires no additional training for behavior learning. We will refer to our framework as Visual Imitation through Nearest Neighbors (VINN).
+
+Our experimental analysis demonstrates that VINN can successfully learn powerful representations and behaviors across three manipulation tasks: Pushing, Stacking, and Door Opening. 
+Surprisingly, we find that non-parametric behavior learning on top of learned representations is competitive with end-to-end behavior cloning methods. On offline MSE metrics, we report results on par with competitive baselines, while being significantly simpler. 
+To further test the real-world applicability of VINN, we run robot experiments on opening doors using 71 visual demonstrations. Across a suite of generalization experiments, VINN succeeds 80\% on doors present in the demonstration dataset and 40\% on opening the door in novel scenes. 
+In contrast, our strongest baselines have success rates of 53.3\% and 3.3\% respectively.
+
+To summarize, this paper presents the following contributions. 
+First, we present VINN, a novel yet simple to implement visual imitation framework that derives non-parametric behaviors from learned visual representations. 
+Second, we show that VINN is competitive to standard parametric behavior cloning and can outperform it on a suite of manipulation tasks. Third, we demonstrate that VINN can be used on real robots for opening doors and can achieve high generalization performance on novel doors. Finally, we extensively ablate over and analyze different representations, amount of training data, and other hyperparameters to demonstrate the robustness of VINN.
+% on our project website. 
+
+% since the performance of a visual robotics system is not just dependent on its representations but also on how the representations are used by action prediction. While prior work in Reinforcement Learning provides approaches to tackle this coupling, they are further conflated with challenges in exploration~\cite{}. 
+
+% The coupling of representation and behavior learning is perhaps most evident in behavior cloning, one of the simplest methods of imitation and hence serves as a reproducible testbed for our analysis. Standard approaches in behavior cloning fit convolutional neural networks on a large dataset of expert demonstrations using end-to-end gradient descent. Although powerful, such models conflate two fundamental problems in visual imitation -- representation learning, i.e. inferring low-dimensional encodings from high-dimensional observations and behavior learning, i.e. generating actions given representations of the environment. 
+
+% Behavior cloning from observation one of the simplest methods of imitation, behavior cloning from observations~\cite{}. Popular techniques fit convolutional neural networks on a large dataset of expert demonstrations using end-to-end gradient descent. Given sufficient data and modelling capacity, behavior cloning is capable of solving challenging manipulation and navigation problems. Although powerful, such models conflate two fundamental problems in visual imitation -- representation learning, i.e. inferring low-dimensional encodings from high-dimensional observations and behavior learning, i.e. generating actions given representations of the environment. 
+
+
+% % para 1: Introducing the challenge of generalization for visual imitation. What works, what doesnt. Allude to decoupling representation with the control aspects.
+
+% para 2: However, generalization is narrow. Models trianed to open one door rarely generalize to opening different doors. This is in contrast to human vision. Inspiration from human vision. Our representations are largely task-agnostic. We dont have independent representations for solving each narrow task distribution.
+
+% para 3: The solution is to decouple representation learning from control and to question the end-to-end vision to action control paradigm for visual imitation. What does decoupling representations from control actually mean? What are the challenges associated with this decoupling? How do you learn representations without.
+
+% para 4: In this work we present a new approach for visual imitation that focuses on showcasing the power of self-supervised representation learning. Unlike supervised representation learning methods~\cite{}, we do not need human labels for providing expensive image annotation. But how do we test out the learned representations.
+
+% para 5: We use the non-parameteric weighted Nearest Neighbours. Simple to implement and interpretable technique. And this works -- surpringly well.
+
+% para 6: Summarize contributions

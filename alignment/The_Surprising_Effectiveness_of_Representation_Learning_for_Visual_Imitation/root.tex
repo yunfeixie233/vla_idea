@@ -1,0 +1,189 @@
+\documentclass[conference]{IEEEtran}
+\usepackage{times}
+
+% numbers option provides compact numerical references in the text. 
+\usepackage[numbers]{natbib}
+\usepackage{multicol}
+\usepackage[bookmarks=true]{hyperref}
+\usepackage{xcolor}
+\usepackage{listings}
+
+\newcommand\myshade{85}
+\colorlet{mylinkcolor}{violet}
+\colorlet{mycitecolor}{orange}
+\colorlet{myurlcolor}{blue}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=Python,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+
+\hypersetup{
+  linkcolor  = mylinkcolor!\myshade!black,
+  citecolor  = mycitecolor!\myshade!black,
+  urlcolor   = myurlcolor!\myshade!black,
+  colorlinks = true,
+  linktoc = none,
+}
+
+
+\pdfinfo{
+  /Author (Mahi Shafiullah)
+  /Title  (The Surprising Effectiveness of Representation Learning for Visual Imitation)
+  /CreationDate (D:20211123120000)
+  /Subject (Visual Imitation Through Nearest Neighbors)
+  /Keywords (Visual Imitation;Imitation Learning;VINN;Robot learning;Robot imitation;Representation Learning)
+}
+
+\IEEEoverridecommandlockouts                              % This command is only needed if 
+\overrideIEEEmargins                                      % Needed to meet printer requirements.
+\pdfminorversion=4
+
+
+\input{math_commands.tex}
+
+% The following packages can be found on http:\\www.ctan.org
+%\usepackage{epsfig} % for postscript graphics files
+%\usepackage{mathptmx} % assumes new font selection scheme installed
+%\usepackage{times} % assumes new font selection scheme installed
+%\usepackage{amssymb}  % assumes amsmath package installed
+% \usepackage[noadjust]{cite}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{algpseudocode}
+\usepackage{algorithm}
+\usepackage[algo2e]{algorithm2e}
+\usepackage{multirow}
+\usepackage[normalem]{ulem}
+% \usepackage{hyperref}
+\usepackage{booktabs}
+% \usepackage{natbib}
+\usepackage{graphicx}
+% \def\hidenotes
+% Feel free to change the color of your note comments
+\newcommand{\lpnote}[1]{{\xxnote{LP}{blue}{#1}}}
+\newcommand{\mnote}[1]{{\xxnote{MS}{red}{#1}}}
+% \newcommand{\TK}[1]{{\xxnote{TK}{green}{#1}}}
+% \newcommand{\wynote}[1]{{\xxnote{WY}{magenta}{#1}}}
+% \newcommand{\ywnote}[1]{{\xxnote{YW}{yellow}{#1}}}
+\newcommand{\xxnote}[3]{}
+\ifx\hidenotes\undefined
+  \renewcommand{\xxnote}[3]{\color{#2}{#1: #3}}
+\fi
+
+% \renewcommand{\baselinestretch}{0.995}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=blue,
+}
+
+
+\title{\LARGE \bf The Surprising Effectiveness of Representation Learning \\for Visual Imitation}
+\author{%
+\\
+Jyothish Pari$^\ast$\\
+New York University\\
+\texttt{jp5981@nyu.edu}
+\and
+Nur Muhammad\\(Mahi) Shafiullah$^\ast$\\
+New York University\\
+\texttt{mahi@cs.nyu.edu}
+\and
+Sridhar Pandian\\Arunachalam\\
+New York University\\
+\texttt{sa5914@nyu.edu}
+\and
+\\
+Lerrel Pinto \\
+New York University\\
+\texttt{lerrel@cs.nyu.edu}
+}%
+
+% \author{%
+% Jyothish Pari
+% \and
+% Nur Muhammad\\(Mahi) Shafiullah
+% \and
+% Sridhar Pandian\\Arunachalam
+% \and
+% Lerrel Pinto\\
+% }
+
+%
+% \affil{New York University}
+
+% \author{
+%     \IEEEauthorblockN{Jyothish Pari}
+%     \and
+%     \IEEEauthorblockN{Nur Muhammad (Mahi) Shafiullah}
+%     \IEEEauthorblockN{Sridhar Pandian Arunachalam, Lerrel Pinto}
+%     \IEEEauthorblockA{New York University
+%     \\\{jyo, mahi\}@nyu.edu}
+% }
+
+
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+\pagestyle{empty}
+
+\def\thefootnote{*}\footnotetext{The first two authors contributed equally to this work.}\def\thefootnote{\arabic{footnote}}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{abstract}
+While visual imitation learning offers one of the most effective ways of learning from visual demonstrations, generalizing from them requires either hundreds of diverse demonstrations, task specific priors, or large, hard-to-train parametric models.
+One reason such complexities arise is because standard visual imitation frameworks try to solve two coupled problems at once: learning a succinct but good representation from the diverse visual data, while simultaneously learning to associate the demonstrated actions with such representations.
+Such joint learning causes an interdependence between these two problems, which often results in needing large amounts of demonstrations for learning.
+To address this challenge, we instead propose to decouple representation learning from behavior learning for visual imitation. First, we learn a visual representation encoder from offline data using standard supervised and self-supervised learning methods. Once the representations are trained, we use non-parametric Locally Weighted Regression to predict the actions.
+We experimentally show that this simple decoupling improves the performance of visual imitation models on both offline demonstration datasets and real-robot door opening compared to prior work in visual imitation. All of our generated data, code, and robot videos are publicly available at \url{https://jyopari.github.io/VINN/}.
+\end{abstract}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{introduction.tex}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{related_work.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{approach.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{results.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{conclusion.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{acknowledgements.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% \section*{ACKNOWLEDGEMENTS}
+
+%% Use plainnat to work nicely with natbib. 
+
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+\clearpage
+
+\input{appendix}
+
+\end{document}
+
+

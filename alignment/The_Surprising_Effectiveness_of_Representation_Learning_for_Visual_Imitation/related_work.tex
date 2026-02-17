@@ -1,0 +1,51 @@
+\section{Related Work}
+
+\begin{figure*}[h]
+  \begin{center}
+    \includegraphics[width = 1.0\textwidth]{figures/VINN_arch.pdf}
+  \end{center}
+  \caption{Overview of our VINN algorithm. During training, we use offline visual data to train a BYOL-style self-supervised model as our encoder. During evaluation, we compare the encoded input against the encodings of our demonstration frames to find the nearest examples to our query. Then, our model's predicted action is just a weighted average of the associated actions from the nearest images.}
+\label{fig:arch}
+\end{figure*}
+
+\subsection{Imitation via Cloning}
+Imitation learning is frequently used to learn skills and behaviors from human demonstrations~\cite{piaget2013play, meltzoff1977imitation, meltzoff1983newborn, tomasello1993imitative}. 
+In the context of manipulation, such techniques have successfully solved a variety of problems in pushing, stacking, and grasping~\cite{zhang2018deep,DBLP:journals/corr/abs-1802-09564,argall2009survey,hussein2017imitation}. Behavioral Cloning (BC) \cite{torabi2018behavioral} is one of the most common techniques. 
+% A comprehensive review of imitation learning can be found in \cite{argall2009survey, hussein2017imitation}.
+If the agent's morphology or viewpoint is different than the demonstrations', the model needs to involve techniques such as transfer learning to resolve this domain gap~\cite{stadie2017third,sermanet2016unsupervised}. 
+To close this unintended domain gap, \cite{zhang2018deep} has used tele-operation methods, while \cite{song2020grasping, young2020visual} have used assistive tools. 
+Using assistive tools provides us the benefit of being a able to scalably collect diverse demonstrations. In this paper, we follow the DemoAT \cite{young2020visual} framework to collect expert demonstrations.
+
+\subsection{Visual Representation Learning}
+
+In computer vision, interest in learning a good representation has been longstanding, especially when labelled data is rare or difficult to collect \cite{simclr, moco2, byol, swav}.
+This large class of representation learning techniques aim to extract features that can help other models improve their performance in some downstream learning tasks, without needing to explicitly learn a label.
+In such tasks, first a model is trained on one or more pretext tasks with this unlabeled dataset to learn a representation.
+Such tasks generally include instance invariance, or predicting some image transformation parameters (e.g. rotation and distortion), patches, or frame sequence~\cite{gidaris2018unsupervised,dosovitskiy2015discriminative,doersch2016unsupervised,misra2016shuffle,simclr,moco2,wu2018unsupervised}.
+% Some works have proposed simultaneously training these pretext tasks alongside the main objective~\cite{zhai2019s4l, sun2019unsupervised}.
+In representation learning, the performance of the model on the pretext task is usually disregarded.
+Instead, the focus is on
+% the model pretrained through these pretext tasks and 
+the input domain to representation mapping that these models have learned.
+Ideally, to solve such pretext tasks, the pretrained model may have learned some useful structural meaning and encoded it in the representation.
+Thus, intuitively, such a model can be used in downstream tasks where there is not enough data to learn this structural meaning directly from the available task-relevant data.
+Unsupervised representation learning, in works such as \cite{simclr, moco2, byol, swav, bardes2021vicreg, dwibedi2021little}, has shown impressive performance gains on difficult benchmarks since they can harness a large amounts of unlabelled data unavailable in task-specific datasets.
+
+Recently, interest in unsupervised or semi-supervised representation learning technique has grown within robotics~\cite{manuelli2020keypoints} due to the availability of unlabeled data and its effectiveness in visual imitation tasks ~\cite{young2021playful,zhan2020framework}.
+We follow a BYOL-style~\cite{byol} self-supervised representation learning framework in our experiments.
+
+\subsection{Non-parametric Control}
+Non-parametric models are those, which instead of modeling some parameters about the data distribution, tries to express it in terms of previously observed training data. Non-parametric models are significantly more expressive, but as a downside to this, they usually require a large number of training examples to generalize well. A popular and simple example of non-parametric models is Locally Weighted Learning (LWL)~\cite{atkeson1997locally}. LWL is a form of instance-based, non-parametric learning that refers to algorithms whose response to any query is a weighted aggregate of similar examples. 
+% There, similarity is measured in distance in some representation space.
+Simple nearest neighbor models are an example of such learning, where all weight is put on the closest neighbor to the input point. Nearest neighbor methods have been successfully used in previous works for control tasks ~\cite{mansimov2018simple}
+More sophisticated, $k$-NN algorithms base their predictions on an aggregate of the nearest $k$ points ~\cite{10.1007/978-1-4612-2660-4_33}.
+
+Uses of LWL based methods in supervised learning, robotics, and reinforcement learning is quite old.
+In works like~\cite{snell2017prototypical, wang2019simpleshot}, effectiveness of LWL algorithms like k-nearest neighbor has shown competitive success in difficult, high dimensional tasks like classifying the miniImageNet.
+LWL has also shown success for robotic control problems~\cite{atkeson1997locally}, although it requires an accurate state-estimator to obtain low-dimensional states.
+In~\cite{lee2016robust,pritzel2017neural,rajeswaran2018generalization}, elements of non-parametric learning is weaved into the reinforcement learning algorithms to create models which can adjust their complexity based on the amount of available data.
+Finally, in works like~\cite{shah2018qlearning} non-parametric k-Nearest Neighbor regression based Q-functions are shown to give a good approximation of the true Q function under some theoretical assumptions.
+Our work, VINN, draws inspiration from the simplicity of LWL and demonstrates the usefulness of this idea by using Locally Weighted Regression in challenging visual robotic tasks.
+
+% In this work, we use a form of Locally Weighted regression with a weighting function~\cite{atkeson1997locally} to compute the particular action for an observation given similar observations among our demonstrations. 
+

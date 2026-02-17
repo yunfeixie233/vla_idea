@@ -1,0 +1,88 @@
+\appendix
+\subsection{VINN Pytorch Pseudocode}
+% \textbf{VINN Pytorch Pseudocode}
+\begin{lstlisting}
+def dist_metric(x,y):
+    return(torch.norm(x-y).item())
+
+def calculate_action(dist_list,k):
+    action = torch.tensor([0.0,0.0,0.0])
+    top_k_weights = torch.zeros((k,))
+    for i in range(k):
+        top_k_weights[i] = dist_list[i][0]
+    top_k_weights = softmax(-1*top_k_weights)
+    for i in range(k):
+        action = torch.add(top_k_weights[i] 
+            * dist_list[i][1], action)
+    return(action)
+
+def calculate_nearest_neighbors(query_img, dataset, k):
+        query_embedding = encoder(query_img)
+        for dataset_index in range(len(dataset)):
+            dataset_embedding, dataset_translation = dataset[dataset_index]
+            distance = dist_metric(query_embedding, dataset_embedding)
+            dist_list.append((distance, dataset_translation, dataset_path))
+       dist_list = sorted(dist_list, key = lambda tup: tup[0])
+pred_action = calculate_action(dist_list, k)
+return pred_action
+
+\end{lstlisting}
+
+\subsection{Network Architectures and Training Details}
+In this section, we will go over our implementation, network architectures, and training details for our various baselines.
+
+\paragraph{Random Action} We sampled a 3-d vector from $[-1, 1]^3$, normalized it, and used it as our action for this baseline.
+
+\paragraph{Open Loop} We computed the average action at frame $t$ over all demonstrations from our dataset for this baseline for each frame number $t$.
+
+\paragraph{Behavioral Cloning (end to end or from representations)}
+For our parameterized model experiments, our encoding network is always a ResNet50, and our translation neural network is a three-layer MLP whose layer dimensions are $2048,1024,3$. 
+Our gripper model is a linear layer that predicts four gripper states from the encoder network output.
+We train both models for 8000 epochs with a learning rate of 0.001 using the Adam optimizer. 
+On an RTX8000, given the learned representations, it takes 12 minutes on the Door Opening dataset to train both MLPs for BC from representations.
+For training the BC end to end model until convergence, it takes us three hours in total.
+
+\paragraph{Implicit Behavioral Cloning (IBC)} We used the official Github repo for Implicit Behavioral Cloning~\cite{florence2021implicit} offline experiments. We modified their Push from Pixels task to fit 3-d vectors bounded within $[-1, 1]^3$. Unfortunately, we could not use the space of normal vectors since the current published version of the IBC code does not support constrained action spaces.
+
+We trained the standard Dense ResNet model provided with the IBC repo for encoders, and IBC-with-DFO framework for sampling actions. It took us about 6 hours to train the models end-to-end on our datasets on an RTX 8000 GPU for 10,000 steps. For every hyperparameter, we use the defaults for the learning to push from pixels task that is included in the IBC repository.
+
+We computed the MSE loss from this model by first sampling 256 actions with DFO optimization, as it's done in IBC, and choosing the action with the highest assigned value out of it.
+
+\paragraph{VINN}
+For our BYOL-trained encoding network, we use a ResNet50 architecture, with the final linear for ImageNet classification replaced with an identity layer. We use the representation vector of size 2048. We fine-tune this network using BYOL for a 100 epochs on our demonstration datasets with the ADAM optimizer and a $3\times 10^{-4}$ learning rate. To train this BYOL on the Door Opening dataset for 100 epochs it took approximately 3.5 hours on a workstation with one Nvidia RTX8000. 
+
+\subsection{Robot details}
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=0.75\linewidth]{figures/robot.png}
+    \caption{Hello Robot's Stretch~\cite{kemp2021design}, the robot model used in our experiments}
+    \label{fig:reacher}
+\end{figure}
+
+We run all of our robots in the Hello Robot's Stretch~\cite{kemp2021design}. This robot has a dexterous wrist with 3 DoF, a telescopic 1 DoF arm on which it is mounted, and an 1-DoF lift on which the arm is mounted. The base of the robot is also capable of rotation and lateral motion, which gives the robot's end-effector a full 6-DoF capability. 
+
+On each step, the translation model predicts $\Delta(x,y,z)$ for the gripper, which is converted to the movement in the robot's joints with an inverse kinematics model. This model takes into account simpler objectives like avoiding self-collisions, but does not model avoiding issues like environment collisions.
+
+For the robot observations, we use a standard webcam mounted on top of the robot wrist using a custom 3-d printed mount. The image captured by the robot is streamed over the network to a machine running the VINN algorithm, which responds with the predicted robot action.
+
+\subsection{Demonstration Collection Details}
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\linewidth]{figures/reachergrabber_real.png}
+    \caption{Reacher grabber tool used for our demonstrations.}
+    \label{fig:reacher}
+\end{figure}
+
+We use the DemoAT~\cite{young2020visual} framework for collecting our demonstrations. We use a simple reacher-grabber tool availabe at hardware shops or online, fitted with a GoPro camera to do capture our observation frames. An image of this is shown in Fig.~\ref{fig:reacher},
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[width=\linewidth]{figures/grip.png}
+    \caption{Modified grip on the robot and the reacher grabber.}
+    \label{fig:reacher_grip}
+\end{figure}
+
+We replaced the pads at the end of the robot gripper with simple 3-d printed nubs for easy resets of the robot, and we do the same on the reacher-grabber tool, as seen in Fig.~\ref{fig:reacher_grip}.
+
+
+To get visual observations, we mount a GoPro on top of the reacher grabber tool with a custom 3-d printed mount. We linearize the GoPro video in post-processing using \texttt{ffmpeg} to get rid of the wide-angle distortions, and extract the frames at one frame per second speed. Finally, using the extracted frames and the OpenSfM library, we reconstruct the 3-d movements between frames. We take the delta position changes between consecutive frames, and normalize them to get our actions.

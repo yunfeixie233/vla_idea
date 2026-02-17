@@ -1,0 +1,67 @@
+% \section{Background}
+% I dont think we need background. We can describe high level in related work.
+
+% \subsection{Representation Learning through Bootstrapping}
+
+% \subsection{Weighted Nearest Neighbours}
+\section{Approach}
+% \lpnote{TODO: Mahi}
+
+In this section, we describe the components of our algorithms and how they fit together to create VINN. As seen in Fig.~\ref{fig:arch}, VINN consists of two parts: (a) training an encoding network on offline visual data, and (b) querying against the provided demonstrations for a nearest-neighbor based action prediction. 
+
+\subsection{Visual Representation Learning}
+
+Given an offline dataset of visual experience from the robot, we first learn a visual representation embedding function.
+In this work, we use two key insights for learning our visual representation: first, we can learn a good vision prior using existing large but unrelated real world datasets, and then, we can fine-tune starting from that prior using our demonstration dataset, which is small but relevant to the task at hand.
+
+For the first insight, whenever possible, we initialize our models from an ImageNet-pretrained model. Such models are provided with the PyTorch~\cite{paszke2019pytorch} library that we use and can be achieved by simply adding a single parameter to the model initialization function call. 
+
+Then, we use self supervised learning and train this visual encoder on the all the frames in our offline training dataset.
+In this work, we use Bootstrap Your Own Latent (BYOL)~\cite{byol} as the self-supervision objective.
+As illustrated in Fig.~\ref{fig:arch}, BYOL uses two versions of the same encoder network: one normally updating online network, and a slow moving average of the online network called the target network.
+The BYOL self-supervised loss function tries to reduce the discrepancy in the two heads of the network when they are fed with differently augmented version of the same image.
+Although we use BYOL in this work, VINN can also work with other self-supervised representation learning methods~\cite{simclr,moco2, swav,bardes2021vicreg} (Table~\ref{tab:mse-table}).
+
+In practice, we initialize both the BYOL online and target networks with an ImageNet-pretrained encoder. 
+Then, using the BYOL objective, we finetune them to better fit our image distribution.
+Once the self-supervised training is done, we encode all our training demonstration frames with the encoder to obtain a set of their embeddings, $E$.
+
+\subsection{$k$-Nearest Neighbors Based Locally Weighted Regression}
+\begin{figure*}[ht]
+  \begin{center}
+    \includegraphics[width = \linewidth]{figures/VINN_opt.pdf}
+  \end{center}
+  \caption{Nearest neighbor queries on the encoded demonstration dataset; the query image is on the first column, and the found nearest neighbors are on the next three columns. The associated action is shown with a green arrow. The bottom right set of nearest neighbors demonstrates the advantage of performing a weighted average over nearest neighbors' actions instead of copying the nearest neighbor's action.}
+\label{figure:sanity_check}
+\end{figure*}
+
+The set of embeddings $E$ given by our encoder holds compact representations of the demonstration images.
+Thus, during test time, given an input we search for demonstration frames with similar features.
+We find the nearest neighbors of the encoded input $e$ from the set of demonstration embeddings, $E$.
+In Fig.~\ref{figure:sanity_check}, we see that these nearest neighbors are visually similar to the query image.
+Our algorithm implicitly assumes that a similar observation must result in a similar action. 
+Thus, once we have found the $k$ nearest neighbors of our query, we set the next action as an weighted average of the actions associated with those $k$ nearest neighbors.
+
+Concretely, this is done by performing nearest neighbors search based on the distance between embeddings: $\|e - e^{(i)}\|_2$, where $e^{(i)}$ is the $i^{th}$ nearest neighbor. Once we find the $k$ nearest neighbors and their associated actions, namely $(e^{(1)}, a^{(1)}), (e^{(2)}, a^{(2)}), \cdots, (e^{(k)}, a^{(k)})$, we set the action as the Euclidean kernel weighted average \cite{atkeson1997locally} of those examples' associated actions:
+% \begin{equation}
+\[\hat a = \frac{\sum_{i=1}^k \exp \left ( {- \|e - e^{(i)}\|_2}\right ) \cdot a^{(i)} } {\sum_{i=1}^k \exp \left ( {- \|e - e^{(i)}\|_2}\right )}\]
+% \end{equation}
+In practice, this turns out to be the average of the observations' associated actions weighted by the SoftMin of their distance from the query image in the embedding space.
+
+% \subsection{Representation Learning for Visual Imitation}
+
+\subsection{Deployment in real-robot door opening}
+\label{sec:demoat}
+% \lpnote{Lerrel: Maybe this should go into experimental details?}
+% \lpnote{Maybe this can involve the changes we made to the original VIME setup. Like the gripper type, camera, action extraction?}
+For our robotic door opening task, we collect demonstrations using the DemoAT~\cite{young2020visual} tool.
+Here, a reacher-grabber is mounted with a GoPro camera to collect a video of each trajectory.
+We pass the series of frames into a structure from motion (SfM) method which outputs the camera's location in a fixed frame ~\cite{ozyesil2017survey}.
+From the sequence of camera poses, which consist of coordinate and orientation, we extract translational motion which becomes our action.
+To extract the gripper state, we train a gripper network that outputs a distribution over four classes (open, almost open, almost closed, closed), which represent various stages of gripping.
+Then, we feed 
+these images and their corresponding actions into our imitation learning method.
+
+To train our visual encoders, we train ImageNet-pretrained BYOL encoders on individual frames in our demonstration dataset without action information. This same dataset with action information serves as the demonstration dataset for the $k$-NN based action prediction. Note that although we use task-specific demonstrations for representation learning, our framework is compatible with using other forms of unlabelled data such offline datasets~\cite{gulcehre2020rl,fu2020d4rl} or task-agnostic play data~\cite{young2021playful}.
+
+To execute our door-opening skill on the robot, we run our model on a closed loop manner. After resetting the robot and the environment, on every step, we retrieve the robot observation and query the model with it. The model returns a translational action $\hat a$ as well as the gripper state $g$, and the robot moves $c \odot \hat a$ where the vector $c$ is a hyper-parameter with each element $< 1$ to mitigate our SfM model's inaccuracies and improve transfer from human demonstrations to robot execution. In addition, for nearest neighbor based methods, we have hyper-parameters that map the floating value $g$ into a gripper state which was tuned per experiment. 

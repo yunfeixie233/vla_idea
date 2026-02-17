@@ -1,0 +1,233 @@
+\section{Experimental Evaluation}\label{sec:experiments}
+% \lpnote{TODO: Mahi}
+
+\begin{figure*}[!htb]
+\minipage{0.33\textwidth}
+   \includegraphics[width=\linewidth]{figures/comparison_push.pdf}
+  %\caption{A really Awesome Image}\label{fig:awesome_image1}
+\endminipage\hfill
+\minipage{0.33\textwidth}
+  \includegraphics[width=\linewidth]{figures/comparison_stack.pdf}
+  %\caption{A really Awesome Image}\label{fig:awesome_image2}
+\endminipage\hfill
+\minipage{0.33\textwidth}%
+  \includegraphics[width=\linewidth]{figures/comparison_handle.pdf}
+  %\caption{A really Awesome Image}\label{fig:awesome_image3}
+\endminipage
+ \caption{Mean Squared Error for the Pushing, Stacking and Door Opening (left to right) datasets of different algorithms trained on subsamples of the original dataset. End-to-end behavior cloning initialized with ImageNet-trained features perform as well as VINN for larger datasets, but fixed representation based methods outperforms it largely on small datasets.}
+ \label{fig:mse_loss}
+\end{figure*}
+
+% Overview of the key research questions we are looking to answer.
+In the previous sections we have described our framework for visual imitation, VINN. 
+In this section, we seek to answer our key question: how well does VINN imitate human demonstrations? 
+To answer this question, we will evaluate both on offline datasets and in closed-loop real-robot evaluation settings.
+Additionally, we will probe into the generalization with few demonstrations ability of VINN in settings where imitation algorithms usually suffer.
+
+\subsection{Experimental Setup}\label{sec:exp_setup}
+We conduct two different set of experiments: the first on the offline datasets for Pushing, Stacking and Door-Opening and the second on real-robot door opening.
+
+\paragraph{Offline Visual Imitation Datasets} Data for Pushing 
+and Stacking tasks are taken from \cite{young2020visual}. 
+% We use \lpnote{Jyo} examples from the dataset provided in and use \lpnote{Jyo} of them in the training set.
+The goal in the pushing task is to slide an object on a surface into a red circle.
+In the stacking task, the goal is to grasp an object present in the scene and move it on top of another object also in the scene, and release. To avoid confusion, in the expert demonstrations for stacking, the closest object is always placed on top of the distant object. 
+The action labels are end-effector movements, which in this case is the translation vector in between the current frame and the subsequent one. 
+In each case, there are a diverse set of backgrounds and objects that make up the scene and the task, making the tasks difficult.
+
+For Door Opening, data is collected by 3 data-collectors in their kitchens. 
+This amounts to a total of 71 demonstrations for training and 21 demonstrations for testing. 
+We normalize all actions from the dataset to account for scale ambiguity from SfM. 
+For all three tasks, we calculate the MSE loss between the ground truth actions and the actions predicted by each of the methods. 
+Note that the number of demonstrations collected for this Door Opening task is an order of magnitude smaller than the ones used for Stacking and Pushing, which contain around 750 and 930 demonstrations respectively.
+To understand the performance on the various model in low data settings, we create subsampled Pushing and Stacking datasets containing 71 demonstrations on each for training and 21 for testing. This subsampling makes all three our datasets have the same size. 
+
+\paragraph{Closed-loop control} We conduct our robot experiments on a loaded cabinet door opening task (see Fig.~\ref{fig:intro}), where the goal of the robot is to grab hold of the cabinet handle and pull open the cabinet door. 
+We use the Hello-Robot Stretch~\cite{kemp2021design} for this experiment.  
+% For our demonstrations, we followed the DemoAt \cite{young2020visual} method of attaching a GoPro to a Reacher-Grabber, and collecting demonstrations with it. 
+% We extracted the ground truth actions from the GoPro metadata.
+When evaluations start, the arm resets to $\approx0.15$ meters away from the cabinet door, with a random lateral translation within $0.05$ meters parallel to the cabinet to evaluate generalization to varying starting states.
+
+\subsection{Baselines}
+We run our experiments for baseline comparison using the following methods:
+\begin{itemize}
+    \item \textit{Random Action:} In this baseline, we sample a random action from the action space.
+    \item \textit{Open Loop:} We find the maximum-likelihood open loop policy given all our demonstration, which is the average action $\overline a(t)$ over all actions $a_i(t)$ seen in the dataset at timestep $t$. In a Bayesian sense, if standard behavioral cloning is trying to approximate $p(a \mid s)$, this model is trying to approximate $p(a \mid t)$.
+    \item \textit{Behavioral Cloning (BC) end to end:} We train a ResNet-50 model with augmentated demonstration frames similar to \cite{torabi2018behavioral,young2020visual}. We initialize the model with  weights derived from ImageNet pretraining.
+    \item \textit{BC on Representations (BC-rep):} We use a self-supervised BYOL model to extract the encoding of each of our demonstration frames, and perform behavioral cloning on top of the representations.
+    This baseline is similar to \cite{young2021playful} and performs better than end-to-end BC on the real robot (Table~\ref{table:real_robot}).
+    \item \textit{Implicit Behavioral Cloning:} We train Implicit BC \cite{florence2021implicit} models on the tasks, modifying the official code. 
+    \item \textit{ImageNet features + NN:} Instead of self-supervision, here we use the image representation generated by a pretrained ImageNet encoder akin to \cite{chen2020robust}. The difference between this baseline and our method is simply forgoing the finetuning step on our dataset.
+    This baseline highlights the importance of self-supervised pre-training on the domain related dataset.
+    
+    \item \textit{Self-supervised learning method + NN:} This is our method; we compare three different ways of learning self-supervised representations features from our dataset -- BYOL~\cite{byol}, SimCLR~\cite{simclr}, and VICReg~\cite{bardes2021vicreg}, starting from an ImageNet pretrained ResNet-50, and then we use locally weighted regression to find the action.
+    % However, the official implementation requires the action space to be products of real intervals, while in our tasks are normalized actions on the unit 2-sphere $S^2$, which is why IBC suffers in these tasks.
+    % \item \textit{ImageNet Features + NN:} We use a similar approach as BC-rep, but instead of using representations trained with BYOL, we use representations generated by a ResNet50 pretrained on ImageNet only. 
+    % \item \textit{Random-NN:} Similar to ImageNet-NN, we consider a randomly initialized ResNet-50 model for this baseline, get encodings from it, and get an action by performing a locally weighted $k$-NN averaging like VINN. This baseline, once again, highlights the importance of the pre-training.
+    % \item \textit{BC-Random:} We use a similar approach as BC-rep, but instead of using representations from BYOL, we use representations generated by a ResNet50 pretrained on ImageNet only.
+\end{itemize}
+
+\subsection{Training Details}
+Each encoder network used in this paper follows the ResNet-50 architecture~\cite{he2015deep} with the final linear layer removed. 
+Unless specified otherwise, we always initialize the weights of the ResNet-50 encoder with a pretrained model on ImageNet dataset.
+For VINN, we train our self-supervised encodings with the BYOL~\cite{byol} loss.
+For standard end-to-end BC, we replace the last linear layer with a three-layer MLP and train it with the MSE loss.
+For BC-rep, we freeze the encoding network to the weights trained by BYOL on our dataset, and train just the final layers with the MSE loss.
+Additionally, for all visual learning, we use random crop, random color jitter, random grayscale augmentations and random blurring. 
+We trained the self-supervised finetuning methods for 100 epochs on all three datasets. 
+% What type of networks used? information to reproduce this learning portion of this paper.
+
+% \subsection{Can VINN Compete with Standard Behavior Cloning?}
+% % Experimental results on Push MSE, Stack MSE and Door MSE.
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=\linewidth]{figures/comparison_push.pdf}
+%       \vspace{-0.2in}
+%     % \caption{Caption}
+%     %   \vspace{-0.2in}
+%     \includegraphics[width=\linewidth]{figures/comparison_stack.pdf}
+%       \vspace{-0.2in}
+%     \includegraphics[width=\linewidth]{figures/comparison_handle.pdf}
+%       \vspace{-0.1in}
+%     \caption{Comparison of the performance of three candidate algorithms (BC on representations, ImageNet pretraining features + NN, and VINN (which is BYOL-fine-tuned features + NN) on the stack, push and handle datasets as the size of the dataset changes.}
+%       \vspace{-0.2in}
+%     \label{fig:scaling_data}
+% \end{figure}
+% \begin{figure}
+%     \centering
+
+% \end{figure}
+
+\subsection{How does VINN Perform on Offline Datasets?}
+For our first evaluation, we compare our method against the baselines on their Mean-Squared Error loss for the Pushing, Stacking, and Door-Opening tasks in Fig.~\ref{fig:mse_loss}. To understand the impact of the training dataset size on the algorithms, we train models on multiple subsamples of different sizes from each dataset. We see that while end-to-end Behavioral Cloning starting from pretrained ImageNet representations can be better with a large amounts of training demonstrations, Nearest Neighbor methods are either competitive or better performing in low data settings.
+
+On the Stacking and Door-Opening tasks, VINN is significantly better when the number of training demonstrations are small ($<20$). While on the Pushing task, we notice that the task might be too difficult to solve with small number of demonstrations. One reason for this is that BYOL might not be able to extract the most relevant representations for this task. Further experiments in Table~\ref{tab:mse-table} show that using other forms of self-supervision such as VICReg can significantly improve performance on this task. Overall, these experiments supports our hypothesis that provided with good representations, nearest-neighbor techniques can provide a competitive alternative to end-to-end behavior cloning.
+
+% it remains on par with the baselines. 
+% As we can see, VINN achieves comparable MSE loss in the test set in Pushing, Stacking, and Door Opening. Thus, in simple offline datasets, the predicted action from VINN is similarly close to the ground truth as BC and BC variants. \lpnote{this statement may not be true.}
+
+\subsection{How does VINN Perform on Robotic Evaluation?}
+
+\begin{figure*}[t]
+  \begin{center}
+    \includegraphics[width = \textwidth]{figures/VINN_generalization.png}
+  \end{center}
+  \caption{Sample frames from the rollouts from our model on the real robot experiments, with artificial occlusions added to the cabinet to test generalization. Under the maximum occlusion, our model fails to ever open the cabinet door, while in all other cases, the robot is able to succeed (Table~\ref{table:generalization}.)}
+\label{fig:rollouts}
+\end{figure*}
+
+% Experimental results on door opening without variations.
+Next, we run VINN and the baselines on our real robot environment. 
+In this setting, our test environment comprises of the same three cabinets where training demonstrations were collected presented without any visual modifications.
+For each of our models, we run 30 rollouts with the robot in the real world with three different cabinets.
+On each rollout, the starting position of the robot is randomized as detailed in (Sec.~\ref{sec:exp_setup}).
+In Table~\ref{table:real_robot}, we show the percentage of success from the 30 rollouts of each model, where we record both the number of time the robot successfully grasped the handle, as well as the number of time it fully opened the door.
+
+\begin{table}[!ht]
+\centering
+\caption{Success rate over 30 trials (10 trials on three cabinets each) on the robotic door opening task.}
+\label{table:real_robot}
+\begin{tabular}{@{}ccc@{}}
+\toprule
+Method                  & Handle grasped & Door opened   \\ \midrule
+BC (end to end)        & 0\%            & 0\%           \\
+BC on representations  & 56.7\%         & 53.3\%        \\
+Imagenet features + NN & 20\%           & 0\%           \\
+VINN (BYOL + NN)       & \textbf{80}\%  & \textbf{80}\% \\ \bottomrule
+\end{tabular}
+\end{table}
+
+As we see from Table~\ref{table:real_robot}, VINN does better than all BC variants in successfully opening the cabinet door when there is minimal difference between the test and the train environments. 
+Noticeably, it shows that depending on self-supervised features on augmented data make the models much more robust.
+% We believe this success is due such models being more robust to the out of distribution queries, since the door opening task is multi-step and long horizon. 
+BC, as an end-to-end parameteric model, does not have a strong prior on the actions if the robot makes a wrong move causing the visual observations to quickly goes out-of-distribution~\cite{dagger2010}. 
+% However, pretrained representation based models do not overfit much to the combination of visual feature and the task objective.
+% This lack of co-optimization between visual features and policy goals enforces a bottleneck that results in better visual representations in runtime.
+On the other hand, VINN can recover up to certain degree of deviation using the nearest neighbor prior, since the translation actions typically tend to re-center the robot instead of pushing it further out of distribution. 
+% \lpnote{Explanations in this section are quite hand-wavy. Mahi, can you edit?}
+
+\subsection{To What Extent does VINN Generalize to Novel Scenes?}\label{sec:generalize}
+% Experiments on generalization. Where does it work and where does it not.
+
+To test generalization of our robot algorithms to novel scenes in the real world, we modified one of our test cabinets with various levels of occlusion. We show frames from a sample rollouts in each environment in Fig.~\ref{fig:rollouts}, which also shows the cabinet modifications.
+
+\begin{table}[ht!]
+\centering
+\caption{Success rate over 10 trials on robotic door opening with visual modifications on one cabinet door.}
+\label{table:generalization}
+\begin{tabular}{@{}ccc@{}}
+\toprule
+Modification                               & BC-rep        & VINN (ours)    \\ \midrule
+Baseline (no modifications)          & \textbf{90}\% & 80\%           \\
+Covered signs and handle             & 10\%          & \textbf{70\% } \\
+Covered signs, handle, and one bin   & 0\%           & \textbf{50\%}  \\
+Covered signs, handle, and both bins & 0\%           & 0\%            \\ \bottomrule
+\end{tabular}
+\end{table}
+
+In Table~\ref{table:generalization}, we see that VINN only completely fails when all the visual landscape on the cabinet is occluded. This failure is expected, because without coherent visual markers, the encoder fails to convey information, and thus the k-NN part also fails.
+Even then, we see that VINN succeeds at a higher rate even with significant modifications to the cabinet while BC-rep fails completely. 
+
+Over all the real robot experiments, we find the following phenomenon: while a good MSE loss is not sufficient for a good performance in the real world, the two are still correlated, and a low MSE loss seems to be necessary for good real world performance.
+This observation let us test hypotheses offline before deploying and testing them in a real robot, which can be time-consuming and expensive.
+We hypothesize that this gap between performance on the MSE metric (Table~\ref{tab:mse-table}) and real world performance (Table~\ref{table:real_robot}, ~\ref{table:generalization}) comes from variability in different models' ability to perform well in situations off the training manifold, where they may need to correct previous errors.
+% Interestingly, although the MSE metric does not directly correspond to online performance, our experiments in Table~\ref{fig:mse_loss} suggest strong correlation. Specifically, methods that have high MSE on online tasks, mainly those that have no pretraining for representations, yield poor online performance on the Door Opening task. 
+
+\begin{table*}[!bhtp]
+\caption{\label{table:mse_loss} Test MSE $(\times 10^{-1})$ on predicted actions for a set of baseline methods and ablations. Standard deviations, when reported, are over three randomly initialized runs.}
+\label{tab:mse-table}
+% \resizebox{\textwidth}{!}{%
+\centering
+\begin{tabular}{@{}cccccccccc@{}}
+\toprule
+             &        &                                                     & \multicolumn{2}{c}{No Pretraining}                & \multicolumn{5}{c}{With ImageNet Pretraining}                                                                                                                                                                                                      \\ \cmidrule(l){4-5}\cmidrule(l){6-10} 
+Tasks        & Random & \begin{tabular}[c]{@{}c@{}}Open\\ Loop\end{tabular} & \begin{tabular}[c]{@{}c@{}}Implicit\\ BC\end{tabular}   & \begin{tabular}[c]{@{}c@{}}BYOL\\ + NN\end{tabular} & BC-Rep          & \begin{tabular}[c]{@{}c@{}}VINN\\(BYOL + NN)\end{tabular} & \begin{tabular}[c]{@{}c@{}}VICREG\\ + NN\end{tabular} & \begin{tabular}[c]{@{}c@{}}SimCLR\\ + NN\end{tabular} & \begin{tabular}[c]{@{}c@{}}ImageNet\\ + NN\end{tabular} \\ \midrule
+Door Opening & $6.34$ & $2.27$                                              & $1.8$ & $1.52$                                              & $1.19 \pm 0.05$ & $0.92$                                              & $1.05$                                                & $0.95$                                                & $0.98$                                                  \\
+Stacking     & $6.13$ & $2.83$                                              & $7.1$ & $2.82$                                              & $3.45 \pm 0.29$ & $2.58$                                              & $2.74$                                                & $2.63$                                                & $2.85$                                                  \\
+Pushing      & $6.15$ & $2.12$                                              & $5.6$ & $2.43$                                              & $2.20 \pm 0.20$ & $2.43$                                              & $1.50$                                                & $2.21$                                                & $2.35$                                                  \\ \bottomrule
+\end{tabular}
+% }
+\end{table*}
+
+\subsection{How Important are the Design Choices Made in VINN for Success?}
+% In this section, we examine some of the design choices made for VINN and empirically show their impact compared to possible alter-tives. 
+
+% \lpnote{This section needs better organization. Currently it reads like a block of text.} 
+VINN comprises of two primary components, the visual encoder and the nearest-neighbor based action modules.
+In this section, we consider some major design choices that we made for each of them. 
+
+\paragraph{Choosing the Right Self-supervision} While we use a BYOL-based self-supervised encoding in our algorithm, there are multiple other self-supervised methods such as SimCLR and VICReg ~\cite{simclr,bardes2021vicreg}. On a small set of experiments we noticed similar MSE losses compared to SimCLR~\cite{simclr} and VICReg~\cite{bardes2021vicreg}. From Table~\ref{table:mse_loss}, we see that BYOL does the best in Door-Opening and Stacking, while VICReg does better in Pushing. However, we choose BYOL for our robot experiments since it requires less tuning overall. 
+% \lpnote{On Pushing VICReg does better. I think it is good to highlight that k-NN depends on the quality of representations, and if it is good, it will do well.}
+
+\paragraph{Ablating Pretraining and Fine-tuning} Another large gain in our algorithm is achieved by initializing our visual encoders with a network trained on ImageNet. In Table~\ref{table:mse_loss}, we also show MSE losses from models that resulted from ablating this components of VINN. Removing this component achieves the column BYOL + NN (No Pretraining), which performs much worse than VINN. 
+Similarly, the success of VINN depends on the self-supervised fine-tuning on our dataset, ablating which results in the model shown in ImageNet + NN column of Table~\ref{table:mse_loss}. 
+This model performs only slightly worse than VINN on the MSE metric.
+However, in Table~\ref{table:real_robot}, we see that this model performs poorly on the real world.
+These ablations show that the performance of our locally weighted regression based policy depends on the quality of the representation, where a good representation leads to better nearest neighbors, which in turn lead to a better policy both offline and online.
+
+\paragraph{Performing Implicit instead of Explicit Imitation}
+Moving away from the explicit forms of imitation where the models try to predict the actions directly, we run baselines with Implicit Behavioral Cloning (IBC)~\cite{florence2021implicit}. 
+As we see on Table~\ref{table:mse_loss}, this baseline fails to learn behaviors significantly better than the random or open loop baselines. We believe this is caused by two reasons. First, the implicit models have to model the energy for the full space (action space $\times$ observation space), which requires more data than the few demonstrations that we have in our datasets. Second, the official implementation of IBC supports $[-1, 1]^3$ as the action space instead of its much smaller subspace of normalized 3d vectors $S^2$. This much larger action space, over which IBC tried to model the action, might have resulted in worse performance for IBC. While VINN makes the implicit assumption that the locally-weighted average of valid actions also yield a valid action, it can be freely projected to any relevant space without further processing, which makes it more flexible.
+
+\paragraph{Learning a Parametric Policy on Representations}
+Our Behavioral Cloning on representations (BC-Rep) baseline in all our experiments (Sec.~\ref{sec:experiments}) show the performance of a baseline where we use learned representations to learn a parametric behavioral policy. In the MSE losses (Table~\ref{tab:mse-table}) and real world experiments (Table~\ref{table:real_robot},~\ref{table:generalization}.) This is the baseline that achieves the closest performance to VINN. However, the difference between BC-rep and VINN becomes more pronounced as the gap between training and test domain or the policy horizon grows. These experimental results indicate that using a non-parametric policy may be enabling us to be robust to out-of-distribution samples.
+
+\begin{figure}[ht]
+  \begin{center}
+    \includegraphics[width = \linewidth]{figures/k_graph.pdf}
+  \end{center}
+%   \vspace{-0.2in}
+  \caption{Value of $k$ in the $k$-nearest neighbor weighted regression in VINN vs normalized MSE loss achieved by the model.}
+%   \vspace{-0.275in}
+\label{fig:knn_ablation}
+\end{figure}
+
+\paragraph{Choosing the Right $k$ for $k$-Nearest Neighbors} Finally, in VINN, we study the effect of different values of $k$ for the $k$-NN based locally weighted controller. This parameter is important because with too small of a $k$, the predicted action may stop being smooth. On the other hand, with too large of a $k$, unrelated examples may start influencing the predicted action. By plotting our model's normalized MSE loss in the validation set against the value of $k$ in Fig.~\ref{fig:knn_ablation}, we find that around $10$, $k$ seems ideal for achieving low validation loss while averaging over only a few actions. 
+Beyond $k=20$, we didn't notice any significant improvement to our model from increasing $k$.
+
+\subsection{Computational Considerations}
+While the datasets we used for our experiments were not large, we recognize that our current nearest neighbor implementation is a $O(n)$ algorithm dependant linearly on the size of the training dataset with a naive algorithm. 
+However, we believe VINN to be practical, since firstly, it was designed mostly for the small demonstration dataset regime where $O(n)$ is quite small, 
+and secondly, this search can be sped up with a compiled index beyond the naive method using open-source libraries such as FAISS~\cite{faiss} which were optimized to run nearest neighbor search on the order of billion examples~\cite{matsui2018survey}. 
+Currently, our algorithm takes $\approx 0.074$ seconds to encode an image, and $\approx 0.038$ seconds to perform nearest neighbors regression, which is only a small speed penalty for the robotic tasks we consider.
+% \lpnote{Can we say that more efficient methods do exist for faster retrieval? and cite them as well.}

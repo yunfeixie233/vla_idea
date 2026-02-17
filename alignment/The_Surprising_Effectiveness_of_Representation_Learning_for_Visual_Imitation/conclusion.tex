@@ -1,0 +1,9 @@
+\section{Limitations and Future Work}
+% \lpnote{First line should be summary of what this paper has presented. Maybe not call it clear drawbacks?}
+In this work we proposed VINN, a new visual imitation framework that decouples visual representation learning from behavior learning.
+Although this decoupling improves over standard visual imitation methods, there are several avenues for future work.
+First, there is still some remaining hurdles to generalizing to a new scene, as seen in Sec.~\ref{sec:generalize}, where our model fails when all large, recognizable markers are removed from the scene.
+While our NN-based action estimation lets us add new demonstrations easily, we cannot easily adapt our representation to such drastic changes in scene.
+An incremental representation learning algorithm has great potential to improve upon that. 
+Second, our self-supervised learning is currently done on task related data, while ideally, if the dataset is expansive enough, task agnostic pre-training should also give us good performance ~\cite{young2021playful}. 
+Finally, although our framework focuses on a single-task setting, we believe that learning a joint representation for multiple tasks could reduce the overall training overhead while being just as accurate. 
